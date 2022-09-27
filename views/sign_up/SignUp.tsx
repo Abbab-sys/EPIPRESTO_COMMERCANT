@@ -34,13 +34,13 @@ const SignUp = () => {
             label: "Shop Name",
             value: "",
             type: "shopName",
-            secure: true,
+            secure: false,
         },
         {
             label: "Phone Number",
             value: "",
             type: "phoneNumber",
-            secure: true,
+            secure: false,
         },
 
     ]
