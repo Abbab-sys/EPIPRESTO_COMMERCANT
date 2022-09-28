@@ -9,7 +9,9 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { VendorContext } from "./context/Vendor";
 import SignUp from "./views/sign_up/SignUp";
-import { useTranslation } from "react-i18next";
+import { I18nextProvider, useTranslation } from "react-i18next";
+import i18next from "i18next";
+import './i18n';
 
 export default function App() {
   const { t, i18n } = useTranslation("translation");
@@ -38,11 +40,11 @@ export default function App() {
     });
   };
   return (
-    <VendorContext.Provider value={storeIdContext}>
-      <ApolloProvider client={client}>
-        <SignUp />
-      </ApolloProvider>
-    </VendorContext.Provider>
+      <VendorContext.Provider value={storeIdContext}>
+        <ApolloProvider client={client}>
+          <SignUp />
+        </ApolloProvider>
+      </VendorContext.Provider>
   );
 }
 
