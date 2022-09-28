@@ -5,8 +5,11 @@ import { setContext } from '@apollo/client/link/context';
 import Login from './views/login/Login';
 import { VendorContext } from './context/Vendor';
 import SignUp from './views/sign_up/SignUp';
+import {useTranslation} from 'react-i18next';
 
 export default function App() {
+  const {t, i18n} = useTranslation('translation')
+  const [language, setLanguage] = React.useState(i18n.language);
   const [storeId, setStoreId] = React.useState<string>("");
   const storeIdContext = {storeId, setStoreId};
   const authLink = setContext((_, { headers }) => {
@@ -24,6 +27,10 @@ export default function App() {
     link: authLink.concat(httpLink),
     cache: new InMemoryCache()
   });
+  const handleChange = (event:any) => {
+    setLanguage(event.target.value as string);
+    i18n.changeLanguage(event.target.value)
+};
   return (
     <VendorContext.Provider value={storeIdContext}>
       <ApolloProvider client={client}>
