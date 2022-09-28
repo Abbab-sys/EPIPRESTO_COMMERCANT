@@ -5,8 +5,14 @@
     "language": "Language"
   },
   "login": {
-    "email": "Email or Username",
-    "password": "Password",
+    "email": {
+      "title" : "Email or Username",
+      "placeholder":"Enter your login"
+    },
+    "password": {
+      "title" : "Password",
+      "placeholder":"Enter your password"
+    },
     "login": "LOG IN",
     "newTo": "New to Épipresto?",
     "createAccount": "Create an account",
@@ -17,26 +23,31 @@
     }
   },
   "sign_up": {
+    "title": "Sign up",
     "createAccount": "Create an account",
     "successAccountCreation": "Your account has been successfully created!",
     "errorAccountCreation": "Oops something went wrong",
     "shopName": {
-      "placeholder": "Shop name",
-      "errorMessage": "The shop name field can not be empty"
+      "placeholder": "Enter your shop's name",
+      "title": "Shop's name",
+      "errorMessage": "The shop's name field can not be empty"
     },
     "username": {
-      "placeholder": "Username",
+      "placeholder": "Enter your username",
+      "title": "Username",
       "errors": {
         "empty": "The username field can not be empty",
         "used": "This username is already used"
       }
     },
     "address": {
-      "placeholder": "Address",
+      "placeholder": "Enter the shop's address",
+      "title": "Shop's address",
       "errorMessage": "The address field can not be empty"
     },
     "email": {
-      "placeholder": "Email",
+      "placeholder": "Enter your email",
+      "title": "Email",
       "errors": {
         "empty": "The email field can not be empty",
         "formatError": "The email format is not correct",
@@ -44,15 +55,18 @@
       }
     },
     "phone": {
-      "placeholder": "Phone number",
+      "placeholder": "Enter your shop's phone number",
+      "title": "Shop's phone number",
       "errorMessage": "The phone number field can not be empty"
     },
     "password": {
-      "placeholder": "Password",
+      "placeholder": "Enter your password",
+      "title": "Password",
       "errorMessage": "The password field can not be empty"
     },
     "confirmPassword": {
-      "placeholder": "Confirm password",
+      "placeholder": "Confirm your password",
+      "title": "Password confirmation",
       "errorMessage": "The two passwords do not match"
     }
   },

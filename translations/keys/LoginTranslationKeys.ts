@@ -1,5 +1,7 @@
-export const LOGIN_EMAIL_KEY="login.email";
-export const LOGIN_PASSWORD_KEY="login.password";
+export const LOGIN_EMAIL_TITLE_KEY="login.email.title";
+export const LOGIN_EMAIL_PLACEHOLDER_KEY="login.email.placeholder";
+export const LOGIN_PASSWORD_TITLE_KEY="login.password.title";
+export const LOGIN_PASSWORD_PLACEHOLDER_KEY="login.password.placeholder";
 export const LOGIN_LOGIN_KEY="login.login";
 export const LOGIN_SIGN_UP_KEY="login.signUp";
 export const LOGIN_NEW_TO_APP_KEY="login.newTo";

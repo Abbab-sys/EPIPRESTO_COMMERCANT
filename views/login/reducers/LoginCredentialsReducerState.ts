@@ -13,8 +13,8 @@ export const initialLoginCredentialsStateReducer: LoginCredentialsReducerState =
         showSnackBar: false
     },
     errorMessage: {
-        authErrorTranslationKey: '',
-        passwordErrorTranslationKey: '',
+        authError: '',
+        passwordError: '',
     }
 
 }

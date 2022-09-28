@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
 
-export const signUpStyles = StyleSheet.create({
+export const LoginStyles = StyleSheet.create({
     root: {
         backgroundColor: '#FFA500',
         height: '100%',
@@ -9,16 +9,20 @@ export const signUpStyles = StyleSheet.create({
     },
     card: {
         elevation: 4,
-        flex: 13,
+        flex: 3,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         
     },
-    signUp:{
+    imageView: { 
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 50,
+    },
+    image:{
+        resizeMode:'contain',
+        width: '100%',
+    
     },
     fieldsView: {
         margin:'5%',

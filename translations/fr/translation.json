@@ -5,8 +5,14 @@
     "language": "Langue"
   },
   "login":{
-    "email": "Email ou Pseudonyme",
-    "password": "Mot de passe",
+    "email": {
+      "title" : "Courriel ou nom utilisateur",
+      "placeholder":"Entrez votre identifiant"
+    },
+    "password": {
+      "title" : "Mot de passe",
+      "placeholder":"Entrez votre mot de passe"
+    },
     "login": "SE CONNECTER",
     "newTo": "Nouveau chez Épipresto?",
     "createAccount": "Créer un compte",
@@ -17,42 +23,50 @@
     }
   },
   "sign_up": {
+    "title": "Inscription",
     "createAccount": "Créer un compte",
     "successAccountCreation": "Votre compte a été créé aves succès!",
     "errorAccountCreation": "Oops une erreur est survenues",
     "shopName": {
-      "placeholder": "Nom du marché",
-      "errorMessage": "Le champ du nom du marché ne peut pas être vide"
+      "placeholder": "Entrez l'adresse de votre boutique",
+      "title": "Nom de la boutique",
+      "errorMessage": "Le champ du nom de la boutique ne peut pas être vide"
     },
     "username": {
-      "placeholder": "Pseudonyme",
+      "placeholder": "Entrez votre nom d'utilisateur",
+      "title": "Nom d'utilisateur",
       "errors": {
-        "empty": "Le champ du pseudonyme ne peut pas être vide",
-        "used": "Ce pseudonyme est déjà utilisé"
+        "empty": "Le champ du nom d'utilisateur ne peut pas être vide",
+        "used": "Ce nom d'utilisateur est déjà utilisé"
       }
     },
     "address": {
-      "placeholder": "Adresse",
+      "placeholder": "Entrez l'adresse de votre boutique",
+      "title": "Adresse de la boutique",
       "errorMessage": "Le champ d'adresse ne peut pas être vide"
     },
     "email": {
-      "placeholder": "Email",
+      "placeholder": "Entrez votre courriel",
+      "title": "Courriel",
       "errors": {
-        "empty": "Le champ d'email ne peut pas être vide",
-        "formatError": "Le format de l'email est incorrect",
-        "used": "Cet email est déjà utilisé"
+        "empty": "Le champ du courriel ne peut pas être vide",
+        "formatError": "Le format du courriel est incorrect",
+        "used": "Ce courriel est déjà utilisé"
       }
     },
     "phone": {
-      "placeholder": "Numéro de téléphone",
+      "placeholder": "Entrez le téléphone de votre boutique",
+      "title": "Téléphone de la boutique",
       "errorMessage": "Le champ du numéro de téléphone ne peut pas être vide"
     },
     "password": {
-      "placeholder": "Mot de passe",
+      "placeholder": "Entrez votre mot de passe",
+      "title": "Mot de passe",
       "errorMessage": "Le champ du mot de passe ne peut pas être vide"
     },
     "confirmPassword": {
       "placeholder": "Confirmez votre mot de passe",
+      "title": "Confirmation mot de passe",
       "errorMessage": "Les deux mots de passe ne sont pas identiques"
     }
   },

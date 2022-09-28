@@ -7,10 +7,10 @@ export interface Credentials {
 }
 
 export interface LoginErrorMessage {
-    authErrorTranslationKey: string;
-    passwordErrorTranslationKey: string;
+    authError: string;
+    passwordError: string;
 }
 export const initialLoginErrorMessage: LoginErrorMessage = {
-    authErrorTranslationKey: '',
-    passwordErrorTranslationKey: '',
+    authError: '',
+    passwordError: '',
 }

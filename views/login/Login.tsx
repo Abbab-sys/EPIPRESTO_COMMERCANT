@@ -1,25 +1,36 @@
 import React, { useContext, useReducer } from "react";
-import { TextInput, Text, Button, HelperText, Snackbar } from "react-native-paper";
-import { SafeAreaView, StyleSheet, View, Image, Keyboard} from "react-native";
+import { TextInput, Text, Button, HelperText, Snackbar, Card } from "react-native-paper";
+import { SafeAreaView, StyleSheet, View, Image, Keyboard, KeyboardTypeOptions} from "react-native";
 import { LOGIN_BY_EMAIL, LOGIN_BY_USERNAME } from "../../queries";
 import { useLazyQuery } from "@apollo/client/react";
+import { LoginStyles } from './LoginStyles';
 import { initialLoginCredentialsStateReducer, LoginCredentialsReducerState } from "./reducers/LoginCredentialsReducerState";
 import { loginCredentialsReducer } from "./reducers/LoginCredentialsReducer";
 import { VendorContext } from "../../context/Vendor";
+import { Credentials, LoginErrorMessage } from "../../interfaces/LoginInterfaces";
+import { LoginCredentialsStateReducerAction } from "./reducers/LoginCredentialsReducerActions";
+import { SignUpErrorMessage } from "../../interfaces/SignUpInterfaces";
+import { fieldsArray } from "./LoginFields";
+import { useTranslation } from "react-i18next";
+import { LOGIN_LOGIN_KEY } from "../../translations/keys/LoginTranslationKeys";
 
 const Login = () => {
   const [{credentials, errorMessage}, dispatchCredentialsState]
         = useReducer(loginCredentialsReducer, initialLoginCredentialsStateReducer);
-
-    const [loginByEmail] = useLazyQuery(LOGIN_BY_EMAIL);
-    const [loginByUsername] = useLazyQuery(LOGIN_BY_USERNAME);
-
-    function areAllCredentialsFieldsValid(credsState: LoginCredentialsReducerState): boolean {
-      return credsState.credentials.auth.length > 0 && credsState.credentials.password.length > 0
+  const {t: translation} = useTranslation('translation');
+  
+  const [loginByEmail] = useLazyQuery(LOGIN_BY_EMAIL);
+  
+  const [loginByUsername] = useLazyQuery(LOGIN_BY_USERNAME);
+  
+  
+  function areAllCredentialsFieldsValid(credsState: LoginCredentialsReducerState): boolean {
+  
+    return credsState.credentials.auth.length > 0 && credsState.credentials.password.length > 0
   }
 
   const {storeId, setStoreId} = useContext(VendorContext);
-
+  
   const handleLogin = async () => {
     Keyboard.dismiss()
     dispatchCredentialsState({type: 'CHECK_LOGIN_CREDENTIALS'})
@@ -41,35 +52,46 @@ const Login = () => {
     }
 }
 
+const errorExists = (attribute: string) => {
+  return errorMessage[
+    (attribute + 'Error') as keyof LoginErrorMessage
+  ] === undefined
+    ? false
+    : errorMessage[(attribute + 'Error') as keyof LoginErrorMessage]
+        .length > 0;
+};
+
     return (
-      <View style={styles.container}>
-          <Image style={styles.image} source={require('../../../assets/logo.png')}/>
-            <TextInput
-            label='Email'
-            value={credentials.auth}
-            onChangeText={(text) => dispatchCredentialsState({
-              type: "CHANGE_AUTH",
-              newAuth: text
-          })}
-            error={errorMessage.authErrorTranslationKey.length > 0}
-            />
-            <HelperText type='error'>
-              {errorMessage.authErrorTranslationKey}
-            </HelperText>
-            <TextInput
-            label='Password'
-            secureTextEntry={true}
-            value={credentials.password}
-            onChangeText={(text) => dispatchCredentialsState({
-              type: "CHANGE_PASSWORD",
-              newPassword: text
-          })}
-            error={errorMessage.passwordErrorTranslationKey.length > 0}
-            />
-            <HelperText type='error'>
-              {errorMessage.passwordErrorTranslationKey}
-            </HelperText>
-          <Button mode="text" onPress={() => handleLogin()}>Login</Button>
+      <View style={LoginStyles.root}>
+        <View style={LoginStyles.imageView}>
+          <Image style={LoginStyles.image} source={require('../../assets/logo.png')}/>
+        </View>
+        <Card style={LoginStyles.card}>
+          <View style={LoginStyles.fieldsView}>
+          {fieldsArray.map((field, index) => (
+            <View key={field.attribute} style={LoginStyles.fieldView}>
+              <Text>{translation(field.title)}</Text>
+              <TextInput
+                style={{height: 40}}
+                label={translation(field.label)}
+                value={credentials[field.attribute as keyof Credentials] as string}
+                onChangeText={text => dispatchCredentialsState(field.onChange(text) as LoginCredentialsStateReducerAction)}
+                keyboardType={field.keyboardType as KeyboardTypeOptions}
+                secureTextEntry={field.secure} 
+                mode="outlined"
+                />
+              <HelperText type="error" style={{
+                    height: errorExists(field.attribute) ? 'auto' : 0,
+                  }}>
+                {translation(errorMessage[(field.attribute + "Error") as keyof LoginErrorMessage])}
+              </HelperText>
+            </View>
+          ))}
+          </View>
+          <View style={LoginStyles.buttonView}>
+          <Button style={LoginStyles.button} mode="contained" onPress={() => handleLogin()}>{translation(LOGIN_LOGIN_KEY)}</Button>
+          </View>
+          <Text>{credentials.auth}</Text>
           <Snackbar
             visible={credentials.showSnackBar}
             onDismiss={() => {}}
@@ -81,56 +103,10 @@ const Login = () => {
             }}>
             Credentials not valid
           </Snackbar>
+        </Card>
       </View>
     );
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      // alignItems: "center",
-      // justifyContent: "center",
-    },
-
-
-   
-    image: {
-      resizeMode:'contain',
-      alignSelf:'center',
-      aspectRatio : 1.5
-      },
-   
-    inputView: {
-      backgroundColor: "#FFC0CB",
-      borderRadius: 20,
-      width: "70%",
-      height: 30,
-      marginBottom: 20,
-      alignItems: "center",
-    },
-   
-    TextInput: {
-      height: 50,
-      flex: 1,
-      padding: 5,
-      marginLeft: 20,
-    },
-   
-    forgot_button: {
-      height: 30,
-      marginBottom: 30,
-    },
-   
-    loginBtn: {
-      width: "80%",
-      borderRadius: 25,
-      height: 50,
-      alignItems: "center",
-      justifyContent: "center",
-      marginTop: 40,
-      backgroundColor: "#FF1493",
-    },
-  });
 
   export default Login;

@@ -12,7 +12,7 @@ import SignUp from "./views/sign_up/SignUp";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import i18next from "i18next";
 import './i18n';
-import AddProcudt from "./views/add_product/AddProduct";
+import Login from "./views/login/Login";
 
 export default function App() {
   const { t, i18n } = useTranslation("translation");
@@ -43,7 +43,7 @@ export default function App() {
   return (
       <VendorContext.Provider value={storeIdContext}>
         <ApolloProvider client={client}>
-          <AddProcudt />
+          <Login />
         </ApolloProvider>
       </VendorContext.Provider>
   );
