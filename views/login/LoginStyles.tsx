@@ -30,9 +30,20 @@ export const LoginStyles = StyleSheet.create({
         // borderColor: '#000000',
         // borderWidth: 1,
     },
+    loginTitle:{
+        fontSize: 19,
+        alignSelf: 'center',
+        
+
+    },
     fieldView : {
         padding: 'auto',
     },
+    textInput: {
+        height: 40,
+        backgroundColor: 'white',
+    },
+
     buttonView: {
         // height: 'auto',
         justifyContent: 'center',
@@ -41,6 +52,15 @@ export const LoginStyles = StyleSheet.create({
         // borderWidth: 1,
         // height: '30%',
 
+    },
+    signUpView:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        padding: '5%',
+    },
+    signUp:{
+        color: '#FFA500',
+        
     },
     button: {
         backgroundColor: '#FFA500',

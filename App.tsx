@@ -13,6 +13,10 @@ import { I18nextProvider, useTranslation } from "react-i18next";
 import i18next from "i18next";
 import './i18n';
 import Login from "./views/login/Login";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const { t, i18n } = useTranslation("translation");
@@ -41,9 +45,15 @@ export default function App() {
     });
   };
   return (
+
       <VendorContext.Provider value={storeIdContext}>
         <ApolloProvider client={client}>
-          <Login />
+          <NavigationContainer >
+            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Login">
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="SignUp" component={SignUp} />
+            </Stack.Navigator>
+          </NavigationContainer>
         </ApolloProvider>
       </VendorContext.Provider>
   );
@@ -54,3 +64,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFA500",
   },
 });
+
