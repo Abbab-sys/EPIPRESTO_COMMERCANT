@@ -15,6 +15,8 @@ import './i18n';
 import Login from "./views/login/Login";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from "./views/home/Home";
+import Navigation from "./views/navigation/Navigation";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,9 +51,10 @@ export default function App() {
       <VendorContext.Provider value={storeIdContext}>
         <ApolloProvider client={client}>
           <NavigationContainer >
-            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Login">
+            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="SignUp" component={SignUp} />
+              <Stack.Screen name="Home" component={Navigation} />
             </Stack.Navigator>
           </NavigationContainer>
         </ApolloProvider>

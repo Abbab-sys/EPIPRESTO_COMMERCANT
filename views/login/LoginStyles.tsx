@@ -33,7 +33,7 @@ export const LoginStyles = StyleSheet.create({
     loginTitle:{
         fontSize: 19,
         alignSelf: 'center',
-        
+        fontFamily: 'Lato'
 
     },
     fieldView : {

@@ -8,5 +8,14 @@ export const CredentialInputStyles
     textInput: {
         height: 40,
         backgroundColor: 'white',
+        
+        
     },
+    title: {
+        fontFamily: 'Poppins',
+        fontWeight: "500",
+        fontSize: 19,
+        fontStyle: 'normal',
+    },
+
 })

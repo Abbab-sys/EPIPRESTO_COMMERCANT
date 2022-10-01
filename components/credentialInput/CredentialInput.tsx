@@ -16,7 +16,7 @@ const CredentialInput = (props:CredentialInputProps) => {
     const { t: translation } = useTranslation('translation');
     return(
             <View key={props.field.attribute} style={CredentialInputStyles.fieldView}>
-              <Text>{translation(props.field.title)}</Text>
+              <Text style={CredentialInputStyles.title}>{translation(props.field.title)}</Text>
               <TextInput
                 style={CredentialInputStyles.textInput}
                 label={translation(props.field.label)}
