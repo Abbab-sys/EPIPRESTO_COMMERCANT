@@ -49,22 +49,12 @@ export function loginCredentialsReducer(state: LoginCredentialsReducerState, act
                 ...state,
                 errorMessage: errorMessage
             }
-        case 'SHOW_SNACKBAR':
+        case 'CHANGE_SNACKBAR_VISIBILITY':
             return {
                 ...state,
                 credentials: {
                     ...state.credentials,
-                    showSnackBar: true
-                }
-            }
-        case 'DISMISS_SNACKBAR':
-            return {
-                ...state,
-                credentials: {
-                    ...state.credentials,
-                    auth:'',
-                    password:'',
-                    showSnackBar: false
+                    showSnackBar: action.showSnackBar
                 }
             }
         default:

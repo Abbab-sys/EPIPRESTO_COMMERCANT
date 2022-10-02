@@ -3,7 +3,7 @@ export interface Credentials {
     auth: string,
     password: string,
     showPassword: boolean,
-    showSnackBar:boolean
+    showSnackBar: boolean,
 }
 
 export interface LoginErrorMessage {

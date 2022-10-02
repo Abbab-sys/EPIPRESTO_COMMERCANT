@@ -1,4 +1,4 @@
-import { TextField } from "../../interfaces/textFieldInterface";
+import { TextField } from "../../interfaces/TextFieldInterface";
 import { SIGN_UP_ADRESS_PLACEHOLDER_KEY, SIGN_UP_ADRESS_TITLE_KEY, SIGN_UP_CONFIRM_PASSWORD_PLACEHOLDER_KEY, SIGN_UP_CONFIRM_PASSWORD_TITLE_KEY, SIGN_UP_EMAIL_PLACEHOLDER_KEY, SIGN_UP_EMAIL_TITLE_KEY, SIGN_UP_PASSWORD_PLACEHOLDER_KEY, SIGN_UP_PASSWORD_TITLE_KEY, SIGN_UP_PHONE_PLACEHOLDER_KEY, SIGN_UP_PHONE_TITLE_KEY, SIGN_UP_SHOP_NAME_PLACEHOLDER_KEY, SIGN_UP_SHOP_NAME_TITLE_KEY, SIGN_UP_USERNAME_PLACEHOLDER_KEY } from "../../translations/keys/SignUpTranslationKeys";
 
 export const SignUpTextFields:TextField[] = [
@@ -31,7 +31,7 @@ export const SignUpTextFields:TextField[] = [
   {
     label: SIGN_UP_CONFIRM_PASSWORD_PLACEHOLDER_KEY,
     title: SIGN_UP_CONFIRM_PASSWORD_TITLE_KEY,
-    attribute: "confirmPassword",
+    attribute: "verifyPassword",
     keyboardType: "default",
     secure: true,
     onChange: (text: string) => {

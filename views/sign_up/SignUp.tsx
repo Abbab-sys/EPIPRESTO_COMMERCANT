@@ -1,23 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {KeyboardAvoidingView, KeyboardTypeOptions, View} from 'react-native';
+import {View} from 'react-native';
 import {Button, Card, HelperText, Snackbar, Text, TextInput} from 'react-native-paper';
 import {signUpStyles} from './SignUpStyles';
 import {SignUpTextFields} from './SignUpTextFields';
 import {initialSignUpCredentialsState} from './reducers/SignUpCredentialsReducerState';
 import {signUpCredentialsReducer} from './reducers/SignUpCredentialsReducer';
-import {SignUpCredentialsReducerActions} from './reducers/SignUpCredentialsReducerActions';
 import {
   AccountInput,
   SignUpErrorMessage,
 } from '../../interfaces/SignUpInterfaces';
 import {useTranslation} from 'react-i18next';
 import { SIGN_UP_CREATE_ACCOUNT_KEY, SIGN_UP_ERROR_ACCOUNT_CREATION_KEY, SIGN_UP_TITLE_KEY } from '../../translations/keys/SignUpTranslationKeys';
-import { LoginTextField } from '../login/LoginTextFieldsFields';
 import CredentialInput from '../../components/credentialInput/CredentialInput';
 import { useLazyQuery, useMutation } from "@apollo/client/react";
 import { IS_VENDOR_EMAIL_USED, IS_VENDOR_USERNAME_USED } from "../../queries";
 import { SIGN_UP } from "../../mutations";
 import { VendorContext } from '../../context/Vendor';
+import {useTimeout} from '../../hooks/CredentialsHooks';
 
 const SignUp = () => {
   const {t: translation} = useTranslation('translation');
@@ -25,14 +24,6 @@ const SignUp = () => {
     {verifyPassword, accountInput, signUpErrorMessage},
     dispatchCredentialsState,
   ] = React.useReducer(signUpCredentialsReducer, initialSignUpCredentialsState);
-  const errorExists = (attribute: string) => {
-    return signUpErrorMessage[
-      (attribute + 'Error') as keyof SignUpErrorMessage
-    ] === undefined
-      ? false
-      : signUpErrorMessage[(attribute + 'Error') as keyof SignUpErrorMessage]
-          .length > 0;
-  };
   const {storeId, setStoreId} = useContext(VendorContext);
 
   const [isEmailUsed, {loading: emailUsedLoading, error: emailUsedError, data: emailUsedData}] = useLazyQuery(IS_VENDOR_EMAIL_USED);
@@ -41,104 +32,92 @@ const SignUp = () => {
 
   const [errorOpen, setErrorOpen] = useState(false);
 
-  // const [emailCheckingTimeout, setEmailCheckingTimeout] = useState(setTimeout(() => isEmailUsed({variables: {email: accountInput.email}}), 500))
-  // useEffect(() => {
-  //   isEmailUsed({variables: {email: accountInput.email}})
-  //   clearTimeout(emailCheckingTimeout)
-  //   setEmailCheckingTimeout(setTimeout(() => {
-  //     isEmailUsed({variables: {email: accountInput.email}})
-  //   }, 500))
-  // }, [accountInput.email])
-
-  // const [usernameCheckingTimeout, setUsernameCheckingTimeout] = useState(setTimeout(() => isUsernameUsed({variables: {username: accountInput.username}}), 500))
-  // useEffect(() => {
-  //   clearTimeout(usernameCheckingTimeout)
-  //   setUsernameCheckingTimeout(setTimeout(() => {
-  //     isUsernameUsed({variables: {username: accountInput.username}})
-  //   }, 500))
+  useTimeout({
+    callback: isEmailUsed,
+    time: 500,
+    callbackVars: {variables: {email: accountInput.email}},
+    dependencies: [accountInput.email]
+  })
+  useEffect(() => {
+    if (!emailUsedData) return
     
-  // }, [accountInput.username])
+    (emailUsedData.isVendorEmailUsed)
+      ? dispatchCredentialsState({type: "SET_EMAIL_AS_ALREADY_USED"})
+      : dispatchCredentialsState({type: "SET_EMAIL_AS_UNUSED"})
+  }, [emailUsedData])
 
-  // useEffect(() => {
-  //   if (emailUsedData && emailUsedData.isVendorEmailUsed) {
-  //     setDisabled(true)
-  //     dispatchCredentialsState({
-  //       type: "SET_EMAIL_AS_ALREADY_USED",
-  //     })
-  //   } else {
-  //     setDisabled(
-  //       signUpErrorMessage.emailError.length > 0 ||
-  //       signUpErrorMessage.usernameError.length > 0 ||
-  //       emailUsedLoading ||
-  //       usernameUsedLoading ||
-  //       !areAllCredentialsFieldsValid()
-  //     )
-  //     dispatchCredentialsState({
-  //       type: "SET_EMAIL_AS_UNUSED",
-  //     })
-  //   }
-  // }, [emailUsedLoading, emailUsedError, emailUsedData])
+  useTimeout({
+    callback: isUsernameUsed,
+    time: 500,
+    callbackVars: {variables: {username: accountInput.username}},
+    dependencies: [accountInput.username]
+  })
+  useEffect(() => {
+    if (!usernameUsedData) return
+    (usernameUsedData.isVendorUsernameUsed)
+      ? dispatchCredentialsState({type: "SET_USERNAME_AS_ALREADY_USED"})
+      : dispatchCredentialsState({type: "SET_USERNAME_AS_UNUSED"})
+  }, [usernameUsedData])
 
-  // useEffect(() => {
-  //   if (usernameUsedData && usernameUsedData.isVendorUsernameUsed) {
-  //     setDisabled(true)
-  //     dispatchCredentialsState({
-  //       type: "SET_USERNAME_AS_ALREADY_USED",
-  //     })
-  //   } else {
-  //     setDisabled(
-  //       signUpErrorMessage.emailError.length > 0 ||
-  //       signUpErrorMessage.usernameError.length > 0 ||
-  //       emailUsedLoading ||
-  //       usernameUsedLoading ||
-  //       !areAllCredentialsFieldsValid()
-  //     )
-  //     dispatchCredentialsState({
-  //       type: "SET_USERNAME_AS_UNUSED",
-  //     })
-  //   }
-  // }, [usernameUsedLoading, usernameUsedError, usernameUsedData])
+  useEffect(() => {
+    if (!signUpData) return
+    if (signUpData.vendorSignUp.code === 200) {
+      setStoreId(signUpData.vendorSignUp.vendorAccount.store._id)
+      // navigate("/synchronization")
+    } else {
+      setErrorOpen(true)
+    }
+  }, [setStoreId, signUpData])
 
-  // useEffect(() => {
-  //   if (signUpData && signUpData.vendorSignUp.code === 200) {
-  //     setStoreId(signUpData.data.vendorSignUp.vendorAccount.store._id)
-  //     // TODO: NAVIGATE TO HOME PAGE
-  //   } else {
-  //     setErrorOpen(true)
-  //   }
-  // }, [signUpLoading, signUpError, signUpData])
+  const handleSnackbarClosing = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorOpen(false);
+  };
 
-  const areAllCredentialsFieldsValid = () => {
+  
+  const areAllCredentialsFieldsValid = (): boolean => {
     const currErrorMessages = signUpErrorMessage;
-    return currErrorMessages.emailError === '' ||
-      currErrorMessages.usernameError === '' ||
-      currErrorMessages.passwordError === '' ||
-      currErrorMessages.verifyPasswordError === '' ||
-      currErrorMessages.shopNameError === '' ||
-      currErrorMessages.addressError === '' ||
-      currErrorMessages.phoneError === '';
+    return currErrorMessages.emailError.size === 0 &&
+      currErrorMessages.usernameError.size === 0 &&
+      currErrorMessages.passwordError.size === 0 &&
+      currErrorMessages.verifyPasswordError.size === 0 &&
+      currErrorMessages.shopNameError.size === 0 &&
+      currErrorMessages.addressError.size === 0 &&
+      currErrorMessages.phoneError.size === 0;
+  }
+  const areAllCredentialsFieldsAreFilled = (): boolean => {
+    return accountInput.shopName !== '' &&
+      accountInput.email !== '' &&
+      accountInput.username !== '' &&
+      accountInput.password !== '' &&
+      verifyPassword !== '' &&
+      accountInput.address !== '' &&
+      accountInput.phone !== ''
   }
 
-  // const handleCreateAccount = () => {
-  //   dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});
-  //   const areCredentialsValid = areAllCredentialsFieldsValid()
-  //   if (areCredentialsValid) {
-  //     signUp({variables: {accountInput: accountInput}})
-  //   }
-  // }
+  const submitButtonShouldBeDisabled = () => {
+    return emailUsedLoading ||
+      usernameUsedLoading ||
+      !areAllCredentialsFieldsValid()
+      || !areAllCredentialsFieldsAreFilled()
+  }
 
-  const [disabled, setDisabled] = useState(
-    signUpErrorMessage.emailError.length > 0 ||
-    signUpErrorMessage.usernameError.length > 0 ||
-    emailUsedLoading ||
-    usernameUsedLoading ||
-    !areAllCredentialsFieldsValid()
-  )
+  const handleCreateAccount = () => {
+    dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});
+    const areCredentialsValid = areAllCredentialsFieldsValid()
+    if (areCredentialsValid) {
+      signUp({variables: {accountInput: accountInput}}).then(r => console.log(r))
+    } else {
+      dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});
+    }
+  }
 
   return (
     <View style={signUpStyles.root}>
       <View style={signUpStyles.signUp}>
-        <Text>{translation(SIGN_UP_TITLE_KEY)}</Text>
+        <Text >{translation(SIGN_UP_TITLE_KEY)}</Text>
       </View>
       <Card style={signUpStyles.card}>
         <View style={signUpStyles.fieldsView}>
@@ -150,11 +129,7 @@ const SignUp = () => {
               credential={field.attribute === 'confirmPassword'
                       ? verifyPassword
                       : accountInput[field.attribute as keyof AccountInput]} 
-              errorMessage={translation(
-                      signUpErrorMessage[
-                        (field.attribute + 'Error') as keyof SignUpErrorMessage
-                      ],
-                    )} 
+              errorMessage={signUpErrorMessage[field.attribute + "Error" as keyof SignUpErrorMessage].size > 0 ? translation(signUpErrorMessage[field.attribute + 'Error' as keyof SignUpErrorMessage].values().next().value) : ''}
               dispatch={dispatchCredentialsState}></CredentialInput>
               // <View style={signUpStyles.fieldView} key={field.attribute}>
               //   <Text>{translation(field.title)}</Text>

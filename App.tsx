@@ -51,7 +51,7 @@ export default function App() {
       <VendorContext.Provider value={storeIdContext}>
         <ApolloProvider client={client}>
           <NavigationContainer >
-            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
+            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Login">
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="SignUp" component={SignUp} />
               <Stack.Screen name="Home" component={Navigation} />

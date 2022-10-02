@@ -10,7 +10,7 @@ export const initialLoginCredentialsStateReducer: LoginCredentialsReducerState =
         auth: '',
         password: '',
         showPassword: false,
-        showSnackBar: false
+        showSnackBar: false,
     },
     errorMessage: {
         authError: '',

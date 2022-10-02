@@ -28,53 +28,50 @@ const Login = ({navigation} : any) => {
   const [loginByUsername, {loading: usernameAuthLoading, error: usernameAuthError, data: usernameAuthData}] = useLazyQuery(LOGIN_BY_USERNAME);
 
   const {storeId, setStoreId} = useContext(VendorContext);
-  
   useEffect(() => {
-    if (emailAuthLoading || emailAuthError || !emailAuthData || !emailAuthData.loginVendorByEmail) return
+    if (storeId.length > 0) {
+        // navigate('/synchronization')
+    }
+}, [storeId]);
+
+useEffect(() => {
+  console.log('LOL')
+    if (emailAuthLoading || emailAuthError || !emailAuthData|| !emailAuthData.loginVendorByEmail !== null) return
     const serverResponse = emailAuthData.loginVendorByEmail
     const loggedWithSuccess = serverResponse.code === 200
     if (loggedWithSuccess) {
-      console.log("SUCCESS EMAIL")
-      setStoreId(serverResponse.vendorAccount.store._id)
-      // TODO: Add navigation to Home page
+        setStoreId(serverResponse.vendorAccount.store._id)
     } else {
-        dispatchCredentialsState({type:'SHOW_SNACKBAR'})
+        dispatchCredentialsState({type:'CHANGE_SNACKBAR_VISIBILITY', showSnackBar: true})
     }
-  }, [emailAuthLoading, emailAuthError, emailAuthData])
+}, [emailAuthLoading, emailAuthError, emailAuthData, setStoreId])
 
-  useEffect(() => {
+useEffect(() => {
     if (usernameAuthLoading || usernameAuthError || !usernameAuthData || !usernameAuthData.loginVendorByUsername) return
     const serverResponse = usernameAuthData.loginVendorByUsername
     const loggedWithSuccess = serverResponse.code === 200
-    
     if (loggedWithSuccess) {
-      console.log("SUCCESS USERNAME")
-      setStoreId(serverResponse.vendorAccount.store._id)
-       // TODO: Add navigation to Home page
+        setStoreId(serverResponse.vendorAccount.store._id)
     } else {
-      dispatchCredentialsState({type:'SHOW_SNACKBAR'})
+        dispatchCredentialsState({type:'CHANGE_SNACKBAR_VISIBILITY', showSnackBar: true})
     }
-  }, [usernameAuthLoading, usernameAuthError, usernameAuthData])
-  
-  const handleLogin = () => {
-    Keyboard.dismiss()
-    dispatchCredentialsState({type: 'CHECK_LOGIN_CREDENTIALS'})
-    if (errorMessage.authError === '' || errorMessage.passwordError === '') {
-      const isAuthEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(credentials.auth)
-      const loginResponse = isAuthEmail
-        ? loginByEmail({variables: {email: credentials.auth, password: credentials.password}})
-        : loginByUsername({variables: {username: credentials.auth, password: credentials.password}})
-    }
-  }
+}, [usernameAuthLoading, usernameAuthError, usernameAuthData, setStoreId])
 
-  const errorExists = (attribute: string) => {
-    return errorMessage[
-      (attribute + 'Error') as keyof LoginErrorMessage
-    ] === undefined
-      ? false
-      : errorMessage[(attribute + 'Error') as keyof LoginErrorMessage]
-          .length > 0;
-  };
+function areAllCredentialsFieldsValid(credsState: LoginCredentialsReducerState): boolean {
+    return credsState.credentials.auth.length > 0 && credsState.credentials.password.length > 0
+}
+
+const handleLogin = () => {
+    dispatchCredentialsState({type: 'CHECK_LOGIN_CREDENTIALS'})
+    const areCredentialsValid = areAllCredentialsFieldsValid({credentials, errorMessage})
+
+    if (areCredentialsValid) {
+        const isAuthEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(credentials.auth)
+        isAuthEmail
+          ? loginByEmail({variables: {email: credentials.auth, password: credentials.password}})
+          : loginByUsername({variables: {username: credentials.auth, password: credentials.password}})
+    }
+}
 
   return (
     <View style={LoginStyles.root}>
@@ -89,7 +86,7 @@ const Login = ({navigation} : any) => {
           key={field.attribute}
           field={field} 
           credential={credentials[field.attribute as keyof Credentials] as string} 
-          errorMessage={translation(errorMessage[(field.attribute + "Error") as keyof LoginErrorMessage]).length > 0 ? translation(errorMessage[(field.attribute + "Error") as keyof LoginErrorMessage]) : ''} 
+          errorMessage={errorMessage[field.attribute + 'Error' as keyof LoginErrorMessage].length > 0 ? errorMessage[field.attribute + 'Error' as keyof LoginErrorMessage] : '' as string} 
           dispatch={dispatchCredentialsState}           
           ></CredentialInput>
           // <View key={field.attribute} style={LoginStyles.fieldView}>
@@ -126,7 +123,7 @@ const Login = ({navigation} : any) => {
           action={{
             label: 'Dismiss',
             onPress: () => {
-              dispatchCredentialsState({type:'DISMISS_SNACKBAR'})
+              dispatchCredentialsState({type:'CHANGE_SNACKBAR_VISIBILITY', showSnackBar: false})
             },
           }}>
           {translation(LOGIN_CREDENTIALS_ERROR)}
