@@ -1,7 +1,9 @@
+import { useMutation } from "@apollo/client/react";
 import CheckBox from "@react-native-community/checkbox";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, View  } from "react-native";
+import { Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
 import { Button, Divider, HelperText, TextInput } from "react-native-paper";
+import { ADD_PRODUCT } from "../../mutations";
 
 const AddProcudt = () => {
   const [title, setTitle] = useState("");
@@ -10,9 +12,32 @@ const AddProcudt = () => {
   const [isAvailableForSale, setAvailableForSale] = useState(false);
   const [isTaxable, setTaxable] = useState(false);
 
+  const [addProduct] = useMutation(ADD_PRODUCT);
+
+  const handleAdd = async () => {
+    Keyboard.dismiss()
+    let product;
+    product = {
+      title: "test",
+      description: "",
+      brand: "",
+      published: false,
+      tags: [],
+      imgSrc: "",
+      variants: []
+    }
+    console.log("OKOK")
+    const response =  await addProduct({variables:{storeID: "6339c917efbeebd69ad55561", newProduct: product} })
+    if (response.data.code !== 404) {
+        console.log("ITEM AJOUTÉ!")
+    } else {
+        console.log("FAIL")
+    }
+    }
+
     return (
         <ScrollView>
-          <Text>AJOUT PRODUIT MANUEL</Text>
+          <Text>AJOUT PRODUIT MANUEL..</Text>
           <Text>FIEDLS PRODUIT</Text>
           <TextInput
             style={styles.input}
@@ -131,7 +156,7 @@ const AddProcudt = () => {
             />
           </View>
           
-          <Button mode="contained" onPress={() => console.log("Push to DB")}>
+          <Button mode="contained" onPress={() => handleAdd()}>
             Enregistrer
           </Button>
           <Divider   />
