@@ -17,6 +17,7 @@ import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from "./views/home/Home";
 import Navigation from "./views/navigation/Navigation";
+import Inventory from "./views/inventory/Inventory";
 
 const Stack = createNativeStackNavigator();
 
