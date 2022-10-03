@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View  } from "react-native";
 import { Button, Divider, HelperText, TextInput } from "react-native-paper";
 
 const AddProcudt = () => {
-  const title = "";
+  const [title, setTitle] = useState("");
   const [isWeightable, setWeightable] = useState(false);
   const [isPublished, setPublished] = useState(false);
   const [isAvailableForSale, setAvailableForSale] = useState(false);
@@ -16,10 +16,13 @@ const AddProcudt = () => {
           <Text>FIEDLS PRODUIT</Text>
           <TextInput
             style={styles.input}
-            label='Titre du produit'
+            label='Titre du produit..'
+            onChangeText={text => setTitle(text)}
             />
-          <HelperText type='error'>
-          HELPER
+          <HelperText type='error' style={{
+                height: title.length < 1  ? 'auto' : 0,
+              }}>
+            Champ obligatoire!
           </HelperText>
           
           <TextInput
