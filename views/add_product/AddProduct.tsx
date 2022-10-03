@@ -1,6 +1,6 @@
 import CheckBox from "@react-native-community/checkbox";
 import React, { useState } from "react";
-import { StyleSheet, Text, View  } from "react-native";
+import { ScrollView, StyleSheet, Text, View  } from "react-native";
 import { Button, Divider, HelperText, TextInput } from "react-native-paper";
 
 const AddProcudt = () => {
@@ -11,16 +11,15 @@ const AddProcudt = () => {
   const [isTaxable, setTaxable] = useState(false);
 
     return (
-        <View>
+        <ScrollView>
           <Text>AJOUT PRODUIT MANUEL</Text>
           <Text>FIEDLS PRODUIT</Text>
           <TextInput
             style={styles.input}
             label='Titre du produit'
-            value={title}
             />
           <HelperText type='error'>
-          HELPER {title}
+          HELPER
           </HelperText>
           
           <TextInput
@@ -136,13 +135,13 @@ const AddProcudt = () => {
           <Button mode="contained" onPress={() => console.log("Cancel")}>
             Annuler
           </Button>
-        </View>
+        </ScrollView>
       )
   };
 
   const styles = StyleSheet.create({
     input: {
-      height: 40,
+      height: 50,
       margin: 12,
       borderWidth: 1,
       padding: 10,
