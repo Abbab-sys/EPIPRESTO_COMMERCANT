@@ -1,42 +1,48 @@
 import {StyleSheet} from 'react-native';
 
 export const signUpStyles = StyleSheet.create({
+  bottomSafeAreaView: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  topSafeAreaView: {
+    flex: 0,
+    backgroundColor: '#FFA500',
+  },
   root: {
     backgroundColor: '#FFA500',
     height: '100%',
-    flex: 1,
   },
   card: {
-    elevation: 4,
-    flex: 13,
+    flex: 90,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    backgroundColor: '#FFFFFF',
   },
   signUp: {
-    flex: 1,
+    flex: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 50,
+  },
+  signUpText: {
+    fontFamily: 'Lato',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 20,
   },
   fieldsView: {
     margin: '5%',
     height: 'auto',
-    // borderColor: '#000000',
-    // borderWidth: 1,
   },
   fieldView: {
     padding: 'auto',
   },
   buttonView: {
-    // height: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: '#FF0000',
-    // borderWidth: 1,
-    // height: '30%',
   },
   button: {
     backgroundColor: '#FFA500',
-    width: '70%',
+    width: 'auto',
   },
 });

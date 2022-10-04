@@ -1,5 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {View} from 'react-native';
+import React, {Fragment, useContext, useEffect, useState} from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import {
   Button,
   Card,
@@ -32,7 +38,7 @@ import {SIGN_UP} from '../../graphql/mutations';
 import {VendorContext} from '../../context/Vendor';
 import {useTimeout} from '../../hooks/CredentialsHooks';
 
-const SignUp = () => {
+const SignUp = ({navigation}: any) => {
   const {t: translation} = useTranslation('translation');
   const [
     {verifyPassword, accountInput, signUpErrorMessage},
@@ -44,6 +50,7 @@ const SignUp = () => {
     isEmailUsed,
     {loading: emailUsedLoading, error: emailUsedError, data: emailUsedData},
   ] = useLazyQuery(IS_VENDOR_EMAIL_USED);
+
   const [
     isUsernameUsed,
     {
@@ -52,6 +59,7 @@ const SignUp = () => {
       data: usernameUsedData,
     },
   ] = useLazyQuery(IS_VENDOR_USERNAME_USED);
+
   const [
     signUp,
     {loading: signUpLoading, error: signUpError, data: signUpData},
@@ -91,16 +99,27 @@ const SignUp = () => {
   }, [usernameUsedData]);
 
   useEffect(() => {
+    if (signUpError) {
+      setErrorOpen(true);
+      console.log(signUpError);
+    }
+  }, [signUpError]);
+  useEffect(() => {
     if (!signUpData) {
       return;
     }
     if (signUpData.vendorSignUp.code === 200) {
       setStoreId(signUpData.vendorSignUp.vendorAccount.store._id);
-      // navigate("/synchronization")
     } else {
       setErrorOpen(true);
     }
-  }, [setStoreId, signUpData]);
+  }, [signUpData]);
+  useEffect(() => {
+    if (storeId.length > 0) {
+      console.log('store id is set ', storeId);
+      navigation.navigate('Home');
+    }
+  }, [storeId]);
 
   const handleSnackbarClosing = (
     event?: React.SyntheticEvent | Event,
@@ -149,106 +168,83 @@ const SignUp = () => {
     dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});
     const areCredentialsValid = areAllCredentialsFieldsValid();
     if (areCredentialsValid) {
-      signUp({variables: {accountInput: accountInput}}).then(r =>
-        console.log(r),
-      );
+      console.log(accountInput);
+      signUp({variables: {accountInput: accountInput}});
     } else {
       dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});
     }
   };
 
   return (
-    <View style={signUpStyles.root}>
-      <View style={signUpStyles.signUp}>
-        <Text>{translation(SIGN_UP_TITLE_KEY)}</Text>
-      </View>
-      <Card style={signUpStyles.card}>
-        <View style={signUpStyles.fieldsView}>
-          {SignUpTextFields.map(field => {
-            return (
-              <CredentialInput
-                key={field.attribute}
-                field={field}
-                credential={
-                  field.attribute === 'confirmPassword'
-                    ? verifyPassword
-                    : accountInput[field.attribute as keyof AccountInput]
-                }
-                errorMessage={
-                  signUpErrorMessage[
-                    (field.attribute + 'Error') as keyof SignUpErrorMessage
-                  ].size > 0
-                    ? translation(
+    <Fragment>
+      <SafeAreaView style={signUpStyles.topSafeAreaView} />
+      <SafeAreaView style={signUpStyles.bottomSafeAreaView}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={signUpStyles.root}>
+          <View style={signUpStyles.signUp}>
+            <Text style={signUpStyles.signUpText}>
+              {translation(SIGN_UP_TITLE_KEY)}
+            </Text>
+          </View>
+          <View style={signUpStyles.card}>
+            <ScrollView>
+              <View style={signUpStyles.fieldsView}>
+                {SignUpTextFields.map(field => {
+                  return (
+                    <CredentialInput
+                      key={field.attribute}
+                      field={field}
+                      credential={
+                        field.attribute === 'confirmPassword'
+                          ? verifyPassword
+                          : accountInput[field.attribute as keyof AccountInput]
+                      }
+                      errorMessage={
                         signUpErrorMessage[
                           (field.attribute +
                             'Error') as keyof SignUpErrorMessage
-                        ]
-                          .values()
-                          .next().value,
-                      )
-                    : ''
-                }
-                dispatch={dispatchCredentialsState}
-              />
-              // <View style={signUpStyles.fieldView} key={field.attribute}>
-              //   <Text>{translation(field.title)}</Text>
-              //   <TextInput
-              //     style={{height: 40}}
-              //     label= {translation(field.label)}
-              //     value={
-              //       field.attribute === 'confirmPassword'
-              //         ? verifyPassword
-              //         : accountInput[field.attribute as keyof AccountInput]
-              //     }
-              //     keyboardType={field.keyboardType as KeyboardTypeOptions}
-              //     secureTextEntry={field.secure}
-              //     onChangeText={text => {
-              //       dispatchCredentialsState(
-              //         field.onChange(text) as unknown as SignUpCredentialsReducerActions,
-              //       );
-              //     }}
-              //     mode="outlined"
-              //     error={false}
-              //   />
-              //   <HelperText
-              //     style={{
-              //       height: errorExists(field.attribute) ? 'auto' : 0,
-              //     }}
-              //     padding="none"
-              //     type="error">
-              //     {translation(
-              //       signUpErrorMessage[
-              //         (field.attribute + 'Error') as keyof SignUpErrorMessage
-              //       ],
-              //     )}
-              //   </HelperText>
-              // </View>
-            );
-          })}
-        </View>
-        <View style={signUpStyles.buttonView}>
-          <Button
-            style={signUpStyles.button}
-            mode="contained"
-            onPress={() =>
-              dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'})
-            }>
-            {translation(SIGN_UP_CREATE_ACCOUNT_KEY)}
-          </Button>
-        </View>
-        <Snackbar
-          visible={errorOpen}
-          onDismiss={() => {}}
-          action={{
-            label: 'Dismiss',
-            onPress: () => {
-              setErrorOpen(false);
-            },
-          }}>
-          {translation(SIGN_UP_ERROR_ACCOUNT_CREATION_KEY)}
-        </Snackbar>
-      </Card>
-    </View>
+                        ].size > 0
+                          ? translation(
+                              signUpErrorMessage[
+                                (field.attribute +
+                                  'Error') as keyof SignUpErrorMessage
+                              ]
+                                .values()
+                                .next().value,
+                            )
+                          : ''
+                      }
+                      dispatch={dispatchCredentialsState}
+                    />
+                  );
+                })}
+              </View>
+              <View style={signUpStyles.buttonView}>
+                <Button
+                  disabled={submitButtonShouldBeDisabled()}
+                  style={signUpStyles.button}
+                  mode="contained"
+                  onPress={() => handleCreateAccount()}>
+                  {translation(SIGN_UP_CREATE_ACCOUNT_KEY)}
+                </Button>
+              </View>
+              <Snackbar
+                visible={errorOpen}
+                onDismiss={() => {}}
+                action={{
+                  label: 'Dismiss',
+                  onPress: () => {
+                    setErrorOpen(false);
+                  },
+                }}>
+                {translation(SIGN_UP_ERROR_ACCOUNT_CREATION_KEY)}
+              </Snackbar>
+            </ScrollView>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </Fragment>
   );
 };
 

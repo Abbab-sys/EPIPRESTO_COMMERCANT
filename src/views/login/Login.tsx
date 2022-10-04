@@ -1,22 +1,6 @@
 import React, {useContext, useEffect, useReducer} from 'react';
-import {
-  TextInput,
-  Text,
-  Button,
-  HelperText,
-  Snackbar,
-  Card,
-} from 'react-native-paper';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Image,
-  Keyboard,
-  KeyboardTypeOptions,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import {Text, Button, Snackbar} from 'react-native-paper';
+import {View, Image, KeyboardAvoidingView, Platform} from 'react-native';
 import {LOGIN_BY_EMAIL, LOGIN_BY_USERNAME} from '../../graphql/queries';
 import {useLazyQuery} from '@apollo/client/react';
 import {LoginStyles} from './LoginStyles';
@@ -27,8 +11,6 @@ import {
 import {loginCredentialsReducer} from './reducers/LoginCredentialsReducer';
 import {VendorContext} from '../../context/Vendor';
 import {Credentials, LoginErrorMessage} from '../../interfaces/LoginInterfaces';
-import {LoginCredentialsStateReducerAction} from './reducers/LoginCredentialsReducerActions';
-import {SignUpErrorMessage} from '../../interfaces/SignUpInterfaces';
 import {LoginTextField} from './LoginTextFieldsFields';
 import {useTranslation} from 'react-i18next';
 import {
@@ -37,7 +19,6 @@ import {
   LOGIN_LOGIN_KEY,
   LOGIN_NEW_TO_APP_KEY,
 } from '../../translations/keys/LoginTranslationKeys';
-import {signUpStyles} from '../sign_up/SignUpStyles';
 import CredentialInput from '../../components/credential-input/CredentialInput';
 import LanguageSelector from '../../components/language-selection/LanguageSelector';
 
