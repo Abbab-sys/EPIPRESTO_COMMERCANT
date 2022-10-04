@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { FlatList, SafeAreaView, View } from "react-native"
-import { Text, Card, BottomNavigation } from 'react-native-paper'
+import { Text, Card } from 'react-native-paper'
 import { homeStyles } from "./HomeStyles";
 import Swiper from "react-native-swiper";
 import Login from "../login/Login";

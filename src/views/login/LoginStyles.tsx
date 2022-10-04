@@ -1,70 +1,79 @@
-import { StyleSheet } from "react-native"
+import {Dimensions, StyleSheet} from 'react-native';
 
 export const LoginStyles = StyleSheet.create({
-    root: {
-        backgroundColor: '#FFA500',
-        height: '100%',
-        flex: 1,
+  root: {
+    backgroundColor: '#FFA500',
+    width: '100%',
+    height: '100%',
+  },
+  imageView: {
+    flex: 25,
+    justifyContent: 'flex-end',
+  },
+  image: {
+    resizeMode: 'contain',
+    width: '100%',
+    height: '100%',
+  },
+  card: {
+    flex: 75,
+    justifyContent: 'flex-end',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: 'white',
+  },
+  loginTitle: {
+    fontSize: 19,
+    fontWeight: '600',
+    fontFamily: 'Lato',
+    justifyContent: 'flex-end',
+  },
+  loginTitleWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: 'blue',
+    flex: 5,
+  },
 
-    },
-    card: {
-        elevation: 4,
-        flex: 3,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        
-    },
-    imageView: { 
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    image:{
-        resizeMode:'contain',
-        width: '100%',
-    
-    },
-    fieldsView: {
-        margin:'5%',
-        height:'auto',
-        // borderColor: '#000000',
-        // borderWidth: 1,
-    },
-    loginTitle:{
-        fontSize: 19,
-        alignSelf: 'center',
-        fontFamily: 'Lato'
+  fieldsView: {
+    flex: 20,
+    justifyContent: 'space-around',
+    marginHorizontal: '5%',
+  },
 
-    },
-    fieldView : {
-        padding: 'auto',
-    },
-    textInput: {
-        height: 40,
-        backgroundColor: 'white',
-    },
-
-    buttonView: {
-        // height: 'auto',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: '#FF0000',
-        // borderWidth: 1,
-        // height: '30%',
-
-    },
-    signUpView:{
-        flexDirection: 'row',
-        justifyContent: 'center',
-        padding: '5%',
-    },
-    signUp:{
-        color: '#FFA500',
-        
-    },
-    button: {
-        backgroundColor: '#FFA500',
-        width: '70%',
-    },
-    
-})
+  loginButtonWrapper: {
+    // backgroundColor: 'red',
+    flex: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signUpView: {
+    marginTop: '5%',
+    paddingHorizontal: '10%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    width: 'auto',
+  },
+  button: {
+    paddingHorizontal: '10%',
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    backgroundColor: '#FF9933',
+    width: 'auto',
+    borderRadius: 13,
+  },
+  newTo: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    color: 'black',
+  },
+  signUp: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    color: '#FFA500',
+  },
+});

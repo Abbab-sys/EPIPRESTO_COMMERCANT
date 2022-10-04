@@ -16,9 +16,9 @@ const Navigation = () => {
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'home', title: 'Favorites', focusedIcon: 'heart', unfocusedIcon: 'heart-outline'},
-    { key: 'login', title: 'Albums', focusedIcon: 'album' },
-    { key: 'signUp', title: 'Recents', focusedIcon: 'history' }
+    { key: 'home', title: 'Home', focusedIcon: 'home'},
+    { key: 'inventory', title: 'Inventory', focusedIcon: 'album' },
+    { key: 'signUp', title: 'Sign-up', focusedIcon: 'history' }
   ]);
 
   const renderScene = BottomNavigation.SceneMap({

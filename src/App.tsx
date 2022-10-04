@@ -56,7 +56,8 @@ export default function App() {
             initialRouteName="SignUp">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="Home" component={Navigation} />
+            <Stack.Screen name="Navigation" component={Navigation} />
+            {/* <Stack.Screen name="Inventory" component={Inventory} /> */}
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>
