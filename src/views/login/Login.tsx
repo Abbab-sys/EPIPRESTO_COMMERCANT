@@ -65,7 +65,8 @@ const Login = ({navigation}: any) => {
   const {storeId, setStoreId} = useContext(VendorContext);
   useEffect(() => {
     if (storeId.length > 0) {
-      // navigate('/synchronization')
+      console.log('store id is set ', storeId);
+      navigation.navigate('Home');
     }
   }, [storeId]);
 
@@ -89,7 +90,7 @@ const Login = ({navigation}: any) => {
         showSnackBar: true,
       });
     }
-  }, [emailAuthLoading, emailAuthError, emailAuthData, setStoreId]);
+  }, [emailAuthLoading, emailAuthError, emailAuthData]);
 
   useEffect(() => {
     if (
@@ -110,7 +111,7 @@ const Login = ({navigation}: any) => {
         showSnackBar: true,
       });
     }
-  }, [usernameAuthLoading, usernameAuthError, usernameAuthData, setStoreId]);
+  }, [usernameAuthLoading, usernameAuthError, usernameAuthData]);
 
   const areAllCredentialsFieldsValid = (
     credsState: LoginCredentialsReducerState,
@@ -147,7 +148,6 @@ const Login = ({navigation}: any) => {
           });
     }
   };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
