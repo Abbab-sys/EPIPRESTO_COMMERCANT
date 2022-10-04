@@ -1,11 +1,24 @@
-import React from "react"
-import { View } from "react-native"
-import { Text, Card } from 'react-native-paper'
+import React, { useState } from "react"
+import { FlatList, SafeAreaView, View } from "react-native"
+import { Text, Card, BottomNavigation } from 'react-native-paper'
 import { homeStyles } from "./HomeStyles";
 import Swiper from "react-native-swiper";
 import OrderTemplate from "./subsections/Order";
+import DailyData, { DailyDataProps, DataType } from "./subsections/DailyData";
 
 const Home = () => {
+
+  const dailyData: DailyDataProps[] = [
+    {
+      dataType: DataType.ORDERS,
+      dataAmount: 10
+    },
+    {
+      dataType: DataType.INCOME,
+      dataAmount: 100
+    }
+  ]
+
   return(
     <View style={homeStyles.root}>
       <View style={homeStyles.view}>
@@ -13,22 +26,24 @@ const Home = () => {
           Marché TEST !
         </Text>
       </View>
-        <Card style={homeStyles.cardStyle}>
-          <Text variant="titleMedium" style={homeStyles.cardTitle}>
-            Bonjour, voici les données de la journée !
-          </Text>
-          <View style={homeStyles.innerView}>
-            <Card style={homeStyles.cardContent}>
-              <Text variant="titleLarge" style={homeStyles.innerCardTitle}>COMMANDES</Text>
-              <Text variant="titleLarge" style={homeStyles.data}>10</Text>
-            </Card>
-            <Card style={homeStyles.cardContent}>
-              <Text variant="titleLarge" style={homeStyles.innerCardTitle}>REVENU</Text>
-              <Text variant="titleLarge" style={homeStyles.data}>100$</Text>
-            </Card>
-          </View>
-        </Card>
-      <Text variant="titleMedium">Commande récentes</Text>
+      <Card style={homeStyles.cardStyle}>
+        <Text variant="titleMedium" style={homeStyles.cardTitle}>
+          Bonjour, voici les données de la journée !
+        </Text>
+        <SafeAreaView>
+          <FlatList
+            numColumns={2}
+            data={dailyData}
+            renderItem={({item}) => 
+              <DailyData
+                dataType={item.dataType}
+                dataAmount={item.dataAmount} /> 
+            }
+            keyExtractor={item => item.dataType}
+          />
+        </SafeAreaView>
+      </Card>
+      <Text variant="titleMedium">Commandes récentes</Text>
       <Swiper showsButtons={true}>
         {/* TODO: MAP MOST RECENT ORDERS */}
         <OrderTemplate clientName="KHALIL ZRIBA" orderNum={1}/>

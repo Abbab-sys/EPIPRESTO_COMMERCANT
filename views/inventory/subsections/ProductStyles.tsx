@@ -27,16 +27,12 @@ export const productStyles = StyleSheet.create({
     backgroundColor: "#FFA500",
     width: "auto"
   },
-  image:{
+  image: {
     resizeMode:'contain',
     height: 100,
     width: '100%',
   },
-  // imageStyle: {
-  //   width: "20%"
-  // },
-  // productName: {
-  //   width: 
-  // }
-
+  buttonText: {
+    color: 'white'
+  }
 })

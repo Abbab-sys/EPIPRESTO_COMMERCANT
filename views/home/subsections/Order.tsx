@@ -1,6 +1,6 @@
 import React from "react"
 import { StyleSheet, View } from "react-native"
-import { Text } from 'react-native-paper'
+import { Button, Text } from 'react-native-paper'
 
 interface OrderTemplateProps {
   orderNum: number;
@@ -19,6 +19,11 @@ const OrderTemplate = (props: OrderTemplateProps) => {
       <Text variant="titleSmall">
         {props.clientName}
       </Text>
+      <Button style={orderStyles.buttonStyle}>
+        <Text style={orderStyles.buttonText}>
+          CONSULTER
+        </Text>
+      </Button>
     </View>
   )
 }
@@ -31,6 +36,15 @@ const orderStyles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 30,
   },
+  buttonStyle: {
+    borderRadius: 30,
+    color: "white",
+    backgroundColor: "#FFA500",
+    width: "auto",
+  },
+  buttonText: {
+    color: 'white'
+  }
 });
 
 export default OrderTemplate

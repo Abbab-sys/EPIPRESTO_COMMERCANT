@@ -3,11 +3,15 @@ import { FlatList, SafeAreaView, View } from "react-native";
 import { Searchbar, Text } from 'react-native-paper';
 import { inventoryStyles } from "./InventoryStyles";
 import Product, { ProductProps } from "./subsections/Product";
-import { mockProducts } from './mockProducts'
+import { mockProducts } from './mockProducts';
+// import { GET_PRODUCTS } from "../../queries";
+import { useQuery } from "@apollo/client";
 
 const Inventory = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
+
+  // const [getProduts, { loading, error, data }] = useLazyQuery()
 
   const onChangeSearch = (query: React.SetStateAction<string>) => setSearchQuery(query);
 
@@ -20,7 +24,7 @@ const Inventory = () => {
     }
     else {
       const data = products.filter(product => {
-        return product.productName.includes(text.toString())
+        return product.productName.toLowerCase().includes(text.toString())
       })
       setProducts(data)
     }

@@ -20,7 +20,9 @@ const Product = (props: ProductProps) => {
           {props.productName}
         </Text>
         <Button style={productStyles.buttonStyle}>
-          VOIR
+          <Text style={productStyles.buttonText}>
+            VOIR
+          </Text>
         </Button>
       </Card>
     </View>
