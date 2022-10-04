@@ -28,7 +28,7 @@ export default function App() {
     };
   });
   const httpLink = createHttpLink({
-    uri: 'http://10.0.2.2:4000/graphql',
+    uri: 'https://epipresto.pagekite.me/',
   });
   const client = new ApolloClient({
     link: authLink.concat(httpLink),

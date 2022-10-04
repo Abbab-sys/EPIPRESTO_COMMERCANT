@@ -1,6 +1,7 @@
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 
 export interface Variant {
+    variantId: string;
     variantTitle: string,
     price: Float,
     sku: string,
@@ -8,5 +9,5 @@ export interface Variant {
     imgSrc: string,
     byWeight:boolean,
     availableForSale:boolean,
-    stock: number,
+    stock: number
 }
