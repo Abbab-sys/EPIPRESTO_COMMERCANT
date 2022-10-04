@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client/react";
 import CheckBox from "@react-native-community/checkbox";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
 import { Button, Divider, HelperText, TextInput } from "react-native-paper";
 import { ADD_PRODUCT } from "../../mutations";
@@ -12,42 +12,49 @@ const AddProcudt = () => {
   const [isAvailableForSale, setAvailableForSale] = useState(false);
   const [isTaxable, setTaxable] = useState(false);
 
-  const [addProduct] = useMutation(ADD_PRODUCT);
+  const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
+ 
 
-  const handleAdd = async () => {
+  const handleAdd =  () => {
     Keyboard.dismiss()
     let product;
     product = {
       title: "test",
-      description: "",
-      brand: "",
+      description: "gre",
+      brand: "ger",
       published: false,
       tags: [],
-      imgSrc: "",
+      imgSrc: "gre",
       variants: []
     }
-    console.log("OKOK")
-    const response =  await addProduct({variables:{storeID: "6339c917efbeebd69ad55561", newProduct: product} })
-    if (response.data.code !== 404) {
-        console.log("ITEM AJOUTÉ!")
-    } else {
+    console.log("OKOK", product)
+    addProduct({variables:{storeID: "6339c917efbeebd69ad55561", newProduct: product} })
+    console.log("DONE")
+    }
+
+  useEffect(() => {
+    console.log('LOL')
+      if (addLoading || addError || !addData) return
+      const serverResponse = addData.loginVendorByEmail
+      const loggedWithSuccess = serverResponse.code === 200
+      if (loggedWithSuccess) {
+          console.log("SUCCES")
+      } else {
         console.log("FAIL")
-    }
-    }
+      }
+  }, [addLoading, addError, addData])
 
     return (
         <ScrollView>
-          <Text>AJOUT PRODUIT MANUEL..</Text>
           <Text>FIEDLS PRODUIT</Text>
           <TextInput
             style={styles.input}
-            label='Titre du produit..'
+            label='Titre du produit'
             onChangeText={text => setTitle(text)}
             />
           <HelperText type='error' style={{
                 height: title.length < 1  ? 'auto' : 0,
               }}>
-            Champ obligatoire!
           </HelperText>
           
           <TextInput
@@ -55,7 +62,6 @@ const AddProcudt = () => {
             label='Description'
             />
           <HelperText type='error'>
-          HELPER
           </HelperText>
 
           <TextInput
@@ -63,7 +69,6 @@ const AddProcudt = () => {
             label='Marque'
             />
           <HelperText type='error'>
-          HELPER
           </HelperText>
 
           <TextInput
@@ -71,7 +76,6 @@ const AddProcudt = () => {
             label='Tags'
             />
           <HelperText type='error'>
-          HELPER
           </HelperText>
 
           <Text>AJOUT PHOTO PRODUIT ICI</Text>
@@ -83,7 +87,6 @@ const AddProcudt = () => {
             label='Titre'
             />
           <HelperText type='error'>
-          HELPER
           </HelperText>
 
           <View style={styles.checkboxContainer}>
@@ -94,14 +97,13 @@ const AddProcudt = () => {
               style={styles.checkbox}
             />
           </View>
-          <Text>Is CheckBox selected: {isWeightable ? "👍" : "👎"}</Text>
 
           <TextInput
             style={styles.input}
             label='Prix'
+            keyboardType= "numeric"
             />
           <HelperText type='error'>
-          HELPER
           </HelperText>
 
           <View style={styles.checkboxContainer}>
@@ -118,15 +120,14 @@ const AddProcudt = () => {
             label='Sku'
             />
           <HelperText type='error'>
-          HELPER
           </HelperText>
 
           <TextInput
             style={styles.input}
             label='Stock'
+            keyboardType= "numeric"
             />
           <HelperText type='error'>
-          HELPER
           </HelperText>
 
           <View style={styles.checkboxContainer}>
@@ -139,12 +140,8 @@ const AddProcudt = () => {
           </View>
 
           <Divider />
-          <Text>AJOUT PHOTO ICI</Text>
-          <Divider />
-          <View style={styles.checkboxContainer}>
-            <Text style={styles.label}>Stock</Text>
-          </View>
-          
+          <Text>AJOUT PHOTO VARIANT ICI</Text>
+          <Divider />          
 
 
           <View style={styles.checkboxContainer}>
@@ -156,11 +153,11 @@ const AddProcudt = () => {
             />
           </View>
           
-          <Button mode="contained" onPress={() => handleAdd()}>
+          <Button style={styles.button} mode="contained" onPress={() => handleAdd()}>
             Enregistrer
           </Button>
           <Divider   />
-          <Button mode="contained" onPress={() => console.log("Cancel")}>
+          <Button style={styles.button} mode="contained" onPress={() => console.log("Cancel")}>
             Annuler
           </Button>
         </ScrollView>
@@ -170,9 +167,9 @@ const AddProcudt = () => {
   const styles = StyleSheet.create({
     input: {
       height: 50,
-      margin: 12,
+      margin: 10,
       borderWidth: 1,
-      padding: 10,
+      padding: 2,
     },
     checkboxContainer: {
       flexDirection: "row",
@@ -183,7 +180,11 @@ const AddProcudt = () => {
     },
     label: {
       margin: 8,
-    }
+    },
+    button: {
+      borderColor: '#FF0000',
+      backgroundColor: '#FFA500'
+    },
   });
 
   export default AddProcudt;
