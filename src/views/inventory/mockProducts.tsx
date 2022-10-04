@@ -4,7 +4,7 @@ export const mockProducts: ProductProps[] = [
   {
     productId: '1',
     productName: 'Banane lol adam',
-    productImage: require('../../assets/banana.png')
+    productImage: require('../../src/assets/images/banana.png')
   },
   {
     productId: '2',

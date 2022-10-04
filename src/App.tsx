@@ -1,35 +1,36 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React from "react";
+import { StyleSheet } from "react-native";
 import {
   ApolloClient,
   ApolloProvider,
   createHttpLink,
   InMemoryCache,
-} from '@apollo/client';
-import {setContext} from '@apollo/client/link/context';
-import {VendorContext} from './context/Vendor';
-import SignUp from './views/sign_up/SignUp';
-import {I18nextProvider, useTranslation} from 'react-i18next';
-import i18next from 'i18next';
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import SignUp from "./views/sign_up/SignUp";
+import { I18nextProvider, useTranslation } from "react-i18next";
+import i18next from "i18next";
 import '../i18n';
-import Login from './views/login/Login';
-import {NavigationContainer, StackActions} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Home from './views/home/Home';
-import Navigation from './views/navigation/Navigation';
+import Login from "./views/login/Login";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from "./views/home/Home";
+import Navigation from "./views/navigation/Navigation";
+import Inventory from "./views/inventory/Inventory";
+import { VendorContext } from "./context/Vendor";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const {t, i18n} = useTranslation('translation');
+  const { t, i18n } = useTranslation("translation");
   const [language, setLanguage] = React.useState(i18n.language);
-  const [storeId, setStoreId] = React.useState<string>('');
-  const storeIdContext = {storeId, setStoreId};
-  const authLink = setContext((_, {headers}) => {
+  const [storeId, setStoreId] = React.useState<string>("");
+  const storeIdContext = { storeId, setStoreId };
+  const authLink = setContext((_, { headers }) => {
     return {
       headers: {
         ...headers,
-        authorization: '{"storeId":"' + storeId + '"}',
+        authorization: `{"storeId":"` + storeId + `"}`,
       },
     };
   });
@@ -60,8 +61,9 @@ export default function App() {
         </NavigationContainer>
       </ApolloProvider>
     </VendorContext.Provider>
-  );
-}
+    );
+};
+
 
 const styles = StyleSheet.create({
   container: {

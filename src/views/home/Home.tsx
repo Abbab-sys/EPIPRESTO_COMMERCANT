@@ -1,14 +1,27 @@
-import React, {useState} from 'react';
-import {View} from 'react-native';
-import {Text, Card, BottomNavigation} from 'react-native-paper';
-import {homeStyles} from './HomeStyles';
-import Swiper from 'react-native-swiper';
-import OrderTemplate from './subsections/Order';
-import Login from '../login/Login';
-import SignUp from '../sign_up/SignUp';
+import React, { useState } from "react"
+import { FlatList, SafeAreaView, View } from "react-native"
+import { Text, Card, BottomNavigation } from 'react-native-paper'
+import { homeStyles } from "./HomeStyles";
+import Swiper from "react-native-swiper";
+import Login from "../login/Login";
+import SignUp from "../sign_up/SignUp";
+import DailyData, { DailyDataProps, DataType } from "./subsections/DailyData";
+import OrderTemplate from "./subsections/OrderTemplate";
 
 const Home = () => {
-  return (
+
+  const dailyData: DailyDataProps[] = [
+    {
+      dataType: DataType.ORDERS,
+      dataAmount: 10
+    },
+    {
+      dataType: DataType.INCOME,
+      dataAmount: 100
+    }
+  ]
+
+  return(
     <View style={homeStyles.root}>
       <View style={homeStyles.view}>
         <Text variant="headlineMedium" style={homeStyles.headline}>
@@ -19,36 +32,30 @@ const Home = () => {
         <Text variant="titleMedium" style={homeStyles.cardTitle}>
           Bonjour, voici les données de la journée !
         </Text>
-        <View style={homeStyles.innerView}>
-          <Card style={homeStyles.cardContent}>
-            <Text variant="titleLarge" style={homeStyles.innerCardTitle}>
-              COMMANDES
-            </Text>
-            <Text variant="titleLarge" style={homeStyles.data}>
-              10
-            </Text>
-          </Card>
-          <Card style={homeStyles.cardContent}>
-            <Text variant="titleLarge" style={homeStyles.innerCardTitle}>
-              REVENU
-            </Text>
-            <Text variant="titleLarge" style={homeStyles.data}>
-              100$
-            </Text>
-          </Card>
-        </View>
+        <SafeAreaView>
+          <FlatList
+            numColumns={2}
+            data={dailyData}
+            renderItem={({item}) => 
+              <DailyData
+                dataType={item.dataType}
+                dataAmount={item.dataAmount} /> 
+            }
+            keyExtractor={item => item.dataType}
+          />
+        </SafeAreaView>
       </Card>
-      <Text variant="titleMedium">Commande récentes</Text>
+      <Text variant="titleMedium">Commandes récentes</Text>
       <Swiper showsButtons={true}>
         {/* TODO: MAP MOST RECENT ORDERS */}
-        <OrderTemplate clientName="KHALIL ZRIBA" orderNum={1} />
-        <OrderTemplate clientName="ALESSANDRO VAN REUSEL" orderNum={2} />
-        <OrderTemplate clientName="ZOUHAIR DEROUICH" orderNum={3} />
-        <OrderTemplate clientName="RYMA MESSADAA" orderNum={4} />
-        <OrderTemplate clientName="ADAM NAOUI" orderNum={5} />
+        <OrderTemplate clientName="KHALIL ZRIBA" orderNum={1}/>
+        <OrderTemplate clientName="ALESSANDRO VAN REUSEL" orderNum={2}/>
+        <OrderTemplate clientName="ZOUHAIR DEROUICH" orderNum={3}/>
+        <OrderTemplate clientName="RYMA MESSADAA" orderNum={4}/>
+        <OrderTemplate clientName="ADAM NAOUI" orderNum={5}/>
       </Swiper>
     </View>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

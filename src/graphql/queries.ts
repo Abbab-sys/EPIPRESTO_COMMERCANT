@@ -40,4 +40,21 @@ export const IS_VENDOR_EMAIL_USED = gql`
   query Query($email: String!) {
     isVendorEmailUsed(email: $email)
   }
-`;
+`
+
+// export const GET_PRODUCTS = gql`
+//   query GetStoreById($idStore: ID!) {
+//     getStoreById(idStore: $idStore) {
+//       code
+//       message
+//       store {
+//         _id
+//         products(first:2) {
+//           _id
+//           title
+//           imgSrc
+//         }
+//       }
+//     }
+//   }
+// `

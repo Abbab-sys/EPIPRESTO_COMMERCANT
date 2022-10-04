@@ -18,25 +18,19 @@ import {signUpStyles} from './SignUpStyles';
 import {SignUpTextFields} from './SignUpTextFields';
 import {initialSignUpCredentialsState} from './reducers/SignUpCredentialsReducerState';
 import {signUpCredentialsReducer} from './reducers/SignUpCredentialsReducer';
+import {SignUpCredentialsReducerActions} from './reducers/SignUpCredentialsReducerActions';
 import {
   AccountInput,
   SignUpErrorMessage,
 } from '../../interfaces/SignUpInterfaces';
 import {useTranslation} from 'react-i18next';
-import {
-  SIGN_UP_CREATE_ACCOUNT_KEY,
-  SIGN_UP_ERROR_ACCOUNT_CREATION_KEY,
-  SIGN_UP_TITLE_KEY,
-} from '../../translations/keys/SignUpTranslationKeys';
+import { SIGN_UP_CREATE_ACCOUNT_KEY, SIGN_UP_ERROR_ACCOUNT_CREATION_KEY, SIGN_UP_TITLE_KEY } from '../../translations/keys/SignUpTranslationKeys';
+import { LoginTextField } from '../login/LoginTextFieldsFields';
 import CredentialInput from '../../components/credential-input/CredentialInput';
-import {useLazyQuery, useMutation} from '@apollo/client/react';
-import {
-  IS_VENDOR_EMAIL_USED,
-  IS_VENDOR_USERNAME_USED,
-} from '../../graphql/queries';
-import {SIGN_UP} from '../../graphql/mutations';
-import {VendorContext} from '../../context/Vendor';
-import {useTimeout} from '../../hooks/CredentialsHooks';
+import { useLazyQuery, useMutation } from "@apollo/client/react";
+import { IS_VENDOR_EMAIL_USED, IS_VENDOR_USERNAME_USED } from "../../graphql/queries";
+import { SIGN_UP } from "../../graphql/mutations";
+import { VendorContext } from '../../context/Vendor';
 
 const SignUp = ({navigation}: any) => {
   const {t: translation} = useTranslation('translation');
@@ -44,6 +38,14 @@ const SignUp = ({navigation}: any) => {
     {verifyPassword, accountInput, signUpErrorMessage},
     dispatchCredentialsState,
   ] = React.useReducer(signUpCredentialsReducer, initialSignUpCredentialsState);
+  const errorExists = (attribute: string) => {
+    return signUpErrorMessage[
+      (attribute + 'Error') as keyof SignUpErrorMessage
+    ] === undefined
+      ? false
+      : signUpErrorMessage[(attribute + 'Error') as keyof SignUpErrorMessage]
+          .length > 0;
+  };
   const {storeId, setStoreId} = useContext(VendorContext);
 
   const [
@@ -67,36 +69,43 @@ const SignUp = ({navigation}: any) => {
 
   const [errorOpen, setErrorOpen] = useState(false);
 
-  useTimeout({
-    callback: isEmailUsed,
-    time: 500,
-    callbackVars: {variables: {email: accountInput.email}},
-    dependencies: [accountInput.email],
-  });
-  useEffect(() => {
-    if (!emailUsedData) {
-      return;
-    }
+  // const [emailCheckingTimeout, setEmailCheckingTimeout] = useState(setTimeout(() => isEmailUsed({variables: {email: accountInput.email}}), 500))
+  // useEffect(() => {
+  //   isEmailUsed({variables: {email: accountInput.email}})
+  //   clearTimeout(emailCheckingTimeout)
+  //   setEmailCheckingTimeout(setTimeout(() => {
+  //     isEmailUsed({variables: {email: accountInput.email}})
+  //   }, 500))
+  // }, [accountInput.email])
 
-    emailUsedData.isVendorEmailUsed
-      ? dispatchCredentialsState({type: 'SET_EMAIL_AS_ALREADY_USED'})
-      : dispatchCredentialsState({type: 'SET_EMAIL_AS_UNUSED'});
-  }, [emailUsedData]);
+  // const [usernameCheckingTimeout, setUsernameCheckingTimeout] = useState(setTimeout(() => isUsernameUsed({variables: {username: accountInput.username}}), 500))
+  // useEffect(() => {
+  //   clearTimeout(usernameCheckingTimeout)
+  //   setUsernameCheckingTimeout(setTimeout(() => {
+  //     isUsernameUsed({variables: {username: accountInput.username}})
+  //   }, 500))
+    
+  // }, [accountInput.username])
 
-  useTimeout({
-    callback: isUsernameUsed,
-    time: 500,
-    callbackVars: {variables: {username: accountInput.username}},
-    dependencies: [accountInput.username],
-  });
-  useEffect(() => {
-    if (!usernameUsedData) {
-      return;
-    }
-    usernameUsedData.isVendorUsernameUsed
-      ? dispatchCredentialsState({type: 'SET_USERNAME_AS_ALREADY_USED'})
-      : dispatchCredentialsState({type: 'SET_USERNAME_AS_UNUSED'});
-  }, [usernameUsedData]);
+  // useEffect(() => {
+  //   if (emailUsedData && emailUsedData.isVendorEmailUsed) {
+  //     setDisabled(true)
+  //     dispatchCredentialsState({
+  //       type: "SET_EMAIL_AS_ALREADY_USED",
+  //     })
+  //   } else {
+  //     setDisabled(
+  //       signUpErrorMessage.emailError.length > 0 ||
+  //       signUpErrorMessage.usernameError.length > 0 ||
+  //       emailUsedLoading ||
+  //       usernameUsedLoading ||
+  //       !areAllCredentialsFieldsValid()
+  //     )
+  //     dispatchCredentialsState({
+  //       type: "SET_EMAIL_AS_UNUSED",
+  //     })
+  //   }
+  // }, [emailUsedLoading, emailUsedError, emailUsedData])
 
   useEffect(() => {
     if (signUpError) {
@@ -121,48 +130,33 @@ const SignUp = ({navigation}: any) => {
     }
   }, [storeId]);
 
-  const handleSnackbarClosing = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string,
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setErrorOpen(false);
-  };
+  // useEffect(() => {
+  //   if (signUpData && signUpData.vendorSignUp.code === 200) {
+  //     setStoreId(signUpData.data.vendorSignUp.vendorAccount.store._id)
+  //     // TODO: NAVIGATE TO HOME PAGE
+  //   } else {
+  //     setErrorOpen(true)
+  //   }
+  // }, [signUpLoading, signUpError, signUpData])
 
-  const areAllCredentialsFieldsValid = (): boolean => {
+  const areAllCredentialsFieldsValid = () => {
     const currErrorMessages = signUpErrorMessage;
-    return (
-      currErrorMessages.emailError.size === 0 &&
-      currErrorMessages.usernameError.size === 0 &&
-      currErrorMessages.passwordError.size === 0 &&
-      currErrorMessages.verifyPasswordError.size === 0 &&
-      currErrorMessages.shopNameError.size === 0 &&
-      currErrorMessages.addressError.size === 0 &&
-      currErrorMessages.phoneError.size === 0
-    );
-  };
-  const areAllCredentialsFieldsAreFilled = (): boolean => {
-    return (
-      accountInput.shopName !== '' &&
-      accountInput.email !== '' &&
-      accountInput.username !== '' &&
-      accountInput.password !== '' &&
-      verifyPassword !== '' &&
-      accountInput.address !== '' &&
-      accountInput.phone !== ''
-    );
-  };
+    return currErrorMessages.emailError === '' ||
+      currErrorMessages.usernameError === '' ||
+      currErrorMessages.passwordError === '' ||
+      currErrorMessages.verifyPasswordError === '' ||
+      currErrorMessages.shopNameError === '' ||
+      currErrorMessages.addressError === '' ||
+      currErrorMessages.phoneError === '';
+  }
 
-  const submitButtonShouldBeDisabled = () => {
-    return (
-      emailUsedLoading ||
-      usernameUsedLoading ||
-      !areAllCredentialsFieldsValid() ||
-      !areAllCredentialsFieldsAreFilled()
-    );
-  };
+  // const handleCreateAccount = () => {
+  //   dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});
+  //   const areCredentialsValid = areAllCredentialsFieldsValid()
+  //   if (areCredentialsValid) {
+  //     signUp({variables: {accountInput: accountInput}})
+  //   }
+  // }
 
   const handleCreateAccount = () => {
     dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});

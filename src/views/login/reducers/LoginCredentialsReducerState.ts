@@ -1,23 +1,20 @@
-import {
-  Credentials,
-  LoginErrorMessage,
-} from '../../../interfaces/LoginInterfaces';
+import {Credentials, LoginErrorMessage} from "../../../../interfaces/LoginInterfaces";
 
 export interface LoginCredentialsReducerState {
-  credentials: Credentials;
-  errorMessage: LoginErrorMessage;
+    credentials: Credentials;
+    errorMessage: LoginErrorMessage;
 }
 
-export const initialLoginCredentialsStateReducer: LoginCredentialsReducerState =
-  {
+export const initialLoginCredentialsStateReducer: LoginCredentialsReducerState = {
     credentials: {
-      auth: '',
-      password: '',
-      showPassword: false,
-      showSnackBar: false,
+        auth: '',
+        password: '',
+        showPassword: false,
+        showSnackBar: false
     },
     errorMessage: {
-      authError: '',
-      passwordError: '',
-    },
-  };
+        authError: '',
+        passwordError: '',
+    }
+
+}
