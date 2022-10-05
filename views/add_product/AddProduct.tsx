@@ -12,11 +12,7 @@ const AddProcudt = () => {
   const [description, setDescription] = useState("");
   const [brand, setBrand] = useState("");
   const [tags, setTgas] = useState([]);
-  const [isWeightable, setWeightable] = useState(false);
   const [isPublished, setPublished] = useState(false);
-  const [isAvailableForSale, setAvailableForSale] = useState(false);
-  const [isTaxable, setTaxable] = useState(false);
-
   const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
 
   const [variants, setVariants]  = useState([
@@ -38,6 +34,7 @@ const AddProcudt = () => {
       const {variantId, ...rest} = variant;
       return rest;
     })
+    console.log(variantsWithoutId);
     let product;
     product = {
       title: title,
@@ -49,7 +46,7 @@ const AddProcudt = () => {
       variants: variantsWithoutId
     }
     console.log("OKOK", product)
-    addProduct({variables:{storeId: "6339c917efbeebd69ad55561", newProduct: product} })
+    addProduct({variables:{storeId: "633ce2e380d8336eb96ea105", newProduct: product} })
     console.log("DONE")
     }
 
@@ -79,7 +76,7 @@ const AddProcudt = () => {
 
     return (
         <ScrollView>
-          <Text>FIEDLS PRODUIT</Text>
+          <Text style = {styles.header}>Ajout Produit à la boutique</Text>
           <TextInput
             style={styles.input}
             label='Titre du produit'
@@ -113,12 +110,23 @@ const AddProcudt = () => {
           <HelperText type='error'>
           </HelperText>
 
-          <Text>AJOUT PHOTO PRODUIT ICI</Text>
+
+          <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
+              Ajouter un variant
+          </Button>
+          <Divider   />
+          <Divider   />
+          <Divider   />
+          <Divider   />
+          <Divider   />
+          <Divider   />
+
 
           <ScrollView horizontal>
           {variants.map((field, index) => (
           <AddVariant 
           key={field.variantId}
+          variantIndex={index}
           variantId={field.variantId}
           variantTitle={field.variantTitle}
           price={field.price}
@@ -150,7 +158,14 @@ const AddProcudt = () => {
         ))}
         </ScrollView>
 
-        <View style={styles.checkboxContainer}>
+          <Divider   />
+          <Divider   />
+          <Divider   />
+          <Divider   />
+          <Divider   />
+          <Divider   />
+
+          <View style={styles.checkboxContainer}>
             <Text style={styles.label}>Publier l'article </Text>
             <CheckBox
               value={isPublished}
@@ -159,9 +174,6 @@ const AddProcudt = () => {
             />
           </View>
 
-            <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
-              Add variant
-            </Button>
 
           <Button style={styles.button} mode="contained" onPress={() => handleAdd()}>
             Enregistrer
@@ -179,6 +191,7 @@ const AddProcudt = () => {
     input: {
       height: 50,
       margin: 10,
+      marginBottom: 0,
       borderWidth: 1,
       padding: 2,
     },
@@ -195,6 +208,12 @@ const AddProcudt = () => {
     button: {
       borderColor: '#FF0000',
       backgroundColor: '#FFA500'
+    },
+    header: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      margin: 10,
     },
   });
 

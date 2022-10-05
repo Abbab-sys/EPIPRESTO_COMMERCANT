@@ -6,6 +6,7 @@ import { Variant } from "../../interfaces/VariantInterfaces";
 
 interface VariantProps {
     variantId: string,
+    variantIndex: number,
     variantTitle: string;
     price: number;
     sku: string;
@@ -26,6 +27,8 @@ const AddVariant = (props: VariantProps) => {
   const [isWeightable, setWeightable] = useState(false);
   const [isAvailableForSale, setAvailableForSale] = useState(false);
   const [isTaxable, setTaxable] = useState(false); 
+  const [unitKg, setUnitKg] = useState(false); 
+  const [unitLb, setUnitLb] = useState(false); 
 
 
   useEffect(() => {
@@ -50,12 +53,12 @@ const AddVariant = (props: VariantProps) => {
     }
 
     return (
-        <ScrollView>
-          <Text>FIEDLS VARIANTS</Text>
+        <ScrollView style={styles.view}>
+          <Text>  Variant # {props.variantIndex +1}</Text>
 
           <TextInput
             style={styles.input}
-            label='Titre'
+            label='Titre du variant'
             value={title}
             onChangeText={text => setTitle(text)}
             />
@@ -69,6 +72,21 @@ const AddVariant = (props: VariantProps) => {
               onValueChange={setWeightable}
               style={styles.checkbox}
             />
+          
+          {(<>
+          <Text style={styles.label}>unité de mesure</Text>
+          <Text style={styles.label}>Lb</Text>
+          <CheckBox disabled={!isWeightable}
+              value={unitKg}
+              onValueChange={setUnitKg}
+              style={styles.checkbox}
+            />
+          <Text style={styles.label}>Kg</Text>
+           <CheckBox disabled={!isWeightable}
+              value={unitLb}
+              onValueChange={setUnitLb}
+              style={styles.checkbox}
+            /></>)}
           </View>
 
           <TextInput
@@ -119,10 +137,9 @@ const AddVariant = (props: VariantProps) => {
           </View>
 
           <Divider />
-          <Text>AJOUT PHOTO VARIANT ICI</Text>
 
           <Button style={styles.button} mode="contained" onPress={() => props.deleteSelf()}>
-              Delete
+              Supprimer
             </Button>
 
         </ScrollView>
@@ -133,12 +150,13 @@ const AddVariant = (props: VariantProps) => {
     input: {
       height: 50,
       margin: 10,
+      marginBottom: 0,
       borderWidth: 1,
       padding: 2,
     },
     checkboxContainer: {
       flexDirection: "row",
-      marginBottom: 20,
+      marginBottom: 10,
     },
     checkbox: {
       alignSelf: "center",
@@ -150,6 +168,13 @@ const AddVariant = (props: VariantProps) => {
       borderColor: '#FF0000',
       backgroundColor: '#FFA500'
     },
+    view: {
+      margin: 10,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#000000',
+      borderRadius: 5,
+    }
   });
 
   export default AddVariant;
