@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, View } from "react-native";
-import { Searchbar, Text } from 'react-native-paper';
+import { Button, FlatList, SafeAreaView, View } from "react-native";
+import { IconButton, Searchbar, Text } from 'react-native-paper';
 import { inventoryStyles } from "./InventoryStyles";
 import Product, { ProductProps } from "./subsections/Product";
 import { mockProducts } from './mockProducts';
@@ -23,8 +23,8 @@ const Inventory = () => {
       setProducts(mockProducts)
     }
     else {
-      const data = products.filter(product => {
-        return product.productName.toLowerCase().includes(text.toString())
+      const data = mockProducts.filter(product => {
+        return product.productName.toLowerCase().includes(text.toString().toLowerCase())
       })
       setProducts(data)
     }
@@ -34,7 +34,7 @@ const Inventory = () => {
     <View style={inventoryStyles.root}>
       <View style={inventoryStyles.view}>
         <Text variant="headlineMedium" style={inventoryStyles.headline}>
-          Inventory
+          INVENTORY
         </Text>
       </View>
       <View>
@@ -58,6 +58,9 @@ const Inventory = () => {
             />
           )}
       </SafeAreaView>
+      <View style={{position:'absolute',bottom:0,alignSelf:'flex-end'}}>
+        <IconButton mode="contained" containerColor="black" iconColor="#FFA500" icon="plus" size={30}/>
+      </View>
     </View>
   )
 }

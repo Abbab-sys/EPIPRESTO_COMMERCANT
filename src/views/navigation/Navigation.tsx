@@ -4,35 +4,39 @@ import Home from "../home/Home";
 import Inventory from "../inventory/Inventory";
 import Login from "../login/Login";
 import SignUp from "../sign_up/SignUp";
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Text } from "react-native";
 
 const Navigation = () => {
   
-  const HomeRoute = () => <Home/>;
+  const Tab = createBottomTabNavigator();
 
-  const InventoryRoute = () => <Inventory/>;
-
-  const SignUpRoute = () => <SignUp/>;
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: 'home', title: 'Home', focusedIcon: 'home'},
-    { key: 'inventory', title: 'Inventory', focusedIcon: 'album' },
-    { key: 'signUp', title: 'Sign-up', focusedIcon: 'history' }
-  ]);
-
-  const renderScene = BottomNavigation.SceneMap({
-    home: HomeRoute,
-    inventory: InventoryRoute,
-    signUp: SignUpRoute,
-  });
-  
   return(
-    <BottomNavigation
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-      />
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: ({size, focused}) => (
+            <Icon name="home" color={focused ? "#FFA500" : "#707070"} size={size}></Icon>
+          ),
+          tabBarLabel: ({focused}) => (
+            <Text style={{color: focused ? "#FFA500" : "#707070"}}>Home</Text>
+          ),
+        }}/>
+      <Tab.Screen
+        name="Inventory"
+        component={Inventory}
+        options={{
+          tabBarIcon: ({size, focused}) => (
+            <Icon name="database" color={focused ? "#FFA500" : "#707070"} size={size}></Icon>
+          ),
+          tabBarLabel: ({focused}) => (
+            <Text style={{color: focused ? "#FFA500" : "#707070"}}>Inventory</Text>
+          ),
+        }}/>
+    </Tab.Navigator>
   )
 }
 
