@@ -1,16 +1,6 @@
 import React, {useContext, useEffect, useReducer} from 'react';
-import {
-  TextInput,
-  Text,
-  Button,
-  Snackbar,
-} from 'react-native-paper';
-import {
-  View,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import {Text, Button, Snackbar} from 'react-native-paper';
+import {View, Image, KeyboardAvoidingView, Platform} from 'react-native';
 import {LOGIN_BY_EMAIL, LOGIN_BY_USERNAME} from '../../graphql/queries';
 import {useLazyQuery} from '@apollo/client/react';
 import {LoginStyles} from './LoginStyles';
@@ -57,7 +47,7 @@ const Login = ({navigation}: any) => {
   useEffect(() => {
     if (storeId.length > 0) {
       console.log('store id is set ', storeId);
-      navigation.navigate('Home');
+      navigation.navigate('Navigation');
     }
   }, [storeId]);
 

@@ -4,9 +4,9 @@ import { Button, Card, Divider, Text } from 'react-native-paper';
 import { productStyles } from "./ProductStyles";
 
 export interface ProductProps {
-  productId: string;
-  productName: string;
-  productImage: any;
+  _id: string;
+  title: string;
+  imgSrc: any;
 }
 
 const Product = (props: ProductProps) => {
@@ -14,10 +14,10 @@ const Product = (props: ProductProps) => {
   return(
     <View style={productStyles.root}>
       <Card style={productStyles.cardStyle}>
-        <Image style={productStyles.image} source={props.productImage}/>
+        <Image style={productStyles.image} source={{uri: props.imgSrc}}/>
         <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%'}}></Divider>
         <Text ellipsizeMode='tail' numberOfLines={2} variant="titleSmall" style={productStyles.productName}>
-          {props.productName}
+          {props.title}
         </Text>
         <Button style={productStyles.buttonStyle}>
           <Text style={productStyles.buttonText}>

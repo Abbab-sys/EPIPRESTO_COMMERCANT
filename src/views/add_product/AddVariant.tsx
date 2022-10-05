@@ -2,7 +2,7 @@ import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useState } from "react";
 import { Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
 import { Button, Divider, HelperText, TextInput } from "react-native-paper";
-import { Variant } from "../../interfaces/VariantInterfaces";
+import { Variant } from "../../../interfaces/VariantInterfaces";
 
 interface VariantProps {
     variantId: string,

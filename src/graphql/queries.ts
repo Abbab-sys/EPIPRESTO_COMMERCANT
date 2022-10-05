@@ -42,6 +42,22 @@ export const IS_VENDOR_EMAIL_USED = gql`
   }
 `
 
+export const GET_STORE_PRODUCTS_BY_ID = gql`
+  query GetStoreById($idStore: ID!, $offset: Int!, $first: Int) {
+    getStoreById(idStore: $idStore) {
+      code
+      message
+      store {
+        products(offset: $offset, first: $first) {
+          _id
+          title
+          imgSrc
+        }
+      }
+    }
+  }
+`
+
 // export const GET_PRODUCTS = gql`
 //   query GetStoreById($idStore: ID!) {
 //     getStoreById(idStore: $idStore) {

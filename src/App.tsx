@@ -18,6 +18,7 @@ import Home from "./views/home/Home";
 import Navigation from "./views/navigation/Navigation";
 import Inventory from "./views/inventory/Inventory";
 import { VendorContext } from "./context/Vendor";
+import AddProduct from "./views/add_product/AddProduct";
 
 const Stack = createNativeStackNavigator();
 
@@ -53,11 +54,11 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{headerShown: false}}
-            initialRouteName="SignUp">
+            initialRouteName="Login">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Navigation" component={Navigation} />
-            {/* <Stack.Screen name="Inventory" component={Inventory} /> */}
+            <Stack.Screen name="AddProduct" component={AddProduct} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>

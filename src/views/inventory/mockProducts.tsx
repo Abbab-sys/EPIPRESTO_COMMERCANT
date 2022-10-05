@@ -2,33 +2,33 @@ import { ProductProps } from "./subsections/Product";
 
 export const mockProducts: ProductProps[] = [
   {
-    productId: '1',
-    productName: 'Banane lol adam',
-    productImage: require('../../assets/images/banana.png')
+    _id: '1',
+    title: 'Banane lol adam',
+    imgSrc: require('../../assets/images/banana.png')
   },
   {
-    productId: '2',
-    productName: 'Pomme',
-    productImage: require('../../assets/images/apple.png')
+    _id: '2',
+    title: 'Pomme',
+    imgSrc: require('../../assets/images/apple.png')
   },
   {
-    productId: '3',
-    productName: 'Raisin',
-    productImage: require('../../assets/images/grapes.png')
+    _id: '3',
+    title: 'Raisin',
+    imgSrc: require('../../assets/images/grapes.png')
   },
   {
-    productId: '4',
-    productName: 'Orange',
-    productImage: require('../../assets/images/orange.png')
+    _id: '4',
+    title: 'Orange',
+    imgSrc: require('../../assets/images/orange.png')
   },
   {
-    productId: '5',
-    productName: 'Pêche',
-    productImage: require('../../assets/images/peach.png')
+    _id: '5',
+    title: 'Pêche',
+    imgSrc: require('../../assets/images/peach.png')
   },
   {
-    productId: '6',
-    productName: 'Abricot',
-    productImage: require('../../assets/images/abricot.png')
+    _id: '6',
+    title: 'Abricot',
+    imgSrc: require('../../assets/images/abricot.png')
   },
 ]

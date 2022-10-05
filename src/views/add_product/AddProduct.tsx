@@ -3,15 +3,15 @@ import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useState } from "react";
 import { FlatList, Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
 import { Button, Divider, HelperText, TextInput } from "react-native-paper";
-import { Variant } from "../../interfaces/VariantInterfaces";
-import { ADD_PRODUCT } from "../../mutations";
+import { Variant } from "../../../interfaces/VariantInterfaces";
+import { ADD_PRODUCT } from "../../graphql/mutations";
 import AddVariant from "./AddVariant";
 
-const AddProcudt = () => {
+const AddProduct = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [brand, setBrand] = useState("");
-  const [tags, setTgas] = useState([]);
+  const [tags, setTags] = useState([]);
   const [isPublished, setPublished] = useState(false);
   const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
 
@@ -75,7 +75,7 @@ const AddProcudt = () => {
   }, [addLoading, addError, addData])
 
     return (
-        <ScrollView>
+        <ScrollView style={styles.root}>
           <Text style = {styles.header}>Ajout Produit à la boutique</Text>
           <TextInput
             style={styles.input}
@@ -114,12 +114,7 @@ const AddProcudt = () => {
           <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
               Ajouter un variant
           </Button>
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
+
 
 
           <ScrollView horizontal>
@@ -188,10 +183,13 @@ const AddProcudt = () => {
   };
 
   const styles = StyleSheet.create({
+    root: {
+      flex: 1,
+      margin: "4%"
+    },
     input: {
       height: 50,
       margin: 10,
-      marginBottom: 0,
       borderWidth: 1,
       padding: 2,
     },
@@ -207,7 +205,8 @@ const AddProcudt = () => {
     },
     button: {
       borderColor: '#FF0000',
-      backgroundColor: '#FFA500'
+      backgroundColor: '#FFA500',
+      flex: 1
     },
     header: {
       fontSize: 20,
@@ -217,4 +216,4 @@ const AddProcudt = () => {
     },
   });
 
-  export default AddProcudt;
+  export default AddProduct;
