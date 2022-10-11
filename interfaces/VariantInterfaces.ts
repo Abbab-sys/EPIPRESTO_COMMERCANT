@@ -9,5 +9,6 @@ export interface Variant {
     imgSrc: string,
     byWeight:boolean,
     availableForSale:boolean,
-    stock: number
+    stock: number,
+    isValid: boolean
 }

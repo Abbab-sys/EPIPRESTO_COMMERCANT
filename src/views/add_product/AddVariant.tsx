@@ -15,6 +15,7 @@ interface VariantProps {
     byWeight: boolean;
     availableForSale: boolean;
     stock: number;
+    isValid: boolean;
     updateSelf: (variant: Variant) => void;
     deleteSelf: () => void;
 }
@@ -29,12 +30,27 @@ const AddVariant = (props: VariantProps) => {
   const [isTaxable, setTaxable] = useState(false); 
   const [unitKg, setUnitKg] = useState(false); 
   const [unitLb, setUnitLb] = useState(false); 
+  const [isValidInput, setValid] = useState("Veuillez remplir tous les champs obligatoires*");
+
 
 
   useEffect(() => {
     props.updateSelf({variantId: props.variantId, variantTitle: title, price: price, sku: sku, taxable: isTaxable,
-         imgSrc: "", byWeight: isWeightable, availableForSale: isAvailableForSale, stock: stock})
+         imgSrc: "", byWeight: isWeightable, availableForSale: isAvailableForSale, stock: stock, isValid: isVariantValid()});
+    console.log("valid", props.isValid)
   }, [title, price, sku, stock, isWeightable, isAvailableForSale, isTaxable])
+
+
+  const isVariantValid = () => {
+    if (title.trim() && price > 0 && stock > 0) {
+      setValid("");
+      return true;
+    } else {
+      setValid("Veuillez remplir tous les champs obligatoires*");
+      return false;
+    }
+
+  }
 
 
   const handleAddViantToList =  () => {
@@ -58,7 +74,7 @@ const AddVariant = (props: VariantProps) => {
 
           <TextInput
             style={styles.input}
-            label='Titre du variant'
+            label='Titre du variant*'
             value={title}
             onChangeText={text => setTitle(text)}
             />
@@ -91,7 +107,7 @@ const AddVariant = (props: VariantProps) => {
 
           <TextInput
             style={styles.input}
-            label='Prix'
+            label='Prix*'
             keyboardType= "numeric"
             value={price.toString()}
             onChangeText={text => setPrice(parseFloat(text))}
@@ -119,7 +135,7 @@ const AddVariant = (props: VariantProps) => {
 
           <TextInput
             style={styles.input}
-            label='Stock'
+            label='Stock*'
             keyboardType= "numeric"
             value={stock.toString()}
             onChangeText={text => setStock(parseFloat(text))}
@@ -136,7 +152,12 @@ const AddVariant = (props: VariantProps) => {
             />
           </View>
 
-          <Divider />
+
+          <HelperText type='error'>
+          {
+          isValidInput
+          }
+          </HelperText>
 
           <Button style={styles.button} mode="contained" onPress={() => props.deleteSelf()}>
               Supprimer

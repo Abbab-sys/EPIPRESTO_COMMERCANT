@@ -14,6 +14,8 @@ const AddProduct = () => {
   const [tags, setTags] = useState([]);
   const [isPublished, setPublished] = useState(false);
   const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
+  const [productNameError, setError] = useState("");
+
 
   const [variants, setVariants]  = useState([
     { 
@@ -25,7 +27,15 @@ const AddProduct = () => {
       imgSrc: "",
       byWeight: false,
       availableForSale:false,
-      stock: 0}]);
+      stock: 0,
+      isValid: false}]);
+
+  const submitButtonShouldBeDisabled = () => {
+    return (
+      variants.some((variant) => !variant.isValid) ||
+      !title.trim()
+    );
+  };
 
   const handleAdd =  () => {
     Keyboard.dismiss()
@@ -51,6 +61,10 @@ const AddProduct = () => {
     }
 
   const addDefaultVariant = () => {
+    // check if the product title is empty
+    if (!title.trim()) {
+      setError("Veuillez remplir le titre du produit");
+    }
     setVariants([...variants, {
       variantId: new Date().getTime().toString(),
       variantTitle: "",
@@ -60,7 +74,8 @@ const AddProduct = () => {
       imgSrc: "",
       byWeight: false,
       availableForSale:false,
-      stock: 0
+      stock: 0,
+      isValid: false
     }])
     console.log("variants", variants)
   }
@@ -79,12 +94,13 @@ const AddProduct = () => {
           <Text style = {styles.header}>Ajout Produit à la boutique</Text>
           <TextInput
             style={styles.input}
-            label='Titre du produit'
+            label='Titre du produit*'
             onChangeText={text => setTitle(text)}
             />
           <HelperText type='error' style={{
                 height: title.length < 1  ? 'auto' : 0,
               }}>
+                {productNameError}
           </HelperText>
           
           <TextInput
@@ -131,6 +147,7 @@ const AddProduct = () => {
           byWeight={field.byWeight}
           availableForSale={field.availableForSale}
           stock={field.stock}
+          isValid={field.isValid}
           updateSelf={(variant: Variant) => {
             const newVariants = [...variants];
             newVariants[index] = variant;
@@ -170,7 +187,10 @@ const AddProduct = () => {
           </View>
 
 
-          <Button style={styles.button} mode="contained" onPress={() => handleAdd()}>
+          <Button style={styles.button} 
+          mode="contained" 
+          onPress={() => handleAdd()}
+          disabled={submitButtonShouldBeDisabled()}>
             Enregistrer
           </Button>
           <Divider   />
