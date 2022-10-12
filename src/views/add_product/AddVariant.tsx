@@ -16,6 +16,7 @@ interface VariantProps {
     availableForSale: boolean;
     stock: number;
     isValid: boolean;
+    isHidden: boolean;
     updateSelf: (variant: Variant) => void;
     deleteSelf: () => void;
 }
@@ -31,14 +32,15 @@ const AddVariant = (props: VariantProps) => {
   const [unitKg, setUnitKg] = useState(false); 
   const [unitLb, setUnitLb] = useState(false); 
   const [isValidInput, setValid] = useState("Veuillez remplir tous les champs obligatoires*");
+  const [isHidden, setHide] = useState(false);
 
 
 
   useEffect(() => {
     props.updateSelf({variantId: props.variantId, variantTitle: title, price: price, sku: sku, taxable: isTaxable,
-         imgSrc: "", byWeight: isWeightable, availableForSale: isAvailableForSale, stock: stock, isValid: isVariantValid()});
+         imgSrc: "", byWeight: isWeightable, availableForSale: isAvailableForSale, stock: stock, isValid: isVariantValid(), isHidden: isHidden});
     console.log("valid", props.isValid)
-  }, [title, price, sku, stock, isWeightable, isAvailableForSale, isTaxable])
+  }, [title, price, sku, stock, isWeightable, isAvailableForSale, isTaxable, isHidden])
 
 
   const isVariantValid = () => {
@@ -68,8 +70,19 @@ const AddVariant = (props: VariantProps) => {
     }
     }
 
-    return (
-        <ScrollView style={styles.view}>
+    if(isHidden) return (
+      <View style={styles.view}>
+        <Text>  Variant # {props.variantIndex +1}</Text>
+        <Button style={styles.button} mode="contained" onPress={() => setHide(false)}>
+              Show
+        </Button>
+      </View>
+      
+    )
+
+    else return (
+        <ScrollView style={styles.view}
+        >
           <Text>  Variant # {props.variantIndex +1}</Text>
 
           <TextInput
@@ -109,7 +122,6 @@ const AddVariant = (props: VariantProps) => {
             style={styles.input}
             label='Prix*'
             keyboardType= "numeric"
-            value={price.toString()}
             onChangeText={text => setPrice(parseFloat(text))}
             />
           <HelperText type='error'>
@@ -137,7 +149,6 @@ const AddVariant = (props: VariantProps) => {
             style={styles.input}
             label='Stock*'
             keyboardType= "numeric"
-            value={stock.toString()}
             onChangeText={text => setStock(parseFloat(text))}
             />
           <HelperText type='error'>
@@ -162,14 +173,15 @@ const AddVariant = (props: VariantProps) => {
           <Button style={styles.button} mode="contained" onPress={() => props.deleteSelf()}>
               Supprimer
             </Button>
-
+            <Button style={styles.button} mode="contained" onPress={() => setHide(true)}>
+              hide
+            </Button>
         </ScrollView>
       )
   };
 
   const styles = StyleSheet.create({
     input: {
-      height: 50,
       margin: 10,
       marginBottom: 0,
       borderWidth: 1,

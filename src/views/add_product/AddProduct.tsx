@@ -11,10 +11,11 @@ const AddProduct = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [brand, setBrand] = useState("");
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(["lol","okok"]);
   const [isPublished, setPublished] = useState(false);
   const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
   const [productNameError, setError] = useState("");
+  const [deleteError, setDeleteError] = useState("");
 
 
   const [variants, setVariants]  = useState([
@@ -28,7 +29,8 @@ const AddProduct = () => {
       byWeight: false,
       availableForSale:false,
       stock: 0,
-      isValid: false}]);
+      isValid: false,
+      isHidden: false}]);
 
   const submitButtonShouldBeDisabled = () => {
     return (
@@ -39,9 +41,9 @@ const AddProduct = () => {
 
   const handleAdd =  () => {
     Keyboard.dismiss()
-    // return variants without variantId
+    // return variants without variantId, isHidden and isValid
     const variantsWithoutId = variants.map((variant) => {
-      const {variantId, ...rest} = variant;
+      const {variantId, isHidden, isValid, ...rest} = variant;
       return rest;
     })
     console.log(variantsWithoutId);
@@ -75,15 +77,15 @@ const AddProduct = () => {
       byWeight: false,
       availableForSale:false,
       stock: 0,
-      isValid: false
+      isValid: false,
+      isHidden: false
     }])
-    console.log("variants", variants)
   }
 
   useEffect(() => {
       if (addLoading || addError || !addData) return
       if (addData.addNewProductToStore.code === 200) {
-          console.log("SUCCES")
+          console.log("PRODUIT AJOUTÉ")
       } else {
         console.log("FAIL")
       }
@@ -108,33 +110,41 @@ const AddProduct = () => {
             label='Description'
             onChangeText={text => setDescription(text)}
             />
-          <HelperText type='error'>
-          </HelperText>
+
 
           <TextInput
             style={styles.input}
             label='Marque'
             onChangeText={text => setBrand(text)}
             />
-          <HelperText type='error'>
-          </HelperText>
 
           <TextInput
             style={styles.input}
-            label='Tags'
-            />
-          <HelperText type='error'>
-          </HelperText>
+            label='Tags (separate your tags with a space)'
+            onChangeText={text => setTags(text.split(" "))}
+            value={tags.join(" ")}
+          />
+          <ScrollView horizontal>
+            {tags.map((tag , index) => (
+              <View 
+              style={styles.tag}
+              key = {index}
+              >
+              <Text style={styles.tagLabel}>{tag}</Text>
+            </View>
+            ))}
+          </ScrollView>
 
 
           <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
               Ajouter un variant
           </Button>
+          <HelperText type='error' >
+                {deleteError}
+          </HelperText>
 
-
-
-          <ScrollView horizontal>
-          {variants.map((field, index) => (
+          <ScrollView >
+          {variants.map((field, index) => (    
           <AddVariant 
           key={field.variantId}
           variantIndex={index}
@@ -148,6 +158,7 @@ const AddProduct = () => {
           availableForSale={field.availableForSale}
           stock={field.stock}
           isValid={field.isValid}
+          isHidden={field.isHidden}
           updateSelf={(variant: Variant) => {
             const newVariants = [...variants];
             newVariants[index] = variant;
@@ -162,7 +173,11 @@ const AddProduct = () => {
               setVariants(newVariants);
             }
             else {
-              console.log("You must have at least one variant");
+              setDeleteError("You must have at least one variant");
+              // Hide the error message afetr 5 seconds
+              setTimeout(() => {
+                setDeleteError("");
+              }, 5000);
             }
           }}
                               
@@ -233,6 +248,16 @@ const AddProduct = () => {
       fontWeight: 'bold',
       textAlign: 'center',
       margin: 10,
+    },
+    // tags
+    tag: {
+      backgroundColor: 'lightgray',
+      borderRadius: 5,
+      padding: 5,
+      margin: 5,
+    },
+    tagLabel: {
+      color: '#FFFFFF',
     },
   });
 

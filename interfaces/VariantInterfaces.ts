@@ -10,5 +10,6 @@ export interface Variant {
     byWeight:boolean,
     availableForSale:boolean,
     stock: number,
-    isValid: boolean
+    isValid: boolean,
+    isHidden: boolean,
 }
