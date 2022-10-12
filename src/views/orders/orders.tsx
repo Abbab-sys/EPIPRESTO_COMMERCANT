@@ -26,6 +26,22 @@ const Orders = () => {
                 </Text>
 
             </View>
+            <View style={styles.filtering}>
+                <Button
+                    style={styles.filtering_button}
+                    mode="contained"
+                    onPress={() => console.log('Pressed')}
+                >
+                    Trier
+                </Button>
+                {/* <Button
+                    style={styles.filtering_button}
+                    mode="contained"
+                    onPress={() => console.log('Pressed')}
+                >
+                    Filtrer
+                </Button> */}
+            </View>
             <FlatList
                 data={OrderList}
                 renderItem={renderOrderContainer}
@@ -52,14 +68,16 @@ const renderOrderContainer = ({ item }: any) => {
                 <View style={styles.order_details_right}>
                     <Text style={styles.order_details_right_text}>{item.client}</Text>
                     <Text style={styles.order_details_right_text}>{item.total}</Text>
-                    <Text style={styles.order_details_right_text}>{item.status}</Text>
+                    <View style={styles.order_status}>
+                        <Text style={styles.order_status_text}>{item.status}</Text>
+                    </View>                
                 </View>
             </View>
-                <TouchableOpacity
-                    style={styles.order_button_text}
-                >
-                    <Text>Détails</Text>
-                </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.order_button_text}
+            >
+                <Text style={styles.view_order_button_text}>Détails</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -87,7 +105,7 @@ const styles = StyleSheet.create({
     },
 
     order_container: {
-        width: 300,
+        width: '90%',
         height: 200,
         backgroundColor: 'white',
         justifyContent: 'center',
@@ -178,7 +196,7 @@ const styles = StyleSheet.create({
 
     },
     order_details_right: {
-        width: '50%',
+        width: '100%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'flex-start',
@@ -190,10 +208,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     order_details_right_text: {
-        fontSize: 15,
+        fontSize: 12,
         fontWeight: 'bold',
         marginBottom: 10,
-
+        //text should take the whole width and not take another line
+        width: '100%',
 
     },
     // order_button: {
@@ -215,6 +234,41 @@ const styles = StyleSheet.create({
         marginRight: 20,
         marginBottom: 10,
     },
+    order_status: {
+        width: 100,
+        height: 30,
+        backgroundColor: '#FFA500',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    order_status_text: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    filtering: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        width: '100%',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        marginBottom: 10,
+    },
+    filtering_button: {
+        width: '100%',
+        height: 40,
+        backgroundColor: '#FFA500',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    view_order_button_text: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    
 
 
 
