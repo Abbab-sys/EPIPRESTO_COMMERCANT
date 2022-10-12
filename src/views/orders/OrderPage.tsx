@@ -59,11 +59,11 @@ const OrderPage = ({ route, navigation }: any) => {
                 </Text>
             </View>
             <View style={styles.subHeader}>
-                <Text style={styles.subHeader_text}>
+                <Text style={styles.subHeader_text.date}>
                     27-06-2021
                 </Text>
-                <Text style={styles.subHeader_text}>
-                    En attente
+                <Text style={styles.subHeader_text.status}>
+                    Annulée
                 </Text>
                 <Button style={styles.subHeader_button} mode="contained" onPress={() => console.log('Pressed')}>
                     Modifier
@@ -89,6 +89,7 @@ const OrderPage = ({ route, navigation }: any) => {
                                             
                                             <View style={styles.product_details}>
                                             <Text style={styles.product_name}>{product.name}</Text>
+                                            <Text style={styles.product_vendor}>Marche Djalil</Text>
                                             <Text style={styles.product_type}>{product.type}</Text>
                                             <Text style={styles.product_pricing}>{calculateProductTotal(product.price,product.quantity)}$ ({product.price}$ x {product.quantity})</Text>
                                             </View>
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 10,
         padding: 10,
-        backgroundColor: 'red',
+        // backgroundColor: 'red',
     },
     subHeader_text: {
         fontFamily: text_font_family,
@@ -176,8 +177,14 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         fontSize: 15,
         textAlign: 'center',
-        margin: 10,
+        // margin: 10,
         color: '#FFA500',
+        status:{
+            color: 'red',
+        },
+        date:{
+            color: 'black',
+        }
     },
     subHeader_button: {
         backgroundColor: '#FFA500',
@@ -220,11 +227,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         height: "100%",
-        // margin: 10,
-        // padding: 10,
-        // backgroundColor: 'white',
-        // justifyContent: 'flex-start',
-        // alignItems: 'flex-start',
+   
     },
 
     customer_details: {
@@ -234,7 +237,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 10,
         padding: 10,
-        backgroundColor: 'red',
     },
     customer_details_header: {
         fontFamily: text_font_family,
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 10,
         padding: 10,
-        backgroundColor: 'red',
+        // backgroundColor: 'red',
     },
     payment_details_header: {
         fontFamily: text_font_family,
@@ -317,37 +319,17 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginBottom: 10,
     },
-    // product_vendor: {
+    product_vendor: {
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
+        fontWeight: 'normal',
+        fontSize: 10,
 
-    //     width: '100%',
-    //     height: "100%",
-    //     margin: 10,
-    //     padding: 10,
-    //     backgroundColor: 'white',
-    //     justifyContent: 'flex-start',
-    //     alignItems: 'flex-start',
-    //     borderRadius: 10,
-    //     shadowColor: "#000",
-    //     shadowOffset: {
-    //         width: 0,
-    //         height: 2,
-    //     },
-    //     shadowOpacity: 0.25,
-    //     shadowRadius: 3.84,
-
-    //     elevation: 5,
-    //     marginBottom: 20,
-    //     alignSelf: 'center',
-    // },
-    // product_vendor_text: {
-    //     fontFamily: text_font_family,
-    //     fontStyle: text_font_style,
-    //     fontWeight: 'bold',
-    //     fontSize: 15,
-    //     textAlign: 'center',
-    //     margin: 10,
-    //     color: '#FFA500',
-    // },
+        textAlign: 'center',
+        marginLeft: 10,
+        marginBottom: 4,
+    },
+   
 
 
 
