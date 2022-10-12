@@ -18,7 +18,7 @@ const AddProduct = () => {
   const [productNameError, setError] = useState("");
   const [deleteError, setDeleteError] = useState("");
 
-  const [productImage, setProductImage] = useState<any>()
+  const [productImage, setProductImage] = useState("")
 
   const [variants, setVariants]  = useState([
     { 
@@ -40,7 +40,7 @@ const AddProduct = () => {
       !title.trim()
     );
   };
-
+ 
   const handleAdd =  () => {
     Keyboard.dismiss()
     // return variants without variantId, isHidden and isValid
@@ -56,7 +56,7 @@ const AddProduct = () => {
       brand: brand,
       published: false,
       tags: tags,
-      imgSrc: "gre",
+      imgSrc: productImage,
       variants: variantsWithoutId
     }
     console.log("OKOK", product)
@@ -105,19 +105,21 @@ const AddProduct = () => {
   };
 
   const handleTakePhotoFromCamera = () => {
-  //  ImagePicker.openCamera({
-  //    width: 300,
-  //    height: 400,
-  //    cropping: true,
-  //  }).then(image => setProductImage(image.path));
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true
+    }).then(image => setProductImage("data:image/png;base64,"+image.data));
   }
 
   const handleTakePhotoFromGallery = () => {
-    //ImagePicker.openPicker({
-    //  width: 300,
-    //  height: 400,
-    //  cropping: true,
-    //}).then(image => setProductImage(image.path));
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true
+    }).then(image => setProductImage("data:image/png;base64,"+image.data));
   }
 
     return (
@@ -152,6 +154,7 @@ const AddProduct = () => {
                 <Button onPress={() => setProductImage(null)}><Text>Supprimer la photo</Text></Button></>
             )}
           </View>
+
           <TextInput
             style={styles.input}
             label='Titre du produit*'
