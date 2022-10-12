@@ -1,8 +1,9 @@
 import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useState } from "react";
-import { Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
-import { Button, Divider, HelperText, TextInput } from "react-native-paper";
+import { Image, Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
+import { Button, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { Variant } from "../../../interfaces/VariantInterfaces";
+import ImagePicker from 'react-native-image-crop-picker'
 
 interface VariantProps {
     variantId: string,
@@ -33,7 +34,7 @@ const AddVariant = (props: VariantProps) => {
   const [unitLb, setUnitLb] = useState(false); 
   const [isValidInput, setValid] = useState("Veuillez remplir tous les champs obligatoires*");
   const [isHidden, setHide] = useState(false);
-
+  const [variantImage, setVariantImage] = useState<any>()
 
 
   useEffect(() => {
@@ -68,7 +69,23 @@ const AddVariant = (props: VariantProps) => {
       availableForSale: isAvailableForSale,
       stock: stock
     }
-    }
+  }
+
+  const handleTakePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => setVariantImage(image.path));
+  }
+
+  const handleTakePhotoFromGallery = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => setVariantImage(image.path));
+  }
 
     if(isHidden) return (
       <View style={styles.view}>
@@ -84,7 +101,35 @@ const AddVariant = (props: VariantProps) => {
         <ScrollView style={styles.view}
         >
           <Text>  Variant # {props.variantIndex +1}</Text>
-
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+              <IconButton 
+                onPress={handleTakePhotoFromCamera}
+                mode="contained"
+                icon="camera"
+                size={40}/>
+              <Text>
+                Prendre une photo
+              </Text>
+            </View>
+            <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+              <IconButton 
+                onPress={handleTakePhotoFromGallery}
+                mode="contained"
+                icon="upload"
+                size={40}/>
+              <Text style={{textAlign: 'center'}}>
+                Importer une photo de la galerie
+              </Text>
+            </View>
+          </View>
+          <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+            {variantImage && (
+              <>
+                <Image source={{ uri: variantImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
+                <Button onPress={() => setVariantImage(null)}><Text>Supprimer la photo</Text></Button></>
+            )}
+          </View>
           <TextInput
             style={styles.input}
             label='Titre du variant*'
