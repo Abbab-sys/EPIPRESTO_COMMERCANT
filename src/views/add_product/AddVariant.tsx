@@ -139,14 +139,23 @@ const AddVariant = (props: VariantProps) => {
           <Divider />
 
           <Button style={styles.button} mode="contained" onPress={() => props.deleteSelf()}>
-              Supprimer
-            </Button>
+            Supprimer
+          </Button>
 
         </ScrollView>
       )
   };
 
   const styles = StyleSheet.create({
+    view: {
+      margin: 10,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#000000',
+      borderRadius: 5,
+      width: "80%",
+      flex: 1
+    },
     input: {
       height: 50,
       margin: 10,
@@ -168,13 +177,6 @@ const AddVariant = (props: VariantProps) => {
       borderColor: '#FF0000',
       backgroundColor: '#FFA500'
     },
-    view: {
-      margin: 10,
-      padding: 10,
-      borderWidth: 1,
-      borderColor: '#000000',
-      borderRadius: 5,
-    }
   });
 
   export default AddVariant;

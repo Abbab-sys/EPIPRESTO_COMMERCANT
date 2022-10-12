@@ -1,11 +1,12 @@
 import { useMutation } from "@apollo/client/react";
 import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useState } from "react";
-import { FlatList, Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
-import { Button, Divider, HelperText, TextInput } from "react-native-paper";
+import { FlatList, Keyboard, ScrollView, StyleSheet, Text, View, Image  } from "react-native";
+import { Button, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { Variant } from "../../../interfaces/VariantInterfaces";
 import { ADD_PRODUCT } from "../../graphql/mutations";
 import AddVariant from "./AddVariant";
+import ImagePicker from 'react-native-image-crop-picker'
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
@@ -14,6 +15,7 @@ const AddProduct = () => {
   const [tags, setTags] = useState([]);
   const [isPublished, setPublished] = useState(false);
   const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
+  const [productImage, setProductImage] = useState<any>()
 
   const [variants, setVariants]  = useState([
     { 
@@ -25,7 +27,8 @@ const AddProduct = () => {
       imgSrc: "",
       byWeight: false,
       availableForSale:false,
-      stock: 0}]);
+      stock: 0}
+  ]);
 
   const handleAdd =  () => {
     Keyboard.dismiss()
@@ -74,112 +77,161 @@ const AddProduct = () => {
       }
   }, [addLoading, addError, addData])
 
-    return (
-        <ScrollView style={styles.root}>
-          <Text style = {styles.header}>Ajout Produit à la boutique</Text>
-          <TextInput
-            style={styles.input}
-            label='Titre du produit'
-            onChangeText={text => setTitle(text)}
-            />
-          <HelperText type='error' style={{
-                height: title.length < 1  ? 'auto' : 0,
-              }}>
-          </HelperText>
+  let options = {
+    title: 'Select Image',
+    customButtons: [
+      { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
+    ],
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
+
+  const handleTakePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => setProductImage(image.path));
+  }
+
+  const handleTakePhotoFromGallery = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => setProductImage(image.path));
+  }
+
+  return (
+    <ScrollView style={styles.root}>
+      <Text style = {styles.header}>Ajout Produit à la boutique</Text>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+          <IconButton 
+            onPress={handleTakePhotoFromCamera}
+            mode="contained"
+            icon="camera"
+            size={40}/>
+          <Text>
+            Prendre une photo
+          </Text>
+        </View>
+        <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+          <IconButton 
+            onPress={handleTakePhotoFromGallery}
+            mode="contained"
+            icon="upload"
+            size={40}/>
+          <Text style={{textAlign: 'center'}}>
+            Importer une photo de la galerie
+          </Text>
+        </View>
+      </View>
+      <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+        {productImage && (
+          <>
+            <Image source={{ uri: productImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
+            <Button onPress={() => setProductImage(null)}><Text>Supprimer la photo</Text></Button></>
+        )}
+      </View>
+      <TextInput
+        style={styles.input}
+        label='Titre du produit'
+        onChangeText={text => setTitle(text)}
+        />
+      <HelperText type='error' style={{
+            height: title.length < 1  ? 'auto' : 0,
+          }}>
+      </HelperText>
           
-          <TextInput
-            style={styles.input}
-            label='Description'
-            onChangeText={text => setDescription(text)}
-            />
-          <HelperText type='error'>
-          </HelperText>
+      <TextInput
+        style={styles.input}
+        label='Description'
+        onChangeText={text => setDescription(text)}
+        />
+      <HelperText type='error'>
+      </HelperText>
 
-          <TextInput
-            style={styles.input}
-            label='Marque'
-            onChangeText={text => setBrand(text)}
-            />
-          <HelperText type='error'>
-          </HelperText>
+      <TextInput
+        style={styles.input}
+        label='Marque'
+        onChangeText={text => setBrand(text)}
+        />
+      <HelperText type='error'>
+      </HelperText>
 
-          <TextInput
-            style={styles.input}
-            label='Tags'
-            />
-          <HelperText type='error'>
-          </HelperText>
-
-
-          <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
-              Ajouter un variant
-          </Button>
+      <TextInput
+        style={styles.input}
+        label='Tags'
+        />
+      <HelperText type='error'>
+      </HelperText>
 
 
+      <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
+          Ajouter un variant
+      </Button>
 
-          <ScrollView horizontal>
-          {variants.map((field, index) => (
+
+
+      <ScrollView horizontal>
+        {variants.map((field, index) => (
           <AddVariant 
-          key={field.variantId}
-          variantIndex={index}
-          variantId={field.variantId}
-          variantTitle={field.variantTitle}
-          price={field.price}
-          sku={field.sku}
-          taxable={field.taxable}
-          imgSrc={field.imgSrc}
-          byWeight={field.byWeight}
-          availableForSale={field.availableForSale}
-          stock={field.stock}
-          updateSelf={(variant: Variant) => {
-            const newVariants = [...variants];
-            newVariants[index] = variant;
-            setVariants(newVariants);
-          }}
-          deleteSelf={() => {
-            const newVariants = [...variants];
-            console.log("newVariants", newVariants)
-            if (newVariants.length > 1) {
-              console.log(index)
-              newVariants.splice(index, 1);
+            key={field.variantId}
+            variantIndex={index}
+            variantId={field.variantId}
+            variantTitle={field.variantTitle}
+            price={field.price}
+            sku={field.sku}
+            taxable={field.taxable}
+            imgSrc={field.imgSrc}
+            byWeight={field.byWeight}
+            availableForSale={field.availableForSale}
+            stock={field.stock}
+            updateSelf={(variant: Variant) => {
+              const newVariants = [...variants];
+              newVariants[index] = variant;
               setVariants(newVariants);
+            }}
+            deleteSelf={() => {
+              const newVariants = [...variants];
+              console.log("newVariants", newVariants)
+              if (newVariants.length > 1) {
+                console.log(index)
+                newVariants.splice(index, 1);
+                setVariants(newVariants);
+              }
+              else {
+                console.log("You must have at least one variant");
+              }
             }
-            else {
-              console.log("You must have at least one variant");
-            }
-          }}
-                              
-          ></AddVariant>
-        ))}
-        </ScrollView>
+        }
+      />
+      ))}
+      </ScrollView>
 
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
-
-          <View style={styles.checkboxContainer}>
-            <Text style={styles.label}>Publier l'article </Text>
-            <CheckBox
-              value={isPublished}
-              onValueChange={setPublished}
-              style={styles.checkbox}
-            />
-          </View>
+      <View style={styles.checkboxContainer}>
+        <Text style={styles.label}>Publier l'article </Text>
+        <CheckBox
+          value={isPublished}
+          onValueChange={setPublished}
+          style={styles.checkbox}
+        />
+      </View>
 
 
-          <Button style={styles.button} mode="contained" onPress={() => handleAdd()}>
-            Enregistrer
-          </Button>
-          <Divider   />
-          <Button style={styles.button} mode="contained" onPress={() => console.log("Cancel")}>
-            Annuler
-          </Button>
+      <Button style={styles.button} mode="contained" onPress={() => handleAdd()}>
+        Enregistrer
+      </Button>
+      <Divider   />
+      <Button style={styles.button} mode="contained" onPress={() => console.log("Cancel")}>
+        Annuler
+      </Button>
           
-        </ScrollView>        
-      )
+    </ScrollView>        
+  )
   };
 
   const styles = StyleSheet.create({
@@ -206,7 +258,8 @@ const AddProduct = () => {
     button: {
       borderColor: '#FF0000',
       backgroundColor: '#FFA500',
-      flex: 1
+      flex: 1,
+      margin: '3%'
     },
     header: {
       fontSize: 20,
