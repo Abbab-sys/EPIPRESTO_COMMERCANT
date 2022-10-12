@@ -94,5 +94,20 @@
         "errorMessage": "The consumer secret key can not be empty"
       }
     }
+  },
+  "home": {
+    "title": "Home"
+  },
+  "inventory":{
+    "title": "Inventory"
+  },
+  "settings": {
+    "title": "Settings",
+    "store":{
+      "title":"My store"
+    },
+    "language":{
+      "title":"Language"
+    }
   }
 }
