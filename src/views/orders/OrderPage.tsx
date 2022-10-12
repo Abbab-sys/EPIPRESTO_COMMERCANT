@@ -76,8 +76,7 @@ const OrderPage = ({ route, navigation }: any) => {
                     <Text style={styles.product_details_title}>Produits</Text>
 
                     <View style={styles.product_details_body}>
-                        <ScrollView  >
-                            <View>
+                        <ScrollView>
                                 {ProductsList.map((product) => {
                                     return (
                                         <View style={styles.product_container}>
@@ -93,10 +92,11 @@ const OrderPage = ({ route, navigation }: any) => {
                                             <Text style={styles.product_type}>{product.type}</Text>
                                             <Text style={styles.product_pricing}>{calculateProductTotal(product.price,product.quantity)}$ ({product.price}$ x {product.quantity})</Text>
                                             </View>
+
+                                          
                                         </View>
                                     );
                                 })}
-                            </View>
                         </ScrollView>
                     </View>
 
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     },
     product_details_container: {
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         width: '100%',
         height: "100%",
         margin: 10,
@@ -220,11 +220,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         height: "100%",
-        margin: 10,
-        padding: 10,
-        backgroundColor: 'white',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        // margin: 10,
+        // padding: 10,
+        // backgroundColor: 'white',
+        // justifyContent: 'flex-start',
+        // alignItems: 'flex-start',
     },
 
     customer_details: {
@@ -316,7 +316,42 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginLeft: 10,
         marginBottom: 10,
-    }
+    },
+    // product_vendor: {
+
+    //     width: '100%',
+    //     height: "100%",
+    //     margin: 10,
+    //     padding: 10,
+    //     backgroundColor: 'white',
+    //     justifyContent: 'flex-start',
+    //     alignItems: 'flex-start',
+    //     borderRadius: 10,
+    //     shadowColor: "#000",
+    //     shadowOffset: {
+    //         width: 0,
+    //         height: 2,
+    //     },
+    //     shadowOpacity: 0.25,
+    //     shadowRadius: 3.84,
+
+    //     elevation: 5,
+    //     marginBottom: 20,
+    //     alignSelf: 'center',
+    // },
+    // product_vendor_text: {
+    //     fontFamily: text_font_family,
+    //     fontStyle: text_font_style,
+    //     fontWeight: 'bold',
+    //     fontSize: 15,
+    //     textAlign: 'center',
+    //     margin: 10,
+    //     color: '#FFA500',
+    // },
+
+
+
+
 
 
    
