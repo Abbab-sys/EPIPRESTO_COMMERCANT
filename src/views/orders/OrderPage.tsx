@@ -25,6 +25,7 @@ const ProductsList = [
         vendor: 'Polytechnique',
         type: "300mL"
     },
+    
 
 ]
 //This is a page where we show a single order's details
@@ -34,15 +35,26 @@ const OrderPage = ({ route, navigation }: any) => {
     // const { order } = route.params;
 
      const calculateProductTotal = (price:any,quantity:any):any => {
-        //Return format should be a price with 2 decimals
         return (price * quantity).toFixed(2);
       
     }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
-            <View>
-                <Text style={styles.header}>
+ 
+
+                <View style={styles.header}>
+                    <TouchableOpacity
+                        style={styles.back_button}
+                        onPress={() => navigation.goBack()}
+                    >
+                        <Image
+                            style={styles.back_button_icon}
+                            source={require('../../assets/icons/back.png')}
+                        />
+                    </TouchableOpacity>
+                    
+                <Text style={styles.header_text}>
                     COMMANDE # 123456
                 </Text>
             </View>
@@ -64,11 +76,6 @@ const OrderPage = ({ route, navigation }: any) => {
                     <Text style={styles.product_details_title}>Produits</Text>
 
                     <View style={styles.product_details_body}>
-                        {/* <FlatList
-                        data={ProductsList}
-                        renderItem={renderProductsContainer}
-                    ></FlatList> */}
-                        {/* list all products in ProductsList*/}
                         <ScrollView  >
                             <View>
                                 {ProductsList.map((product) => {
@@ -120,12 +127,39 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#EAEAEA',
+        height: 50,
+        width: '100%',
+        padding: 10,
+        marginBottom: 10,
+    },
+    back_button: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 50,
+        height: 50,
+        marginLeft: 10,
+        
+    },
+    back_button_icon: {
+        width: 35,
+        height: 35,
+        tintColor: '#FFA500',
+    },
+    
+    header_text: {
         fontFamily: text_font_family,
         fontStyle: text_font_style,
         fontWeight: 'bold',
         fontSize: 20,
         textAlign: 'center',
-        margin: 10,
         color: '#FFA500',
     },
     subHeader: {
@@ -233,15 +267,11 @@ const styles = StyleSheet.create({
     product_container: {
         flex: 1,
         flexDirection: 'row',
-        // justifyContent: 'space-between',
-        // alignItems: 'center',
         margin: 5,
         padding: 10,
     },
 
     product_image_container: {
-        // flex: 1,
-        // flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
     },
@@ -251,8 +281,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     product_details: {
-        // flex: 1,
-        // flexDirection: 'row',
+
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
     },
@@ -276,7 +305,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginLeft: 10,
         marginBottom: 10,
-        // margin: 10,
         color: 'black',
     },
     product_pricing: {
