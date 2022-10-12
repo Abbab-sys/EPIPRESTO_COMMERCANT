@@ -7,6 +7,7 @@ import { Variant } from "../../../interfaces/VariantInterfaces";
 import { ADD_PRODUCT } from "../../graphql/mutations";
 import AddVariant from "./AddVariant";
 import ImagePicker from 'react-native-image-crop-picker'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
@@ -110,6 +111,7 @@ const AddProduct = () => {
       height: 400,
       cropping: true,
       includeBase64: true
+      // @ts-ignore
     }).then(image => setProductImage("data:image/png;base64,"+image.data));
   }
 
@@ -119,41 +121,45 @@ const AddProduct = () => {
       height: 400,
       cropping: true,
       includeBase64: true
+      // @ts-ignore
     }).then(image => setProductImage("data:image/png;base64,"+image.data));
   }
 
     return (
         <ScrollView style={styles.root}>
           <Text style = {styles.header}>Ajout Produit à la boutique</Text>
+          <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
           <View style={{flex: 1, flexDirection: 'row'}}>
-            <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
-              <IconButton 
-                onPress={handleTakePhotoFromCamera}
-                mode="contained"
-                icon="camera"
-                size={40}/>
-              <Text>
-                Prendre une photo
-              </Text>
+            <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+              {productImage ? (
+                <>
+                  <Image source={{ uri: productImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
+                  <Button onPress={() => setProductImage("")}><Text>Supprimer la photo</Text></Button></>
+              ) : (
+                <Icon name="image" size={100}></Icon>
+              )}
             </View>
-            <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
-              <IconButton 
-                onPress={handleTakePhotoFromGallery}
-                mode="contained"
-                icon="upload"
-                size={40}/>
-              <Text style={{textAlign: 'center'}}>
-                Importer une photo de la galerie
-              </Text>
+              <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+                <IconButton 
+                  onPress={handleTakePhotoFromCamera}
+                  mode="contained"
+                  icon="camera"
+                  size={40}/>
+                <Text>
+                  Prendre une photo
+                </Text>
+                <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
+                <IconButton 
+                  onPress={handleTakePhotoFromGallery}
+                  mode="contained"
+                  icon="upload"
+                  size={40}/>
+                <Text style={{textAlign: 'center'}}>
+                  Importer une photo de la galerie
+                </Text>
+              </View>
             </View>
-          </View>
-          <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
-            {productImage && (
-              <>
-                <Image source={{ uri: productImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
-                <Button onPress={() => setProductImage(null)}><Text>Supprimer la photo</Text></Button></>
-            )}
-          </View>
+          <Divider bold style={{backgroundColor: "#FFA500", marginVertical: '4%', width: "100%"}}></Divider>
 
           <TextInput
             style={styles.input}

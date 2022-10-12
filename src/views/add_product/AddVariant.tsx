@@ -4,6 +4,7 @@ import { Image, Keyboard, ScrollView, StyleSheet, Text, View  } from "react-nati
 import { Button, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { Variant } from "../../../interfaces/VariantInterfaces";
 import ImagePicker from 'react-native-image-crop-picker'
+import Icon from "react-native-vector-icons/FontAwesome";
 
 interface VariantProps {
     variantId: string,
@@ -101,35 +102,38 @@ const AddVariant = (props: VariantProps) => {
         <ScrollView style={styles.view}
         >
           <Text>  Variant # {props.variantIndex +1}</Text>
+          <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
           <View style={{flex: 1, flexDirection: 'row'}}>
-            <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
-              <IconButton 
-                onPress={handleTakePhotoFromCamera}
-                mode="contained"
-                icon="camera"
-                size={40}/>
-              <Text>
-                Prendre une photo
-              </Text>
+            <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+              {variantImage ? (
+                <>
+                  <Image source={{ uri: variantImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
+                  <Button onPress={() => setVariantImage("")}><Text>Supprimer la photo</Text></Button></>
+              ) : (
+                <Icon name="image" size={100}></Icon>
+              )}
             </View>
-            <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
-              <IconButton 
-                onPress={handleTakePhotoFromGallery}
-                mode="contained"
-                icon="upload"
-                size={40}/>
-              <Text style={{textAlign: 'center'}}>
-                Importer une photo de la galerie
-              </Text>
+              <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+                <IconButton 
+                  onPress={handleTakePhotoFromCamera}
+                  mode="contained"
+                  icon="camera"
+                  size={40}/>
+                <Text>
+                  Prendre une photo
+                </Text>
+                <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
+                <IconButton 
+                  onPress={handleTakePhotoFromGallery}
+                  mode="contained"
+                  icon="upload"
+                  size={40}/>
+                <Text style={{textAlign: 'center'}}>
+                  Importer une photo de la galerie
+                </Text>
+              </View>
             </View>
-          </View>
-          <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
-            {variantImage && (
-              <>
-                <Image source={{ uri: variantImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
-                <Button onPress={() => setVariantImage(null)}><Text>Supprimer la photo</Text></Button></>
-            )}
-          </View>
+          <Divider bold style={{backgroundColor: "#FFA500", marginVertical: '4%', width: "100%"}}></Divider>
           <TextInput
             style={styles.input}
             label='Titre du variant*'
