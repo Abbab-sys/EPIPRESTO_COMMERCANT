@@ -4,6 +4,10 @@ import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 
+
+const text_font_family = 'Lato';
+const text_font_style = 'normal';
+
 const OrderList = [
     { id: 1, date: '23-10-2022', number: '#EP89391', client: 'KHALIL ZRIBA', total: '$ 100', status: 'En attente' },
     { id: 2, date: '23-10-2022', number: '#EP89391', client: 'ADAM NAOUI', total: '$ 100', status: 'En attente' },
@@ -12,45 +16,14 @@ const OrderList = [
     { id: 5, date: '23-10-2022', number: '#EP89391', client: 'ALESSANDRO VAN REUSEL', total: '$ 100', status: 'En attente' },
 ]
 
-//add a button after each order details that will redirect to the order details page. bUTTON MUST BE ON THE RIGHT
-//add a filtering icon on the top right of the page next to COMMANDES title
+//TODO: GET ORDERS FROM API
+//TODO: TRANSLATION FR/ENG
 
-const Orders = () => {
+// const handleDetailsPress = () => {
+//     navigation.navigate('OrderPage');
+// }
 
-    return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
-
-            <View>
-                <Text style={styles.titleText}>
-                    COMMANDES
-                </Text>
-
-            </View>
-            <View style={styles.filtering}>
-                <Button
-                    style={styles.filtering_button}
-                    mode="contained"
-                    onPress={() => console.log('Pressed')}
-                >
-                    Trier
-                </Button>
-                {/* <Button
-                    style={styles.filtering_button}
-                    mode="contained"
-                    onPress={() => console.log('Pressed')}
-                >
-                    Filtrer
-                </Button> */}
-            </View>
-            <FlatList
-                data={OrderList}
-                renderItem={renderOrderContainer}
-            ></FlatList>
-        </SafeAreaView>
-    );
-
-};
-
+const Orders = ({navigation}: any) => {
 
 const renderOrderContainer = ({ item }: any) => {
     return (
@@ -75,6 +48,8 @@ const renderOrderContainer = ({ item }: any) => {
             </View>
             <TouchableOpacity
                 style={styles.order_button_text}
+                onPress={() => navigation.navigate('OrderPage', {order: item})}
+
             >
                 <Text style={styles.view_order_button_text}>Détails</Text>
             </TouchableOpacity>
@@ -82,8 +57,38 @@ const renderOrderContainer = ({ item }: any) => {
     )
 }
 
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
 
-//add some style to our components
+            <View>
+                <Text style={styles.titleText}>
+                    COMMANDES
+                </Text>
+
+            </View>
+            <View style={styles.filtering}>
+                <Button
+                    style={styles.filtering_button}
+                    mode="contained"
+                    onPress={() => console.log('Pressed')}
+                >
+                    Trier
+                </Button>
+                
+            </View>
+            <FlatList
+                data={OrderList}
+                renderItem={renderOrderContainer}
+            ></FlatList>
+        </SafeAreaView>
+    );
+
+};
+
+
+
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -102,6 +107,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         margin: 10,
         color: '#FFA500',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
 
     order_container: {
@@ -121,7 +128,6 @@ const styles = StyleSheet.create({
 
         elevation: 5,
         marginBottom: 20,
-        //container must be centered
         alignSelf: 'center',
 
 
@@ -154,10 +160,14 @@ const styles = StyleSheet.create({
     order_date: {
         fontSize: 15,
         fontWeight: 'bold',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_number: {
         fontSize: 15,
         fontWeight: 'bold',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_details: {
         width: '90%',
@@ -186,6 +196,8 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 20,
         fontWeight: 'bold',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_details_left: {
         width: '50%',
@@ -193,6 +205,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         paddingLeft: 10,
+        
 
     },
     order_details_right: {
@@ -206,22 +219,18 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         marginBottom: 10,
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_details_right_text: {
         fontSize: 12,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         marginBottom: 10,
-        //text should take the whole width and not take another line
         width: '100%',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
 
     },
-    // order_button: {
-    //     width: '100%',
-    //     height: 50,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     marginTop: 10,
-    // },
     order_button_text: {
         width: '30%',
         height: 40,
@@ -233,6 +242,8 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginRight: 20,
         marginBottom: 10,
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_status: {
         width: 100,
@@ -246,6 +257,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         color: 'white',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     filtering: {
         flexDirection: 'row',
@@ -262,19 +275,16 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     view_order_button_text: {
         fontSize: 15,
         fontWeight: 'bold',
         color: 'white',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
-    
-
-
-
-
-
-
 });
 
 

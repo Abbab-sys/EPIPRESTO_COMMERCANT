@@ -19,7 +19,8 @@ import Navigation from "./views/navigation/Navigation";
 import Inventory from "./views/inventory/Inventory";
 import { VendorContext } from "./context/Vendor";
 import AddProduct from "./views/add_product/AddProduct";
-import Orders from "./views/orders/orders";
+import Orders from "./views/orders/Orders";
+import OrderPage from "./views/orders/OrderPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,7 @@ export default function App() {
             <Stack.Screen name="Navigation" component={Navigation} />
             <Stack.Screen name="AddProduct" component={AddProduct} />
             <Stack.Screen name="Orders" component={Orders} />
+            <Stack.Screen name="OrderPage" component={OrderPage} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>
@@ -73,4 +75,5 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFA500',
   },
+  
 });
