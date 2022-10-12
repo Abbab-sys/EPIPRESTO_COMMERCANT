@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
-//import all the components we are going to use
 import { SafeAreaView, StyleSheet, View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-paper'
+import { Button, SegmentedButtons } from 'react-native-paper'
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
+// const orderStatus = ["WAITING_CONFIRMATION", "CONFIRMED", "IN_DELIVERY", "DELIVERED", "CLOSED"];
+const orderStatus= [
+    {label: "Waiting for confirmation", value: "WAITING_CONFIRMATION"},
+    {label: "Confirmed", value: "CONFIRMED"},
+    {label: "In Delivery", value: "IN_DELIVERY"},
+    {label: "Delivered", value: "DELIVERED"},
+    {label: "Closed", value: "CLOSED"}
+]
 const ProductsList = [
     {
         id: 1,
@@ -18,105 +26,133 @@ const ProductsList = [
     },
     {
         id: 2,
-        name: 'Club Sandwish',
+        name: 'Club Sandwich',
         quantity: 2,
         price: 2.25,
         imgUrl: 'https://picsum.photos/200/300',
         vendor: 'Polytechnique',
         type: "300mL"
     },
-    
+
 
 ]
-//This is a page where we show a single order's details
 const OrderPage = ({ route, navigation }: any) => {
-
+    const [open, setOpen] = React.useState(false);
+    const [current_order_status, set_current_order_status] = React.useState(orderStatus[0].value); //TODO: get the current order status from the server
     //TODO: USE REAL DATA
     // const { order } = route.params;
 
-     const calculateProductTotal = (price:any,quantity:any):any => {
+    const calculateProductTotal = (price: any, quantity: any): any => {
         return (price * quantity).toFixed(2);
-      
+
     }
+
+    const changeStatus = (status: any) => {
+        console.log(status)
+    }
+
+
+    //TODO: FUNCTION CALLED TWICE, FIX IT
+
+    const showSaveButton = () => {
+        console.log(current_order_status);
+        //TODO: If the current order status is different from the one in the server, show the save button
+        if(current_order_status !== orderStatus[0].value) {
+            return (
+                <View style={styles.saveButtonContainer}>
+                <Button
+                    mode="contained"
+                    style={styles.saveButtonText}
+                    onPress={() => sendStatusUpdate(current_order_status)}
+                >
+                    Save
+                </Button>
+                </View>
+            )
+        }
+    }
+
+    const sendStatusUpdate = (status:any) => {
+
+    }
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
- 
 
-                <View style={styles.header}>
-                    <TouchableOpacity
-                        style={styles.back_button}
-                        onPress={() => navigation.goBack()}
-                    >
-                        <Image
-                            style={styles.back_button_icon}
-                            source={require('../../assets/icons/back.png')}
-                        />
-                    </TouchableOpacity>
-                    
+
+            <View style={styles.header}>
+                <TouchableOpacity
+                    style={styles.back_button}
+                    onPress={() => navigation.goBack()}
+                >
+                    <Image
+                        style={styles.back_button_icon}
+                        source={require('../../assets/icons/back.png')}
+                    />
+                </TouchableOpacity>
+
                 <Text style={styles.header_text}>
                     COMMANDE # 123456
                 </Text>
             </View>
             <View style={styles.subHeader}>
-                <Text style={styles.subHeader_text.date}>
-                    27-06-2021
-                </Text>
-                <Text style={styles.subHeader_text.status}>
-                    Annulée
-                </Text>
-                <Button style={styles.subHeader_button} mode="contained" onPress={() => console.log('Pressed')}>
-                    Modifier
-                </Button>
+                <DropDownPicker
+                    open={open}
+                    value={current_order_status}
+                    items={orderStatus}
+                    setOpen={setOpen}
+                    setValue={set_current_order_status}
+                    onChangeValue={showSaveButton}
+                />
+
             </View>
 
             <ScrollView style={styles.container}>
 
-                <View style={styles.product_details_container}>
-                    <Text style={styles.product_details_title}>Produits</Text>
+                <View style={styles.details_container}>
+                    <Text style={styles.details_title}>Produits</Text>
 
                     <View style={styles.product_details_body}>
                         <ScrollView>
-                                {ProductsList.map((product) => {
-                                    return (
-                                        <View style={styles.product_container}>
-                                            <View style={styles.product_image_container}>
-                                                <Image
-                                                    source={{ uri: product.imgUrl }}
-                                                    style={styles.product_image}
-                                                />
-                                            </View>
-                                            
-                                            <View style={styles.product_details}>
-                                            <Text style={styles.product_name}>{product.name}</Text>
-                                            <Text style={styles.product_vendor}>Marche Djalil</Text>
-                                            <Text style={styles.product_type}>{product.type}</Text>
-                                            <Text style={styles.product_pricing}>{calculateProductTotal(product.price,product.quantity)}$ ({product.price}$ x {product.quantity})</Text>
-                                            </View>
-
-                                          
+                            {ProductsList.map((product) => {
+                                return (
+                                    <View style={styles.product_container}>
+                                        <View style={styles.product_image_container}>
+                                            <Image
+                                                source={{ uri: product.imgUrl }}
+                                                style={styles.product_image} />
                                         </View>
-                                    );
-                                })}
+                                        <View style={styles.product_details}>
+                                            <Text style={styles.product_name}>{product.name}</Text>
+                                            <Text style={styles.product_information}>Marche Djalil</Text>
+                                            <Text style={styles.product_information}>{product.type}</Text>
+                                            <Text style={styles.product_information}>{calculateProductTotal(product.price, product.quantity)}$ ({product.price}$ x {product.quantity})</Text>
+                                        </View>
+
+
+                                    </View>
+                                );
+                            })}
                         </ScrollView>
                     </View>
 
                 </View>
-
-
-                <View style={styles.customer_details}>
-                    <Text style={styles.customer_details_header}>
+                <View style={styles.details_container}>
+                    <Text style={styles.details_title}>
                         Client
                     </Text>
                 </View>
 
-                <View style={styles.payment_details}>
-                    <Text style={styles.payment_details_header}>
+                <View style={styles.details_container}>
+                    <Text style={styles.details_title}>
                         Paiement
                     </Text>
                 </View>
-            </ScrollView>
 
+
+            </ScrollView>
+            {showSaveButton()}
         </SafeAreaView>
     );
 }
@@ -147,14 +183,14 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         marginLeft: 10,
-        
+
     },
     back_button_icon: {
         width: 35,
         height: 35,
         tintColor: '#FFA500',
     },
-    
+
     header_text: {
         fontFamily: text_font_family,
         fontStyle: text_font_style,
@@ -163,34 +199,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#FFA500',
     },
+
+
     subHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        margin: 10,
+        height: "auto",
+        width: '100%',
         padding: 10,
-        // backgroundColor: 'red',
+        marginBottom: 5,
+        zIndex: 1,
     },
-    subHeader_text: {
-        fontFamily: text_font_family,
-        fontStyle: text_font_style,
-        fontWeight: 'normal',
-        fontSize: 15,
-        textAlign: 'center',
-        // margin: 10,
-        color: '#FFA500',
-        status:{
-            color: 'red',
-        },
-        date:{
-            color: 'black',
-        }
-    },
-    subHeader_button: {
-        backgroundColor: '#FFA500',
-        width: 'auto',
-    },
-    product_details_container: {
+
+
+    details_container: {
         flex: 1,
         flexDirection: 'column',
         width: '100%',
@@ -213,7 +233,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignSelf: 'center',
     },
-    product_details_title: {
+    details_title: {
         fontFamily: text_font_family,
         fontStyle: text_font_style,
         fontWeight: 'bold',
@@ -227,45 +247,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         height: "100%",
-   
+
     },
 
-    customer_details: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        margin: 10,
-        padding: 10,
-    },
-    customer_details_header: {
-        fontFamily: text_font_family,
-        fontStyle: text_font_style,
-        fontWeight: 'bold',
-        fontSize: 15,
-        textAlign: 'center',
-        margin: 10,
-        color: '#FFA500',
-    },
-
-    payment_details: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        margin: 10,
-        padding: 10,
-        // backgroundColor: 'red',
-    },
-    payment_details_header: {
-        fontFamily: text_font_family,
-        fontStyle: text_font_style,
-        fontWeight: 'bold',
-        fontSize: 15,
-        textAlign: 'center',
-        margin: 10,
-        color: '#FFA500',
-    },
     product_container: {
         flex: 1,
         flexDirection: 'row',
@@ -295,10 +279,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
 
         textAlign: 'center',
-        marginLeft:10 ,
+        marginLeft: 10,
         color: 'black',
     },
-    product_type: {
+    product_information: {
         fontFamily: text_font_family,
         fontStyle: text_font_style,
         fontWeight: 'normal',
@@ -309,37 +293,27 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: 'black',
     },
-    product_pricing: {
+    saveButtonContainer: {
+        position: 'relative',
+        height: 50,
+        width: "50%",
+        zIndex: 1,
+        alignSelf: 'center',
+        marginTop: 10,
+    },
+  
+    saveButtonText: {
         fontFamily: text_font_family,
         fontStyle: text_font_style,
-        fontWeight: 'normal',
-        fontSize: 10,
-
+        fontWeight: 'bold',
+        fontSize: 20,
         textAlign: 'center',
-        marginLeft: 10,
-        marginBottom: 10,
+        color: 'white',
+        backgroundColor: '#FFA500',
+        justifyContent: 'center',
+        alignItems: 'center',
+        
     },
-    product_vendor: {
-        fontFamily: text_font_family,
-        fontStyle: text_font_style,
-        fontWeight: 'normal',
-        fontSize: 10,
-
-        textAlign: 'center',
-        marginLeft: 10,
-        marginBottom: 4,
-    },
-   
-
-
-
-
-
-
-   
- 
-
-
 
 
 
