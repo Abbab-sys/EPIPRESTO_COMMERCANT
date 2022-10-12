@@ -94,5 +94,20 @@
         "errorMessage": "La clé secrète du consommateur ne peut pas être vide"
       }
     }
+  },
+  "home":{
+    "title": "Accueil"
+  },
+  "inventory": {
+    "title":"Inventaire"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "store":{
+      "title":"Ma boutique"
+    },
+    "language":{
+      "title":"Langue"
+    }
   }
 }

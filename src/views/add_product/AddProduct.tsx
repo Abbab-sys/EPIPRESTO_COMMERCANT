@@ -1,11 +1,12 @@
 import { useMutation } from "@apollo/client/react";
 import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useState } from "react";
-import { FlatList, Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
-import { Button, Divider, HelperText, TextInput } from "react-native-paper";
+import { FlatList, Keyboard, ScrollView, StyleSheet, Text, View, Image  } from "react-native";
+import { Button, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { Variant } from "../../../interfaces/VariantInterfaces";
 import { ADD_PRODUCT } from "../../graphql/mutations";
 import AddVariant from "./AddVariant";
+import ImagePicker from 'react-native-image-crop-picker'
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
@@ -17,6 +18,7 @@ const AddProduct = () => {
   const [productNameError, setError] = useState("");
   const [deleteError, setDeleteError] = useState("");
 
+  const [productImage, setProductImage] = useState<any>()
 
   const [variants, setVariants]  = useState([
     { 
@@ -91,9 +93,65 @@ const AddProduct = () => {
       }
   }, [addLoading, addError, addData])
 
+  let options = {
+    title: 'Select Image',
+    customButtons: [
+      { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
+    ],
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
+
+  const handleTakePhotoFromCamera = () => {
+  //  ImagePicker.openCamera({
+  //    width: 300,
+  //    height: 400,
+  //    cropping: true,
+  //  }).then(image => setProductImage(image.path));
+  }
+
+  const handleTakePhotoFromGallery = () => {
+    //ImagePicker.openPicker({
+    //  width: 300,
+    //  height: 400,
+    //  cropping: true,
+    //}).then(image => setProductImage(image.path));
+  }
+
     return (
         <ScrollView style={styles.root}>
           <Text style = {styles.header}>Ajout Produit à la boutique</Text>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+              <IconButton 
+                onPress={handleTakePhotoFromCamera}
+                mode="contained"
+                icon="camera"
+                size={40}/>
+              <Text>
+                Prendre une photo
+              </Text>
+            </View>
+            <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+              <IconButton 
+                onPress={handleTakePhotoFromGallery}
+                mode="contained"
+                icon="upload"
+                size={40}/>
+              <Text style={{textAlign: 'center'}}>
+                Importer une photo de la galerie
+              </Text>
+            </View>
+          </View>
+          <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+            {productImage && (
+              <>
+                <Image source={{ uri: productImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
+                <Button onPress={() => setProductImage(null)}><Text>Supprimer la photo</Text></Button></>
+            )}
+          </View>
           <TextInput
             style={styles.input}
             label='Titre du produit*'
@@ -185,6 +243,8 @@ const AddProduct = () => {
         ))}
         </ScrollView>
 
+          
+
           <Divider   />
           <Divider   />
           <Divider   />
@@ -213,8 +273,8 @@ const AddProduct = () => {
             Annuler
           </Button>
           
-        </ScrollView>        
-      )
+    </ScrollView>        
+  )
   };
 
   const styles = StyleSheet.create({
@@ -241,7 +301,8 @@ const AddProduct = () => {
     button: {
       borderColor: '#FF0000',
       backgroundColor: '#FFA500',
-      flex: 1
+      flex: 1,
+      margin: '3%'
     },
     header: {
       fontSize: 20,

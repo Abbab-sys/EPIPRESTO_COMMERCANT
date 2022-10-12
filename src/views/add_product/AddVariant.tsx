@@ -181,6 +181,15 @@ const AddVariant = (props: VariantProps) => {
   };
 
   const styles = StyleSheet.create({
+    view: {
+      margin: 10,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#000000',
+      borderRadius: 5,
+      width: "80%",
+      flex: 1
+    },
     input: {
       margin: 10,
       marginBottom: 0,
@@ -201,13 +210,6 @@ const AddVariant = (props: VariantProps) => {
       borderColor: '#FF0000',
       backgroundColor: '#FFA500'
     },
-    view: {
-      margin: 10,
-      padding: 10,
-      borderWidth: 1,
-      borderColor: '#000000',
-      borderRadius: 5,
-    }
   });
 
   export default AddVariant;

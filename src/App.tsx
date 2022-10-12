@@ -20,6 +20,7 @@ import Inventory from "./views/inventory/Inventory";
 import { VendorContext } from "./context/Vendor";
 import AddProduct from "./views/add_product/AddProduct";
 import Orders from "./views/orders/orders";
+import Settings from "./views/settings/Settings";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,8 +56,9 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{headerShown: false}}
-            initialRouteName="AddProduct">
+            initialRouteName="Navigation">
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Navigation" component={Navigation} />
             <Stack.Screen name="AddProduct" component={AddProduct} />
