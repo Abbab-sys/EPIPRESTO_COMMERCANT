@@ -7,6 +7,7 @@ import SignUp from "../sign_up/SignUp";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Text } from "react-native";
+import Orders from "../orders/Orders";
 
 const Navigation = () => {
   
@@ -36,6 +37,18 @@ const Navigation = () => {
             <Text style={{color: focused ? "#FFA500" : "#707070"}}>Inventory</Text>
           ),
         }}/>
+      <Tab.Screen
+        name="Orders"
+        component={Orders}
+        options={{
+          tabBarIcon: ({size, focused}) => (
+            <Icon name="cart-shopping" color={focused ? "#FFA500" : "#707070"} size={size}></Icon>
+          ),
+          tabBarLabel: ({focused}) => (
+            <Text style={{color: focused ? "#FFA500" : "#707070"}}>Orders</Text>
+          ),
+        }}/>
+        
     </Tab.Navigator>
   )
 }
