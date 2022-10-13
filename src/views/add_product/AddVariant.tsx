@@ -77,7 +77,9 @@ const AddVariant = (props: VariantProps) => {
       width: 300,
       height: 400,
       cropping: true,
-    }).then(image => setVariantImage(image.path));
+      includeBase64: true
+      // @ts-ignore
+    }).then(image => setVariantImage("data:image/png;base64,"+image.data));
   }
 
   const handleTakePhotoFromGallery = () => {
@@ -85,15 +87,20 @@ const AddVariant = (props: VariantProps) => {
       width: 300,
       height: 400,
       cropping: true,
-    }).then(image => setVariantImage(image.path));
+      includeBase64: true
+      // @ts-ignore
+    }).then(image => setVariantImage("data:image/png;base64,"+image.data));
   }
 
     if(isHidden) return (
       <View style={styles.view}>
-        <Text>  Variant # {props.variantIndex +1}</Text>
-        <Button style={styles.button} mode="contained" onPress={() => setHide(false)}>
-              Show
-        </Button>
+        <View style={{flex: 1, flexDirection: 'row'}} >
+          <Text>  Variant # {props.variantIndex +1}</Text>
+          <View style={{position: 'absolute', right: 0, flex: 1, flexDirection: 'row'}}>
+          <IconButton icon="delete" size={20} onPress={() => props.deleteSelf()} />
+          <IconButton icon="eye" size={20} onPress={() => setHide(false)} />
+          </View>
+      </View>
       </View>
       
     )
@@ -101,7 +108,15 @@ const AddVariant = (props: VariantProps) => {
     else return (
         <ScrollView style={styles.view}
         >
+          <View style={{flex: 1, flexDirection: 'row'}} >
           <Text>  Variant # {props.variantIndex +1}</Text>
+          <View style={{position: 'absolute', right: 0, flex: 1, flexDirection: 'row'}}>
+          <IconButton icon="delete" size={20} onPress={() => props.deleteSelf()} />
+          <IconButton icon="eye-off" size={20} 
+            onPress={() => setHide(true)} />
+          </View>
+
+          </View>
           <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
@@ -218,13 +233,6 @@ const AddVariant = (props: VariantProps) => {
           isValidInput
           }
           </HelperText>
-
-          <Button style={styles.button} mode="contained" onPress={() => props.deleteSelf()}>
-              Supprimer
-            </Button>
-            <Button style={styles.button} mode="contained" onPress={() => setHide(true)}>
-              hide
-            </Button>
         </ScrollView>
       )
   };
