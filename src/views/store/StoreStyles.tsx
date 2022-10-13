@@ -1,15 +1,19 @@
 import { StyleSheet } from "react-native";
 
 export const StoreStyles = StyleSheet.create({
-    titleView:{
-        padding: '5%',
-        alignItems: 'center',
+    fieldsView: {
+        margin: '5%',
+        height: 'auto',
+      },
+    statusView: {
+        margin: '5%',
+        flexDirection: 'row',
     },
-    title:{
-        fontFamily: 'Lato',
-        color: '#FFA500',
-        fontStyle: 'normal',
-        fontWeight: '700',
-        fontSize: 24,
+    text : {
+      fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: 19,
+    fontStyle: 'normal',
+    alignSelf: 'center',
     }
 });

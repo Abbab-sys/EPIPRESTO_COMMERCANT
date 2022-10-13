@@ -58,6 +58,27 @@ export const GET_STORE_PRODUCTS_BY_ID = gql`
   }
 `
 
+export const GET_STORE_CREDENTIALS_BY_ID = gql`
+query getStoreCredentialsById($idStore: ID!) {
+  getStoreById(idStore: $idStore) {
+    code
+    message
+    store {
+      name
+      address
+      disponibilities {
+        day
+        activesHours {
+          openingHour
+          endingHour
+        }
+      }
+    }
+  }
+}
+
+`
+
 // export const GET_PRODUCTS = gql`
 //   query GetStoreById($idStore: ID!) {
 //     getStoreById(idStore: $idStore) {

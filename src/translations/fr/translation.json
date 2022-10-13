@@ -104,7 +104,12 @@
   "settings": {
     "title": "Paramètres",
     "store":{
-      "title":"Ma boutique"
+      "title":"Ma boutique",
+      "status": {
+        "title": "Statut",
+        "open":"Ouvert",
+        "closed":"Fermé"
+      }
     },
     "language":{
       "title":"Changement de langue"

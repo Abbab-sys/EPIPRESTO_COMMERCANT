@@ -104,7 +104,12 @@
   "settings": {
     "title": "Settings",
     "store":{
-      "title":"My store"
+      "title":"My store",
+      "status": {
+        "title":"StatuS",
+        "open":"Open",
+        "closed":"Closed"
+        }
     },
     "language":{
       "title":"Change Language"
