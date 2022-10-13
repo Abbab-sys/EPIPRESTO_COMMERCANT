@@ -3,6 +3,7 @@ import { SafeAreaView, View, Text, Image, ScrollView, TouchableOpacity } from 'r
 import { Button } from 'react-native-paper'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { OrderPageStyles } from './OrderPageStyles';
+import { Product } from '../../interfaces/OrderInterface';
 
 const styles = OrderPageStyles
 const orderStatus = [
@@ -12,31 +13,33 @@ const orderStatus = [
     { label: "Delivered", value: "DELIVERED" },
     { label: "Closed", value: "CLOSED" }
 ]
-const ProductsList = [
-    {
-        id: 1,
-        name: 'Redbull',
-        quantity: 1,
-        price: 3,
-        imgUrl: 'https://picsum.photos/200/300',
-        vendor: 'Marché Djalil',
-        type: "300mL"
-    },
-    {
-        id: 2,
-        name: 'Club Sandwich',
-        quantity: 2,
-        price: 2.25,
-        imgUrl: 'https://picsum.photos/200/300',
-        vendor: 'Polytechnique',
-        type: "300mL"
-    },
-]
+// const ProductsList = [
+//     {
+//         id: 1,
+//         name: 'Redbull',
+//         quantity: 1,
+//         price: 3,
+//         imgUrl: 'https://picsum.photos/200/300',
+//         vendor: 'Marché Djalil',
+//         type: "300mL"
+//     },
+//     {
+//         id: 2,
+//         name: 'Club Sandwich',
+//         quantity: 2,
+//         price: 2.25,
+//         imgUrl: 'https://picsum.photos/200/300',
+//         vendor: 'Polytechnique',
+//         type: "300mL"
+//     },
+// ]
 const OrderPage = ({ route, navigation }: any) => {
+    const { order } = route.params;
     const [open, setOpen] = React.useState(false);
-    const [current_order_status, set_current_order_status] = React.useState(orderStatus[0].value); //TODO: get the current order status from the server
+    const [current_order_status, set_current_order_status] = React.useState(order.logs[order.logs.length-1].status); //TODO: get the current order status from the server
     //TODO: USE REAL DATA
-    // const { order } = route.params;
+
+    console.log("order", order);
 
     const calculateProductTotal = (price: any, quantity: any): any => {
         return (price * quantity).toFixed(2);
@@ -53,7 +56,7 @@ const OrderPage = ({ route, navigation }: any) => {
     const showSaveButton = () => {
         console.log(current_order_status);
         //TODO: If the current order status is different from the one in the server, show the save button
-        if (current_order_status !== orderStatus[0].value) {
+        if (current_order_status !== order.logs[order.logs.length-1].status) {
             return (
                 <View style={styles.saveButtonContainer}>
                     <Button
@@ -77,7 +80,7 @@ const OrderPage = ({ route, navigation }: any) => {
         //4.Hide the save button if the mutation is successful
     }
 
-
+    //TODO: FIX PRODUCT TYPE
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
 
@@ -110,36 +113,7 @@ const OrderPage = ({ route, navigation }: any) => {
             </View>
 
             <ScrollView style={styles.container}>
-
-                <View style={styles.details_container}>
-                    <Text style={styles.details_title}>Produits</Text>
-
-                    <View style={styles.product_details_body}>
-                        <ScrollView>
-                            {ProductsList.map((product) => {
-                                return (
-                                    <View style={styles.product_container}>
-                                        <View style={styles.product_image_container}>
-                                            <Image
-                                                source={{ uri: product.imgUrl }}
-                                                style={styles.product_image} />
-                                        </View>
-                                        <View style={styles.product_details}>
-                                            <Text style={styles.product_name}>{product.name}</Text>
-                                            <Text style={styles.product_information}>Marche Djalil</Text>
-                                            <Text style={styles.product_information}>{product.type}</Text>
-                                            <Text style={styles.product_information}>{calculateProductTotal(product.price, product.quantity)}$ ({product.price}$ x {product.quantity})</Text>
-                                        </View>
-
-
-                                    </View>
-                                );
-                            })}
-                        </ScrollView>
-                    </View>
-
-                </View>
-                <View style={styles.details_container}>
+            <View style={styles.details_container}>
                     <View style={styles.client_header}>
                         <Text style={styles.details_title}>
                             Client
@@ -156,16 +130,16 @@ const OrderPage = ({ route, navigation }: any) => {
                     </View>
 
                     <Text style={styles.product_name}>
-                        John Doe
+                        {order.client.firstName} {order.client.lastName}
                     </Text>
                     <Text style={styles.product_information}>
-                        3001, rue Jean-Talon Ouest, Montréal, QC H3R 1P3
+                        {order.client.address}
                     </Text>
                     <Text style={styles.product_information}>
-                        john.doe@gmail.com
+                        {order.client.email}
                     </Text>
                     <Text style={styles.product_name}>
-                        514-123-4567
+                        {order.client.phone}
                     </Text>
                 </View>
 
@@ -196,6 +170,36 @@ const OrderPage = ({ route, navigation }: any) => {
 
                     
                 </View>
+
+                <View style={styles.details_container}>
+                    <Text style={styles.details_title}>Produits</Text>
+
+                    <View style={styles.product_details_body}>
+                        <ScrollView>
+                            {order.products.map((product:Product) => {
+                                return (
+                                    <View style={styles.product_container}>
+                                        <View style={styles.product_image_container}>
+                                            <Image
+                                                source={{ uri: product.imgSrc}}
+                                                style={styles.product_image} />
+                                        </View>
+                                        <View style={styles.product_details}>
+                                            <Text style={styles.product_name}>{product.title}</Text>
+                                            <Text style={styles.product_information}>{product.vendor}</Text>
+                                            <Text style={styles.product_information}>300 mL</Text>
+                                            <Text style={styles.product_information}>{calculateProductTotal(product.price, product.quantity)}$ ({product.price}$ x {product.quantity})</Text>
+                                        </View>
+
+
+                                    </View>
+                                );
+                            })}
+                        </ScrollView>
+                    </View>
+
+                </View>
+               
 
 
             </ScrollView>

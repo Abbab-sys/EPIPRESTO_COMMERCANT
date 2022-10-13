@@ -1,20 +1,16 @@
 //create a simple react native component
+import { useLazyQuery, useQuery } from '@apollo/client';
 import React, { Component } from 'react';
 //import all the components we are going to use
 import { SafeAreaView, StyleSheet, View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
+import {GET_ALL_ORDERS_BY_STORE_ID} from '../../graphql/queries';
+import {Client, Order, Product} from '../../interfaces/OrderInterface';
 
 
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
-const OrderList = [
-    { id: 1, date: '23-10-2022', number: '#EP89391', client: 'KHALIL ZRIBA', total: '$ 100', status: 'En attente' },
-    { id: 2, date: '23-10-2022', number: '#EP89391', client: 'ADAM NAOUI', total: '$ 100', status: 'En attente' },
-    { id: 3, date: '23-10-2022', number: '#EP89391', client: 'ZOUHAIR DEROUICH', total: '$ 100', status: 'En attente' },
-    { id: 4, date: '23-10-2022', number: '#EP89391', client: 'RYMA MESSEDAA', total: '$ 100', status: 'En attente' },
-    { id: 5, date: '23-10-2022', number: '#EP89391', client: 'ALESSANDRO VAN REUSEL', total: '$ 100', status: 'En attente' },
-]
 
 //TODO: GET ORDERS FROM API
 //TODO: TRANSLATION FR/ENG
@@ -25,41 +21,102 @@ const OrderList = [
 
 const Orders = ({navigation}: any) => {
 
-const renderOrderContainer = ({ item }: any) => {
-    return (
-        <View style={styles.order_container}>
-            <View style={styles.order_header}>
-                <Text style={styles.order_date}>{item.date}</Text>
-                <Text style={styles.order_number}>{item.number}</Text>
-            </View>
-            <View style={styles.order_details}>
-                <View style={styles.order_details_left}>
-                    <Text style={styles.order_details_left_text}>Client</Text>
-                    <Text style={styles.order_details_left_text}>Total</Text>
-                    <Text style={styles.order_details_left_text}>Status</Text>
-                </View>
-                <View style={styles.order_details_right}>
-                    <Text style={styles.order_details_right_text}>{item.client}</Text>
-                    <Text style={styles.order_details_right_text}>{item.total}</Text>
-                    <View style={styles.order_status}>
-                        <Text style={styles.order_status_text}>{item.status}</Text>
-                    </View>                
-                </View>
-            </View>
-            <TouchableOpacity
-                style={styles.order_button_text}
-                onPress={() => navigation.navigate('OrderPage', {order: item})}
+    const {data,loading,error} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
+        variables: {
+            idStore: "633cfb2bf7bdb731e893e28b"
+        }
+    });
 
-            >
-                <Text style={styles.view_order_button_text}>Détails</Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
+    if (loading) {
+        return <Text>Loading...</Text>;
+    }
+
+    if (error) {
+        return <Text>Error while loading orders</Text>;
+    }
+
+    const orders:Order[] = data.getStoreById.store.orders.map((order: any) => {
+
+        //create a new Product object
+        const products: Product[] = order.productsVariantsOrdered.map(({relatedProductVariant,quantity}:any) => {
+            const newProduct: Product = {
+                _id:relatedProductVariant._id,
+                title: relatedProductVariant.displayName,
+                imgSrc: relatedProductVariant.imgSrc,
+                quantity:quantity,
+                vendor: relatedProductVariant.relatedProduct.relatedStore.name,
+                price:relatedProductVariant.price
+            }
+            return newProduct;
+
+        })
+
+
+        const client : Client ={
+            _id: order.relatedClient._id,
+            name: order.relatedClient.name,
+            firstName: order.relatedClient.firstName,
+            email: order.relatedClient.email,
+            phone: order.relatedClient.phone,
+            address: "TODO" //TODO: ADD ADDRESS
+        }
+        //create a new Order object
+        const newOrder:Order = {
+            _id: order._id,
+            products: products,
+            client: client,
+            logs: order.logs,
+            total: order.price,//TODO
+            subTotal: 100,
+            tax: 50,
+            deliveryFee: 20,
+        }
+        return newOrder;
+  
+    })
+
+
+
+   
+    const renderOrderContainer = ({ item }: any) => {
+        const order_date = new Date(item.logs[0].time);
+        return (
+            <View style={styles.order_container}>
+                <View style={styles.order_header}>
+                    <Text style={styles.order_date}>{order_date.toDateString()}</Text>
+                    <Text style={styles.order_number}>{item._id}</Text>
+                </View>
+                <View style={styles.order_details}>
+                    <View style={styles.order_details_left}>
+                        <Text style={styles.order_details_left_text}>Client</Text>
+                        <Text style={styles.order_details_left_text}>Total</Text>
+                        <Text style={styles.order_details_left_text}>Status</Text>
+                    </View>
+                    <View style={styles.order_details_right}>
+                        <Text style={styles.order_details_right_text}>{item.client.firstName} {item.client.name}</Text>
+                        <Text style={styles.order_details_right_text}>{item.total}</Text>
+                        <View style={styles.order_status}>
+                            <Text style={styles.order_status_text}>{item.logs[item.logs.length-1].status}</Text>
+                        </View>                
+                    </View>
+                </View>
+                <TouchableOpacity
+                    style={styles.order_button_text}
+                    onPress={() => navigation.navigate('OrderPage', {order: item})}
+    
+                >
+                    <Text style={styles.view_order_button_text}>Détails</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+    
+
+
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
-
             <View>
                 <Text style={styles.titleText}>
                     COMMANDES
@@ -77,7 +134,7 @@ const renderOrderContainer = ({ item }: any) => {
                 
             </View>
             <FlatList
-                data={OrderList}
+                data={orders}
                 renderItem={renderOrderContainer}
             ></FlatList>
         </SafeAreaView>

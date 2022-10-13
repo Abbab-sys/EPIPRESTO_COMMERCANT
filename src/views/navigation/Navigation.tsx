@@ -18,6 +18,7 @@ const Navigation = () => {
       <Tab.Screen
         name="Home"
         component={Home}
+        
         options={{
           tabBarIcon: ({size, focused}) => (
             <Icon name="home" color={focused ? "#FFA500" : "#707070"} size={size}></Icon>
