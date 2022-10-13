@@ -1,8 +1,7 @@
 //create a simple react native component
-import { useLazyQuery, useQuery } from '@apollo/client';
+import {useQuery } from '@apollo/client';
 import React, { Component } from 'react';
-//import all the components we are going to use
-import { SafeAreaView, StyleSheet, View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text,ActivityIndicator, FlatList,TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import {GET_ALL_ORDERS_BY_STORE_ID} from '../../graphql/queries';
 import {Client, Order, Product} from '../../interfaces/OrderInterface';
@@ -12,12 +11,7 @@ const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
 
-//TODO: GET ORDERS FROM API
 //TODO: TRANSLATION FR/ENG
-
-// const handleDetailsPress = () => {
-//     navigation.navigate('OrderPage');
-// }
 
 const Orders = ({navigation}: any) => {
 
@@ -28,8 +22,12 @@ const Orders = ({navigation}: any) => {
     });
 
     if (loading) {
-        //TODO: ADD LOADING SCREEN (SPINNER)
-        return <Text>Loading...</Text>;
+        return (
+            <View style={{flex:1,justifyContent:"center"}}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        )
+
     }
 
     if (error) {
@@ -38,7 +36,6 @@ const Orders = ({navigation}: any) => {
 
     const orders:Order[] = data.getStoreById.store.orders.map((order: any) => {
 
-        //create a new Product object
         const products: Product[] = order.productsVariantsOrdered.map(({relatedProductVariant,quantity}:any) => {
             const newProduct: Product = {
                 _id:relatedProductVariant._id,
@@ -52,7 +49,6 @@ const Orders = ({navigation}: any) => {
 
         })
 
-
         const client : Client ={
             _id: order.relatedClient._id,
             name: order.relatedClient.name,
@@ -61,22 +57,21 @@ const Orders = ({navigation}: any) => {
             phone: order.relatedClient.phone,
             address: order.relatedClient.address,
         }
-        //create a new Order object
         const newOrder:Order = {
             number: order.orderNumber,
             products: products,
             client: client,
             logs: order.logs,
             total: (order.subTotal+order.taxs+order.deliveryFee).toFixed(2),
-            subTotal: order.subTotal,
-            taxs: order.taxs,
-            deliveryFee: order.deliveryFee,
+            subTotal: order.subTotal.toFixed(2),
+            taxs: order.taxs.toFixed(2),
+            deliveryFee: order.deliveryFee.toFixed(2),
+            paymentMethod: "Apple Pay", //TODO: ADD TO SERVER
         }
         return newOrder;
   
     })
 
-    //Handle the status color depending on the status
     const status_bar_color = (status: string) => {
         let style= StyleSheet.create({
             status_bar: {
@@ -125,7 +120,7 @@ const Orders = ({navigation}: any) => {
                     </View>
                     <View style={styles.order_details_right}>
                         <Text style={styles.order_details_right_text}>{item.client.firstName} {item.client.name}</Text>
-                        <Text style={styles.order_details_right_text}>{item.total}</Text>
+                        <Text style={styles.order_details_right_text}>{item.total} $</Text>
 
                         <View style={status_bar_color(item.logs[item.logs.length-1].status)}>
                             <Text style={styles.order_status_text}>{item.logs[item.logs.length-1].status}</Text>

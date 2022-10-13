@@ -7,6 +7,7 @@ export interface Order{
     subTotal: number;
     taxs: number;
     deliveryFee: number;
+    paymentMethod: string;
 }
 
 export interface Product{

@@ -13,33 +13,11 @@ const orderStatus = [
     { label: "Delivered", value: "DELIVERED" },
     { label: "Closed", value: "CLOSED" }
 ]
-// const ProductsList = [
-//     {
-//         id: 1,
-//         name: 'Redbull',
-//         quantity: 1,
-//         price: 3,
-//         imgUrl: 'https://picsum.photos/200/300',
-//         vendor: 'Marché Djalil',
-//         type: "300mL"
-//     },
-//     {
-//         id: 2,
-//         name: 'Club Sandwich',
-//         quantity: 2,
-//         price: 2.25,
-//         imgUrl: 'https://picsum.photos/200/300',
-//         vendor: 'Polytechnique',
-//         type: "300mL"
-//     },
-// ]
 const OrderPage = ({ route, navigation }: any) => {
     const { order } = route.params;
     const [open, setOpen] = React.useState(false);
     const [current_order_status, set_current_order_status] = React.useState(order.logs[order.logs.length-1].status); //TODO: get the current order status from the server
-    //TODO: USE REAL DATA
 
-    console.log("order", order);
 
     const calculateProductTotal = (price: any, quantity: any): any => {
         return (price * quantity).toFixed(2);
@@ -75,12 +53,12 @@ const OrderPage = ({ route, navigation }: any) => {
         //here we send the status update mutation to the server
 
         //1. send the mutation
+        
         //2. if the mutation is successful, SHOW A SUCCESS MESSAGE
         //3. if the mutation is not successful, SHOW AN ERROR MESSAGE
         //4.Hide the save button if the mutation is successful
     }
 
-    //TODO: FIX PRODUCT TYPE
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
 
@@ -150,22 +128,22 @@ const OrderPage = ({ route, navigation }: any) => {
                         </Text>
 
                         <Text style={styles.total_price}>
-                            Total: 10.50$
+                            Total: {order.total} $
                         </Text>
                     </View>
 
 
                     <Text style={styles.product_information}>
-                        Sous-total : 9.50$
+                        Sous-total : {order.subTotal} $
                     </Text>
                     <Text style={styles.product_information}>
-                        Taxes: 1.00$
+                        Taxes: {order.taxs} $
                     </Text>
                     <Text style={styles.product_information}>
-                        Frais de livraison: 0.00$
+                        Frais de livraison: {order.deliveryFee} $
                     </Text>
                     <Text style={styles.product_information}>
-                        Méthode de paiement: Carte de crédit
+                        Méthode de paiement: {order.paymentMethod}
                     </Text>
 
                     
