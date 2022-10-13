@@ -1,11 +1,11 @@
 export interface Order{
-    _id: string; //TODO: HANDLE ID OF ORDER, WE SHOULD CHECK THE LATEST ORDER AND INCREMENT IT
+    number: string;
     products: Product[];
     client: Client;
     logs: Log[];
     total: number;
     subTotal: number;
-    tax: number;
+    taxs: number;
     deliveryFee: number;
 }
 

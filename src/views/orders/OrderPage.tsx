@@ -97,7 +97,7 @@ const OrderPage = ({ route, navigation }: any) => {
                 </TouchableOpacity>
 
                 <Text style={styles.header_text}>
-                    COMMANDE # 123456
+                    COMMANDE #{order.number}
                 </Text>
             </View>
             <View style={styles.subHeader}>

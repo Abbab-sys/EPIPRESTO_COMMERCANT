@@ -66,6 +66,7 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
       store {
         orders {
           _id
+          orderNumber
           productsVariantsOrdered {
             relatedProductVariant {
               displayName
@@ -88,12 +89,15 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
             firstName
             email
             phone
+            address
           }
           logs {
             status
             time
           }
-          price
+          subTotal
+          taxs
+          deliveryFee
         }
       }
     }

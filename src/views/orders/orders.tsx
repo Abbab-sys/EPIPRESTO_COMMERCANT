@@ -28,6 +28,7 @@ const Orders = ({navigation}: any) => {
     });
 
     if (loading) {
+        //TODO: ADD LOADING SCREEN (SPINNER)
         return <Text>Loading...</Text>;
     }
 
@@ -58,33 +59,63 @@ const Orders = ({navigation}: any) => {
             firstName: order.relatedClient.firstName,
             email: order.relatedClient.email,
             phone: order.relatedClient.phone,
-            address: "TODO" //TODO: ADD ADDRESS
+            address: order.relatedClient.address,
         }
         //create a new Order object
         const newOrder:Order = {
-            _id: order._id,
+            number: order.orderNumber,
             products: products,
             client: client,
             logs: order.logs,
-            total: order.price,//TODO
-            subTotal: 100,
-            tax: 50,
-            deliveryFee: 20,
+            total: (order.subTotal+order.taxs+order.deliveryFee).toFixed(2),
+            subTotal: order.subTotal,
+            taxs: order.taxs,
+            deliveryFee: order.deliveryFee,
         }
         return newOrder;
   
     })
 
+    //Handle the status color depending on the status
+    const status_bar_color = (status: string) => {
+        let style= StyleSheet.create({
+            status_bar: {
+                width: 100,
+                height: 30,
+                backgroundColor: '#FFA500',
+                borderRadius: 10,
+                justifyContent: 'center',
+                alignItems: 'center',  
+            }
+        })
+        switch (status) {
+            case "WAITING_CONFIRMATION":
+                style.status_bar.backgroundColor = 'yellow';
+                return style.status_bar;
+            case "CONFIRMED":
+                style.status_bar.backgroundColor = 'green';
+                return style.status_bar;
+            case "IN_DELIVERY":
+                style.status_bar.backgroundColor = 'blue';
+                return style.status_bar;
+            case "DELIVERED":
+                style.status_bar.backgroundColor = 'grey';
+                return style.status_bar;
+            case "CANCELED":
+                style.status_bar.backgroundColor = 'red';
+                return style.status_bar;
+            default:
+                return style.status_bar;
+        }
+    }
 
-
-   
     const renderOrderContainer = ({ item }: any) => {
         const order_date = new Date(item.logs[0].time);
         return (
             <View style={styles.order_container}>
                 <View style={styles.order_header}>
                     <Text style={styles.order_date}>{order_date.toDateString()}</Text>
-                    <Text style={styles.order_number}>{item._id}</Text>
+                    <Text style={styles.order_number}>{item.number}</Text>
                 </View>
                 <View style={styles.order_details}>
                     <View style={styles.order_details_left}>
@@ -95,7 +126,8 @@ const Orders = ({navigation}: any) => {
                     <View style={styles.order_details_right}>
                         <Text style={styles.order_details_right_text}>{item.client.firstName} {item.client.name}</Text>
                         <Text style={styles.order_details_right_text}>{item.total}</Text>
-                        <View style={styles.order_status}>
+
+                        <View style={status_bar_color(item.logs[item.logs.length-1].status)}>
                             <Text style={styles.order_status_text}>{item.logs[item.logs.length-1].status}</Text>
                         </View>                
                     </View>
@@ -305,7 +337,7 @@ const styles = StyleSheet.create({
     order_status: {
         width: 100,
         height: 30,
-        backgroundColor: '#FFA500',
+        // backgroundColor: '#FFA500',
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
