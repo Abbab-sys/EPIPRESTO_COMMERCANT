@@ -40,3 +40,13 @@ export const SYNC_WOOCOMMERCE = gql`
     }
   }
 `;
+
+//todo: add the rest of the mutations
+export const CHANGE_ORDER_STATUS = gql`
+  mutation Mutation($orderId: ID!, $newStatus: String!) {
+    changeOrderStatus(orderId: $orderId, newStatus: $newStatus) {
+      code
+      message
+    }
+  }
+`;
