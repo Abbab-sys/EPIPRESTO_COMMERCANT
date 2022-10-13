@@ -37,8 +37,9 @@ export default function App() {
       },
     };
   });
+  //TODO: A CHANGER
   const httpLink = createHttpLink({
-    uri: 'https://epipresto.pagekite.me/',
+    uri: 'http://localhost:4000/',
   });
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
