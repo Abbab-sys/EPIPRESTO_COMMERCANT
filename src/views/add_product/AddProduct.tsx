@@ -49,6 +49,8 @@ const AddProduct = () => {
       const {variantId, isHidden, isValid, ...rest} = variant;
       return rest;
     })
+    // consider only tags that are not empty
+    const filteredTags = tags.filter((tag) => tag.trim());
     console.log(variantsWithoutId);
     let product;
     product = {
@@ -126,7 +128,10 @@ const AddProduct = () => {
   }
 
     return (
-        <ScrollView style={styles.root}>
+        <ScrollView 
+        style={styles.root}
+        showsVerticalScrollIndicator={false}
+        >
           <Text style = {styles.header}>Ajout Produit à la boutique</Text>
           <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
           <View style={{flex: 1, flexDirection: 'row'}}>
@@ -193,20 +198,30 @@ const AddProduct = () => {
           />
           <ScrollView horizontal>
             {tags.map((tag , index) => (
+              tag.trim() && (
               <View 
               style={styles.tag}
               key = {index}
               >
+              <IconButton 
+              style={styles.tagCloseIcon}
+              icon="close"
+              size={10}
+              onPress={() => {
+                const newTags = [...tags];
+                newTags.splice(index, 1);
+                setTags(newTags);
+              }}
+              ></IconButton>
               <Text style={styles.tagLabel}>{tag}</Text>
+
             </View>
-            ))}
+            )))}
           </ScrollView>
 
+          <Text style={styles.header}>Variants</Text>
 
-          <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
-              Ajouter un variant
-          </Button>
-          <HelperText type='error' >
+            <HelperText type='error' >
                 {deleteError}
           </HelperText>
 
@@ -252,6 +267,9 @@ const AddProduct = () => {
         ))}
         </ScrollView>
 
+        <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
+              Ajouter un variant
+          </Button>
           
 
           <Divider   />
@@ -296,6 +314,8 @@ const AddProduct = () => {
       margin: 10,
       borderWidth: 1,
       padding: 2,
+      backgroundColor: '#FFFFFF',
+
     },
     checkboxContainer: {
       flexDirection: "row",
@@ -325,10 +345,17 @@ const AddProduct = () => {
       borderRadius: 5,
       padding: 5,
       margin: 5,
+      flexDirection: 'column',
     },
     tagLabel: {
       color: '#FFFFFF',
     },
+    tagCloseIcon: {
+      backgroundColor: 'gray',
+      borderRadius: 5,
+      padding: 5,
+      margin: 5,
+    }
   });
 
   export default AddProduct;

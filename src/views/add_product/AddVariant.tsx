@@ -95,7 +95,9 @@ const AddVariant = (props: VariantProps) => {
     if(isHidden) return (
       <View style={styles.view}>
         <View style={{flex: 1, flexDirection: 'row'}} >
-          <Text>  Variant # {props.variantIndex +1}</Text>
+        <Text
+          style={{fontSize: 20, fontWeight: 'bold'}}
+          >  Variant # {props.variantIndex +1}</Text>
           <View style={{position: 'absolute', right: 0, flex: 1, flexDirection: 'row'}}>
           <IconButton icon="delete" size={20} onPress={() => props.deleteSelf()} />
           <IconButton icon="eye" size={20} onPress={() => setHide(false)} />
@@ -109,7 +111,9 @@ const AddVariant = (props: VariantProps) => {
         <ScrollView style={styles.view}
         >
           <View style={{flex: 1, flexDirection: 'row'}} >
-          <Text>  Variant # {props.variantIndex +1}</Text>
+          <Text
+          style={{fontSize: 20, fontWeight: 'bold'}}
+          >  Variant # {props.variantIndex +1}</Text>
           <View style={{position: 'absolute', right: 0, flex: 1, flexDirection: 'row'}}>
           <IconButton icon="delete" size={20} onPress={() => props.deleteSelf()} />
           <IconButton icon="eye-off" size={20} 
@@ -245,13 +249,15 @@ const AddVariant = (props: VariantProps) => {
       borderColor: '#000000',
       borderRadius: 5,
       width: "80%",
-      flex: 1
+      flex: 1,
+      alignSelf: 'center',
     },
     input: {
       margin: 10,
       marginBottom: 0,
       borderWidth: 1,
-      padding: 2,
+      padding: 0,
+      backgroundColor: '#FFFFFF',
     },
     checkboxContainer: {
       flexDirection: "row",
