@@ -5,6 +5,8 @@ import { Button, Divider, HelperText, IconButton, RadioButton, TextInput } from 
 import { Variant } from "../../../interfaces/VariantInterfaces";
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from "react-native-vector-icons/FontAwesome";
+import { addVariantStyles } from './AddVariantStyles'
+import { commonStyles } from "./CommonStyles";
 
 interface VariantProps {
     variantId: string,
@@ -99,7 +101,7 @@ const AddVariant = (props: VariantProps) => {
     )
 
     else return (
-        <ScrollView style={styles.view}
+        <ScrollView style={addVariantStyles.view}
         >
           <View style={{flex: 1, flexDirection: 'row'}} >
           <Text
@@ -123,7 +125,7 @@ const AddVariant = (props: VariantProps) => {
                 <Icon name="image" size={100}></Icon>
               )}
             </View>
-              <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+              <View style={commonStyles.imageInnerView}>
                 <IconButton 
                   containerColor="#FFA50047"
                   iconColor="#FFA500"
@@ -142,12 +144,12 @@ const AddVariant = (props: VariantProps) => {
                   mode="contained"
                   icon="upload"
                   size={40}/>
-                <Text style={{textAlign: 'center'}}>
+                <Text style={commonStyles.innerText}>
                   Importer une photo de la galerie
                 </Text>
               </View>
             </View>
-          <Divider bold style={{backgroundColor: "#FFA500", marginVertical: '4%', width: "100%"}}></Divider>
+          <Divider bold style={commonStyles.bottomDivider}></Divider>
           <TextInput
           underlineColor="transparent"
           activeUnderlineColor="#FFA500"
@@ -159,12 +161,12 @@ const AddVariant = (props: VariantProps) => {
           <HelperText type='error'>
           </HelperText>
 
-          <View style={styles.checkboxContainer}>
-            <Text style={styles.label}>Produit vendu au poids</Text>
+          <View style={addVariantStyles.checkboxContainer}>
+            <Text style={addVariantStyles.label}>Produit vendu au poids</Text>
             <CheckBox
               value={isWeightable}
               onValueChange={setWeightable}
-              style={styles.checkbox}
+              style={addVariantStyles.checkbox}
             />
           
           </View>
@@ -206,12 +208,12 @@ const AddVariant = (props: VariantProps) => {
           <HelperText type='error'>
           </HelperText>
 
-          <View style={styles.checkboxContainer}>
-            <Text style={styles.label}>Produit Taxable</Text>
+          <View style={addVariantStyles.checkboxContainer}>
+            <Text style={addVariantStyles.label}>Produit Taxable</Text>
             <CheckBox
               value={isTaxable}
               onValueChange={setTaxable}
-              style={styles.checkbox}
+              style={addVariantStyles.checkbox}
             />
           </View>
           
@@ -237,12 +239,12 @@ const AddVariant = (props: VariantProps) => {
           <HelperText type='error'>
           </HelperText>
 
-          <View style={styles.checkboxContainer}>
-            <Text style={styles.label}>Produit disponible a la vente</Text>
+          <View style={addVariantStyles.checkboxContainer}>
+            <Text style={addVariantStyles.label}>Produit disponible a la vente</Text>
             <CheckBox
               value={isAvailableForSale}
               onValueChange={setAvailableForSale}
-              style={styles.checkbox}
+              style={addVariantStyles.checkbox}
             />
           </View>
 

@@ -8,6 +8,8 @@ import { ADD_PRODUCT } from "../../graphql/mutations";
 import AddVariant from "./AddVariant";
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { addProductsStyles } from "./AddProductStyles";
+import { commonStyles } from "./CommonStyles";
 
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
@@ -188,7 +190,7 @@ const AddProduct = () => {
                 <Icon name="image" size={100}></Icon>
               )}
             </View>
-              <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
+              <View style={commonStyles.imageInnerView}>
                 <IconButton 
                   onPress={handleTakePhotoFromCamera}
                   mode="contained"
@@ -200,16 +202,13 @@ const AddProduct = () => {
                 <Text>
                   Prendre une photo
                 </Text>
-                <Divider bold style={styles.divider}></Divider>
+                <Divider bold style={commonStyles.divider}></Divider>
                 <IconButton 
                   onPress={handleTakePhotoFromGallery}
                   mode="contained"
                   icon="upload"
-                  size={40}
-                  containerColor="#FFA50047"
-                  iconColor="#FFA500"
-                  />
-                <Text style={{textAlign: 'center'}}>
+                  size={40}/>
+                <Text style={commonStyles.innerText}>
                   Importer une photo de la galerie
                 </Text>
               </View>
@@ -331,12 +330,12 @@ const AddProduct = () => {
               Ajouter un variant
           </Button>
 
-          <View style={styles.checkboxContainer}>
-            <Text style={styles.label}>Publier l'article </Text>
+          <View style={addProductsStyles.checkboxContainer}>
+            <Text style={addProductsStyles.label}>Publier l'article </Text>
             <CheckBox
               value={isPublished}
               onValueChange={setPublished}
-              style={styles.checkbox}
+              style={addProductsStyles.checkbox}
             />
           </View>
           
