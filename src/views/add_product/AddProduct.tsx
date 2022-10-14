@@ -236,9 +236,10 @@ const AddProduct = () => {
           </>
           
           <TextInput
+          multiline={true}
             underlineColor="transparent"
             activeUnderlineColor="#FFA500"
-            style={styles.input}
+            style={styles.inputDescription}
             label='Description'
             onChangeText={text => setDescription(text)}
             />
@@ -455,6 +456,21 @@ const AddProduct = () => {
       height: 50,
       marginRight: 10,
   },
+  inputDescription: {
+    margin: 10,
+      marginBottom: 0,
+      borderWidth: 1,
+      padding: 0,
+      backgroundColor: '#FFFFFF',
+      borderColor: '#FFA500',
+      borderRadius: 10,
+      width: '90%',
+      fontFamily: text_font_family,
+      fontStyle: text_font_style,
+      fontWeight: 'normal',
+      fontSize: 15,
+      minHeight: 120,
+  }
 
   });
 
