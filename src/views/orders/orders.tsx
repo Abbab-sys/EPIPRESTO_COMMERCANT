@@ -1,11 +1,11 @@
 //create a simple react native component
 import { useLazyQuery, useQuery } from '@apollo/client';
-import React, { Component, useEffect } from 'react';
+import React, { Component, useContext, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import { GET_ALL_ORDERS_BY_STORE_ID } from '../../graphql/queries';
 import { Client, Order, Product } from '../../interfaces/OrderInterface';
-
+import { VendorContext } from '../../context/Vendor';
 
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
@@ -14,8 +14,12 @@ const text_font_style = 'normal';
 //TODO: TRANSLATION FR/ENG
 
 const Orders = ({ navigation }: any) => {
+    // const {storeId} = useContext(VendorContext);
+
     const { data, loading, error ,refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
         variables: {
+            //id store should come from vendor context
+            // idStore: storeId
             idStore: "633cfb2bf7bdb731e893e28b"
         }
     });

@@ -27,9 +27,6 @@ const OrderPage = ({ route, navigation }: any) => {
 
     }
 
-
-
-
     const showSaveButton = () => {
         if (current_order_status !== order.logs[order.logs.length-1].status) {
             return (
@@ -49,25 +46,36 @@ const OrderPage = ({ route, navigation }: any) => {
     const receivedUpdateStatus = (data:any) => {
         if (data.updateOrderStatus.code === 200) {
             Alert.alert("Status Updated Successfully")
+        }else{
+            Alert.alert("Error Updating Status")
         }
     }
 
-    const [changeOrderStatus, { loading: changeStatusLoading, error: changeStatusError, data: changeStatusData }] = useMutation(CHANGE_ORDER_STATUS, {onCompleted: receivedUpdateStatus});
+    const [changeOrderStatus] = useMutation(CHANGE_ORDER_STATUS, {onCompleted: receivedUpdateStatus});
 
 
     const sendStatusUpdate = (status: any) => {
-        //here we send the status update mutation to the server
-        
-        console.log("sending status update orderID: ", order._id, " status: ", status)
-
-        //1. send the mutation
         changeOrderStatus({ variables: { orderId: order._id, newStatus: status  } })
-      
+    
     }
 
-        
-    
-
+    //TODO: A REGLER
+    const renderProductImage = (imgSrc: any) => {
+        if (imgSrc !== "") {
+            return (
+                <Image
+                    source={{ uri: imgSrc}}
+                    style={styles.product_image} />
+            )
+        } else {
+            return (
+                <Image
+                    style={styles.product_image}
+                    source={{uri:"http://via.placeholder.com/640x360"}}
+                />
+            )
+        }
+    }
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
 
@@ -167,9 +175,10 @@ const OrderPage = ({ route, navigation }: any) => {
                                 return (
                                     <View style={styles.product_container}>
                                         <View style={styles.product_image_container}>
-                                            <Image
+                                            {/* <Image
                                                 source={{ uri: product.imgSrc}}
-                                                style={styles.product_image} />
+                                                style={styles.product_image} /> */}
+                                                {renderProductImage(product.imgSrc)}
                                         </View>
                                         <View style={styles.product_details}>
                                             <Text style={styles.product_name}>{product.title}</Text>
