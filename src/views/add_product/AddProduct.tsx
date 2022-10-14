@@ -1,15 +1,19 @@
 import { useMutation } from "@apollo/client/react";
 import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useState } from "react";
-import { FlatList, Keyboard, ScrollView, StyleSheet, Text, View, Image  } from "react-native";
-import { Button, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
+import { Keyboard, ScrollView, StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity  } from "react-native";
+import { Button, Chip, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { Variant } from "../../../interfaces/VariantInterfaces";
 import { ADD_PRODUCT } from "../../graphql/mutations";
 import AddVariant from "./AddVariant";
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+const text_font_family = 'Lato';
+const text_font_style = 'normal';
+
 const AddProduct = () => {
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [brand, setBrand] = useState("");
@@ -128,12 +132,38 @@ const AddProduct = () => {
   }
 
     return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
+        <View style={styles.headerFix}>
+        <TouchableOpacity
+                    style={styles.back_button}
+                    onPress={() => console.log("navigation BACK")}
+                >
+                    <Image
+                        style={styles.back_button_icon}
+                        source={require('../../assets/icons/back.png')}
+                    />
+                </TouchableOpacity>
+
+                <Text style = {styles.header_text}>Ajout Produit à la boutique</Text>
+
+                <IconButton 
+                style={styles.save_button}
+                onPress={() => handleAdd()}
+                disabled={submitButtonShouldBeDisabled()}
+                  mode="contained"
+                  icon="content-save"
+                  size={30}/>
+                <Text></Text>
+                
+            </View>
+
         <ScrollView 
         style={styles.root}
         showsVerticalScrollIndicator={false}
         >
-          <Text style = {styles.header}>Ajout Produit à la boutique</Text>
-          <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
+
+          <View >
+          <Divider bold style={styles.divider}></Divider>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
               {productImage ? (
@@ -153,7 +183,7 @@ const AddProduct = () => {
                 <Text>
                   Prendre une photo
                 </Text>
-                <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
+                <Divider bold style={styles.divider}></Divider>
                 <IconButton 
                   onPress={handleTakePhotoFromGallery}
                   mode="contained"
@@ -164,7 +194,7 @@ const AddProduct = () => {
                 </Text>
               </View>
             </View>
-          <Divider bold style={{backgroundColor: "#FFA500", marginVertical: '4%', width: "100%"}}></Divider>
+          <Divider bold style={styles.divider}></Divider>
 
           <TextInput
             style={styles.input}
@@ -199,29 +229,29 @@ const AddProduct = () => {
           <ScrollView horizontal>
             {tags.map((tag , index) => (
               tag.trim() && (
-              <View 
-              style={styles.tag}
-              key = {index}
-              >
-              <IconButton 
-              style={styles.tagCloseIcon}
-              icon="close"
-              size={8}
-              onPress={() => {
-                const newTags = [...tags];
-                newTags.splice(index, 1);
-                setTags(newTags);
-              }}
-              ></IconButton>
-              <Text 
-              style={{marginRight: 20, fontSize:15}}
-              >{tag}</Text>
-
-            </View>
+                // put close icon right
+                <Chip
+                  key={index}
+                  icon="close"
+                  onPress={() => {
+                    const newTags = [...tags];
+                    newTags.splice(index, 1);
+                    setTags(newTags);
+                  }}
+                  style={{margin: 2, color: "white", backgroundColor:'lightgrey' , 
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                  fontFamily: text_font_family,
+                  fontStyle: text_font_style,
+                  borderWidth: 1, borderRadius: 5}}
+                >
+                {tag}</Chip>
             )))}
           </ScrollView>
+          </View>
+          
 
-          <Text style={styles.header}>Variants</Text>
+          <Text style={styles.titleText}>VARIANTS</Text>
 
             <HelperText type='error' >
                 {deleteError}
@@ -274,12 +304,8 @@ const AddProduct = () => {
           </Button>
           
 
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
-          <Divider   />
+          <Divider bold style={styles.divider}></Divider>
+
 
           <View style={styles.checkboxContainer}>
             <Text style={styles.label}>Publier l'article </Text>
@@ -289,20 +315,9 @@ const AddProduct = () => {
               style={styles.checkbox}
             />
           </View>
-
-
-          <Button style={styles.button} 
-          mode="contained" 
-          onPress={() => handleAdd()}
-          disabled={submitButtonShouldBeDisabled()}>
-            Enregistrer
-          </Button>
-          <Divider   />
-          <Button style={styles.button} mode="contained" onPress={() => console.log("Cancel")}>
-            Annuler
-          </Button>
           
-    </ScrollView>        
+    </ScrollView>
+    </SafeAreaView>
   )
   };
 
@@ -317,7 +332,8 @@ const AddProduct = () => {
       borderWidth: 1,
       padding: 2,
       backgroundColor: '#FFFFFF',
-
+      fontFamily: text_font_family,
+      fontStyle: text_font_style,
     },
     checkboxContainer: {
       flexDirection: "row",
@@ -337,28 +353,75 @@ const AddProduct = () => {
     },
     header: {
       fontSize: 20,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       textAlign: 'center',
       margin: 10,
+      color: '#FFA500',
+      fontFamily: text_font_family,
+      fontStyle: text_font_style,
+  },
+    titleText: {
+      fontSize: 17,
+        fontWeight: "bold",
+        textAlign: 'center',
+        margin: 10,
+        color: '#FFA500',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
-    tag: {
-      backgroundColor: 'lightgray',
-      borderRadius: 5,
-      padding: 5,
-      margin: 5,
-      flexDirection: 'column',
+    divider: {
+      backgroundColor: "#FFA500",
+      marginVertical: '4%',
+      width: "100%"
     },
-    tagLabel: {
-      color: '#FFFFFF',
+    headerFix: {
+      flexDirection: 'row',
+      alignItems: 'center',
       justifyContent: 'center',
-    },
-    tagCloseIcon: {
-      backgroundColor: 'gray',
-      alignSelf: 'flex-end',
-      marginTop: -5,
+      backgroundColor: '#EAEAEA',
+      height: 50,
+      width: '100%',
+      padding: 10,
+      marginBottom: 10,
+  },
+  back_button: {
       position: 'absolute',
-      borderRadius: 5,
-    }
+      left: 0,
+      top: 0,
+      bottom: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 50,
+      height: 50,
+      marginLeft: 10,
+
+  },
+  back_button_icon: {
+      width: 35,
+      height: 35,
+      tintColor: '#FFA500',
+  },
+
+  header_text: {
+      fontFamily: text_font_family,
+      fontStyle: text_font_style,
+      fontWeight: 'bold',
+      fontSize: 20,
+      textAlign: 'center',
+      color: '#FFA500',
+  },
+  save_button: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      bottom: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 50,
+      height: 50,
+      marginRight: 10,
+  },
+
   });
 
   export default AddProduct;

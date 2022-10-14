@@ -23,6 +23,9 @@ interface VariantProps {
     deleteSelf: () => void;
 }
 
+const text_font_family = 'Lato';
+const text_font_style = 'normal';
+
 const AddVariant = (props: VariantProps) => {
   const [title, setTitle] = useState(props.variantTitle);
   const [price, setPrice] = useState(0);
@@ -96,7 +99,7 @@ const AddVariant = (props: VariantProps) => {
       <View style={styles.view}>
         <View style={{flex: 1, flexDirection: 'row'}} >
         <Text
-          style={{fontSize: 20, fontWeight: 'bold'}}
+          style={styles.title}
           >  Variant # {props.variantIndex +1}</Text>
           <View style={{position: 'absolute', right: 0, flex: 1, flexDirection: 'row'}}>
           <IconButton icon="delete" size={20} onPress={() => props.deleteSelf()} />
@@ -112,7 +115,7 @@ const AddVariant = (props: VariantProps) => {
         >
           <View style={{flex: 1, flexDirection: 'row'}} >
           <Text
-          style={{fontSize: 20, fontWeight: 'bold'}}
+          style={styles.title}
           >  Variant # {props.variantIndex +1}</Text>
           <View style={{position: 'absolute', right: 0, flex: 1, flexDirection: 'row'}}>
           <IconButton icon="delete" size={20} onPress={() => props.deleteSelf()} />
@@ -243,14 +246,22 @@ const AddVariant = (props: VariantProps) => {
 
   const styles = StyleSheet.create({
     view: {
-      margin: 10,
-      padding: 10,
-      borderWidth: 1,
-      borderColor: '#000000',
-      borderRadius: 5,
-      width: "80%",
-      flex: 1,
-      alignSelf: 'center',
+      width: '90%',
+      minHeight: 50,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+        marginBottom: 20,
+        alignSelf: 'center',
+
     },
     input: {
       margin: 10,
@@ -268,11 +279,29 @@ const AddVariant = (props: VariantProps) => {
     },
     label: {
       margin: 5,
+      fontFamily: text_font_family,
+        fontStyle: text_font_style,
+        fontWeight: 'normal',
+        fontSize: 15,
     },
     button: {
-      borderColor: '#FF0000',
-      backgroundColor: '#FFA500'
+      marginTop: 20,
+        width: 200,
+        height: 40,
+        backgroundColor: '#FFA500',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+
     },
+    title:{
+      fontSize: 15,
+      fontWeight: 'bold',
+      fontFamily: text_font_family,
+      fontStyle: text_font_style,
+      margin: 10,
+      color: '#FFA500'
+    }
   });
 
   export default AddVariant;
