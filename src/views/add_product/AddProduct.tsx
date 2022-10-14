@@ -206,14 +206,16 @@ const AddProduct = () => {
               <IconButton 
               style={styles.tagCloseIcon}
               icon="close"
-              size={10}
+              size={8}
               onPress={() => {
                 const newTags = [...tags];
                 newTags.splice(index, 1);
                 setTags(newTags);
               }}
               ></IconButton>
-              <Text style={styles.tagLabel}>{tag}</Text>
+              <Text 
+              style={{marginRight: 20, fontSize:15}}
+              >{tag}</Text>
 
             </View>
             )))}
@@ -339,7 +341,6 @@ const AddProduct = () => {
       textAlign: 'center',
       margin: 10,
     },
-    // tags
     tag: {
       backgroundColor: 'lightgray',
       borderRadius: 5,
@@ -349,12 +350,14 @@ const AddProduct = () => {
     },
     tagLabel: {
       color: '#FFFFFF',
+      justifyContent: 'center',
     },
     tagCloseIcon: {
       backgroundColor: 'gray',
+      alignSelf: 'flex-end',
+      marginTop: -5,
+      position: 'absolute',
       borderRadius: 5,
-      padding: 5,
-      margin: 5,
     }
   });
 
