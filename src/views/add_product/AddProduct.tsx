@@ -175,7 +175,8 @@ const AddProduct = () => {
         showsVerticalScrollIndicator={false}
         >
 
-          <View >
+          <View style={{justifyContent: 'center', alignItems: 'center'
+          }} >
           <Divider bold style={styles.divider}></Divider>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
@@ -346,7 +347,7 @@ const AddProduct = () => {
   const styles = StyleSheet.create({
     root: {
       flex: 1,
-      margin: "4%"
+      margin: "4%",
     },
     input: {
       margin: 10,
