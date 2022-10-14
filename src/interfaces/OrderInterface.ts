@@ -22,7 +22,7 @@ export interface Product{
 
 export interface Client{
     _id: string;
-    name: string;
+    lastName: string;
     firstName: string;
     email: string;
     phone: string;

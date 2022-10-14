@@ -1,10 +1,10 @@
 //create a simple react native component
-import {useQuery } from '@apollo/client';
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, View, Text,ActivityIndicator, FlatList,TouchableOpacity } from 'react-native';
+import { useQuery } from '@apollo/client';
+import React, { Component, useEffect } from 'react';
+import { SafeAreaView, StyleSheet, View, Text, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
-import {GET_ALL_ORDERS_BY_STORE_ID} from '../../graphql/queries';
-import {Client, Order, Product} from '../../interfaces/OrderInterface';
+import { GET_ALL_ORDERS_BY_STORE_ID } from '../../graphql/queries';
+import { Client, Order, Product } from '../../interfaces/OrderInterface';
 
 
 const text_font_family = 'Lato';
@@ -13,18 +13,24 @@ const text_font_style = 'normal';
 
 //TODO: TRANSLATION FR/ENG
 
-const Orders = ({navigation}: any) => {
-
-    //TODO: GET THE STORE ID FROM THE USER
-    const {data,loading,error} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
+const Orders = ({ navigation }: any) => {
+    const { data, loading, error } = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
         variables: {
             idStore: "633cfb2bf7bdb731e893e28b"
         }
     });
 
+    //TODO: GET THE STORE ID FROM THE USER
+
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         console.log("Orders page rendered");
+    //     });
+    // }, [navigation]);
+
     if (loading) {
         return (
-            <View style={{flex:1,justifyContent:"center"}}>
+            <View style={{ flex: 1, justifyContent: "center" }}>
                 <ActivityIndicator size="large" color="#0000ff" />
             </View>
         )
@@ -35,54 +41,58 @@ const Orders = ({navigation}: any) => {
         return <Text>Error while loading orders</Text>;
     }
 
-    const orders:Order[] = data.getStoreById.store.orders.map((order: any) => {
+    
 
-        const products: Product[] = order.productsVariantsOrdered.map(({relatedProductVariant,quantity}:any) => {
-            const newProduct: Product = {
-                _id:relatedProductVariant._id,
-                title: relatedProductVariant.displayName,
-                imgSrc: relatedProductVariant.imgSrc,
-                quantity:quantity,
-                vendor: relatedProductVariant.relatedProduct.relatedStore.name,
-                price:relatedProductVariant.price
+        const orders: Order[] = data.getStoreById.store.orders.map((order: any) => {
+
+            const products: Product[] = order.productsVariantsOrdered.map(({ relatedProductVariant, quantity }: any) => {
+                const newProduct: Product = {
+                    _id: relatedProductVariant._id,
+                    title: relatedProductVariant.displayName,
+                    imgSrc: relatedProductVariant.imgSrc,
+                    quantity: quantity,
+                    vendor: relatedProductVariant.relatedProduct.relatedStore.name,
+                    price: relatedProductVariant.price
+                }
+                return newProduct;
+
+            })
+
+            const client: Client = {
+                _id: order.relatedClient._id,
+                lastName: order.relatedClient.lastName,
+                firstName: order.relatedClient.firstName,
+                email: order.relatedClient.email,
+                phone: order.relatedClient.phone,
+                address: order.relatedClient.address,
             }
-            return newProduct;
+            const newOrder: Order = {
+                _id: order._id,
+                number: order.orderNumber,
+                products: products,
+                client: client,
+                logs: order.logs,
+                total: (order.subTotal + order.taxs + order.deliveryFee).toFixed(2),
+                subTotal: order.subTotal.toFixed(2),
+                taxs: order.taxs.toFixed(2),
+                deliveryFee: order.deliveryFee.toFixed(2),
+                paymentMethod: "Apple Pay", //TODO: ADD TO SERVER
+            }
+            return newOrder;
 
         })
 
-        const client : Client ={
-            _id: order.relatedClient._id,
-            name: order.relatedClient.name,
-            firstName: order.relatedClient.firstName,
-            email: order.relatedClient.email,
-            phone: order.relatedClient.phone,
-            address: order.relatedClient.address,
-        }
-        const newOrder:Order = {
-            _id: order._id,
-            number: order.orderNumber,
-            products: products,
-            client: client,
-            logs: order.logs,
-            total: (order.subTotal+order.taxs+order.deliveryFee).toFixed(2),
-            subTotal: order.subTotal.toFixed(2),
-            taxs: order.taxs.toFixed(2),
-            deliveryFee: order.deliveryFee.toFixed(2),
-            paymentMethod: "Apple Pay", //TODO: ADD TO SERVER
-        }
-        return newOrder;
-  
-    })
+    
 
     const status_bar_color = (status: string) => {
-        let style= StyleSheet.create({
+        let style = StyleSheet.create({
             status_bar: {
                 width: 100,
                 height: 30,
                 backgroundColor: '#FFA500',
                 borderRadius: 10,
                 justifyContent: 'center',
-                alignItems: 'center',  
+                alignItems: 'center',
             }
         })
         switch (status) {
@@ -121,27 +131,27 @@ const Orders = ({navigation}: any) => {
                         <Text style={styles.order_details_left_text}>Status</Text>
                     </View>
                     <View style={styles.order_details_right}>
-                        <Text style={styles.order_details_right_text}>{item.client.firstName} {item.client.name}</Text>
+                        <Text style={styles.order_details_right_text}>{item.client.firstName} {item.client.lastName}</Text>
                         <Text style={styles.order_details_right_text}>{item.total} $</Text>
 
-                        <View style={status_bar_color(item.logs[item.logs.length-1].status)}>
+                        <View style={status_bar_color(item.logs[item.logs.length - 1].status)}>
 
-                            <Text style={styles.order_status_text}>{item.logs[item.logs.length-1].status}</Text>
+                            <Text style={styles.order_status_text}>{item.logs[item.logs.length - 1].status}</Text>
 
-                        </View>                
+                        </View>
                     </View>
                 </View>
                 <TouchableOpacity
                     style={styles.order_button_text}
-                    onPress={() => navigation.navigate('OrderPage', {order: item})}
-    
+                    onPress={() => navigation.navigate('OrderPage', { order: item })}
+
                 >
                     <Text style={styles.view_order_button_text}>Détails</Text>
                 </TouchableOpacity>
             </View>
         )
     }
-    
+
 
 
 
@@ -162,7 +172,7 @@ const Orders = ({navigation}: any) => {
                 >
                     Trier
                 </Button>
-                
+
             </View>
             <FlatList
                 data={orders}
@@ -293,7 +303,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         paddingLeft: 10,
-        
+
 
     },
     order_details_right: {

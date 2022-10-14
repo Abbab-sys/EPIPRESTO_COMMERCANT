@@ -20,7 +20,7 @@ const OrderPage = ({ route, navigation }: any) => {
     const { order } = route.params;
     const [open, setOpen] = React.useState(false);
     const [current_order_status, set_current_order_status] = React.useState(order.logs[order.logs.length-1].status); //TODO: get the current order status from the server
-    const [changeOrderStatus, { loading: changeStatusLoading, error: changeStatusError, data: changeStatusData }] = useMutation(CHANGE_ORDER_STATUS);
+
 
     const calculateProductTotal = (price: any, quantity: any): any => {
         return (price * quantity).toFixed(2);
@@ -46,14 +46,14 @@ const OrderPage = ({ route, navigation }: any) => {
         }
     }
 
-    // useEffect(() => {
-    //     if(!changeStatusData || changeStatusLoading || changeStatusError) return
-    //     if(changeStatusData.updateOrderStatus.code === 200){
-    //         Alert.alert("Success", "Order status updated successfully")
-    //     }else{
-    //         Alert.alert("Error", "Something went wrong, please try again later")
-    //     }
-    // }, [changeStatusData, changeStatusLoading, changeStatusError])
+    const receivedUpdateStatus = (data:any) => {
+        if (data.updateOrderStatus.code === 200) {
+            Alert.alert("Status Updated Successfully")
+        }
+    }
+
+    const [changeOrderStatus, { loading: changeStatusLoading, error: changeStatusError, data: changeStatusData }] = useMutation(CHANGE_ORDER_STATUS, {onCompleted: receivedUpdateStatus});
+
 
     const sendStatusUpdate = (status: any) => {
         //here we send the status update mutation to the server
@@ -61,14 +61,9 @@ const OrderPage = ({ route, navigation }: any) => {
         console.log("sending status update orderID: ", order._id, " status: ", status)
 
         //1. send the mutation
-        changeOrderStatus({ variables: { orderId: order._id, newStatus: status } })
-        //2. if the mutation is successful, we SHOW AN ALERT and hide the save button
-        if(changeStatusData){
-            Alert.alert("Status updated successfully",changeStatusData)
-        }else{
-            Alert.alert("Status update failed",changeStatusError?.name)
-        }
-        }
+        changeOrderStatus({ variables: { orderId: order._id, newStatus: status  } })
+      
+    }
 
         
     

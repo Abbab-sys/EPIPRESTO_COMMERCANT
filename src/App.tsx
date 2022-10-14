@@ -39,7 +39,7 @@ export default function App() {
   });
   //TODO: A CHANGER
   const httpLink = createHttpLink({
-    uri: 'http://localhost:4000/',
+    uri: 'http:/localhost:4000'
   });
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
