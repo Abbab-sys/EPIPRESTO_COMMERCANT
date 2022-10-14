@@ -183,7 +183,7 @@ const AddProduct = () => {
               {productImage ? (
                 <>
                   <Image source={{ uri: productImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
-                  <Button onPress={() => setProductImage("")}><Text>Supprimer la photo</Text></Button></>
+                  <Button onPress={() => setProductImage("")}><Text style={{color: "#ce1212d9" }}>Supprimer la photo</Text></Button></>
               ) : (
                 <Icon name="image" size={100}></Icon>
               )}

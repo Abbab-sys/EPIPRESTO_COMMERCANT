@@ -118,7 +118,7 @@ const AddVariant = (props: VariantProps) => {
               {variantImage ? (
                 <>
                   <Image source={{ uri: variantImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
-                  <Button  onPress={() => setVariantImage("")}><Text style={{color: "#FFA500" }}>Supprimer la photo</Text></Button></>
+                  <Button  onPress={() => setVariantImage("")}><Text style={{color: "#ce1212d9" }}>Supprimer la photo</Text></Button></>
               ) : (
                 <Icon name="image" size={100}></Icon>
               )}
