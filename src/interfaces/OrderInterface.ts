@@ -1,4 +1,5 @@
 export interface Order{
+    _id: string;
     number: string;
     products: Product[];
     client: Client;

@@ -15,6 +15,7 @@ const text_font_style = 'normal';
 
 const Orders = ({navigation}: any) => {
 
+    //TODO: GET THE STORE ID FROM THE USER
     const {data,loading,error} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
         variables: {
             idStore: "633cfb2bf7bdb731e893e28b"
@@ -58,6 +59,7 @@ const Orders = ({navigation}: any) => {
             address: order.relatedClient.address,
         }
         const newOrder:Order = {
+            _id: order._id,
             number: order.orderNumber,
             products: products,
             client: client,
@@ -85,7 +87,7 @@ const Orders = ({navigation}: any) => {
         })
         switch (status) {
             case "WAITING_CONFIRMATION":
-                style.status_bar.backgroundColor = 'yellow';
+                style.status_bar.backgroundColor = 'gold';
                 return style.status_bar;
             case "CONFIRMED":
                 style.status_bar.backgroundColor = 'green';
@@ -96,7 +98,7 @@ const Orders = ({navigation}: any) => {
             case "DELIVERED":
                 style.status_bar.backgroundColor = 'grey';
                 return style.status_bar;
-            case "CANCELED":
+            case "CLOSED":
                 style.status_bar.backgroundColor = 'red';
                 return style.status_bar;
             default:
@@ -123,7 +125,9 @@ const Orders = ({navigation}: any) => {
                         <Text style={styles.order_details_right_text}>{item.total} $</Text>
 
                         <View style={status_bar_color(item.logs[item.logs.length-1].status)}>
+
                             <Text style={styles.order_status_text}>{item.logs[item.logs.length-1].status}</Text>
+
                         </View>                
                     </View>
                 </View>
