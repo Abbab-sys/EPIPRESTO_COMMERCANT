@@ -1,7 +1,7 @@
 import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useState } from "react";
 import { Image, Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
-import { Button, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
+import { Button, Divider, HelperText, IconButton, RadioButton, TextInput } from "react-native-paper";
 import { Variant } from "../../../interfaces/VariantInterfaces";
 import ImagePicker from 'react-native-image-crop-picker'
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -34,11 +34,13 @@ const AddVariant = (props: VariantProps) => {
   const [isWeightable, setWeightable] = useState(false);
   const [isAvailableForSale, setAvailableForSale] = useState(false);
   const [isTaxable, setTaxable] = useState(false); 
-  const [unitKg, setUnitKg] = useState(false); 
-  const [unitLb, setUnitLb] = useState(false); 
+
   const [isValidInput, setValid] = useState("Veuillez remplir tous les champs obligatoires*");
   const [isHidden, setHide] = useState(false);
   const [variantImage, setVariantImage] = useState<any>()
+
+  const [unit, setUnit] = React.useState('first');
+
 
 
   useEffect(() => {
@@ -59,21 +61,7 @@ const AddVariant = (props: VariantProps) => {
 
   }
 
-
-  const handleAddViantToList =  () => {
-    Keyboard.dismiss()
-    let variant;
-    variant = {
-      variantTitle: title,
-      price: price,
-      sku: sku,
-      taxable: isTaxable,
-      imgSrc: "",
-      byWeight: isWeightable,
-      availableForSale: isAvailableForSale,
-      stock: stock
-    }
-  }
+  
 
   const handleTakePhotoFromCamera = () => {
     ImagePicker.openCamera({
@@ -102,8 +90,8 @@ const AddVariant = (props: VariantProps) => {
           style={styles.title}
           >  Variant # {props.variantIndex +1}</Text>
           <View style={{position: 'absolute', right: 0, flex: 1, flexDirection: 'row'}}>
-          <IconButton icon="delete" size={20} onPress={() => props.deleteSelf()} />
-          <IconButton icon="eye" size={20} onPress={() => setHide(false)} />
+          <IconButton icon="delete" iconColor="#FFA500" size={20} onPress={() => props.deleteSelf()} />
+          <IconButton icon="eye" iconColor="#FFA500"size={20} onPress={() => setHide(false)} />
           </View>
       </View>
       </View>
@@ -118,8 +106,8 @@ const AddVariant = (props: VariantProps) => {
           style={styles.title}
           >  Variant # {props.variantIndex +1}</Text>
           <View style={{position: 'absolute', right: 0, flex: 1, flexDirection: 'row'}}>
-          <IconButton icon="delete" size={20} onPress={() => props.deleteSelf()} />
-          <IconButton icon="eye-off" size={20} 
+          <IconButton icon="delete" iconColor="#FFA500" size={20} onPress={() => props.deleteSelf()} />
+          <IconButton icon="eye-off" iconColor="#FFA500" size={20} 
             onPress={() => setHide(true)} />
           </View>
 
@@ -130,13 +118,15 @@ const AddVariant = (props: VariantProps) => {
               {variantImage ? (
                 <>
                   <Image source={{ uri: variantImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
-                  <Button onPress={() => setVariantImage("")}><Text>Supprimer la photo</Text></Button></>
+                  <Button  onPress={() => setVariantImage("")}><Text style={{color: "#FFA500" }}>Supprimer la photo</Text></Button></>
               ) : (
                 <Icon name="image" size={100}></Icon>
               )}
             </View>
               <View style={{flex:1, flexDirection: 'column', alignItems: 'center'}}>
                 <IconButton 
+                  containerColor="#FFA50047"
+                  iconColor="#FFA500"
                   onPress={handleTakePhotoFromCamera}
                   mode="contained"
                   icon="camera"
@@ -145,7 +135,9 @@ const AddVariant = (props: VariantProps) => {
                   Prendre une photo
                 </Text>
                 <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%', width: "100%"}}></Divider>
-                <IconButton 
+                <IconButton
+                  containerColor="#FFA50047"
+                  iconColor="#FFA500" 
                   onPress={handleTakePhotoFromGallery}
                   mode="contained"
                   icon="upload"
@@ -157,6 +149,8 @@ const AddVariant = (props: VariantProps) => {
             </View>
           <Divider bold style={{backgroundColor: "#FFA500", marginVertical: '4%', width: "100%"}}></Divider>
           <TextInput
+          underlineColor="transparent"
+          activeUnderlineColor="#FFA500"
             style={styles.input}
             label='Titre du variant*'
             value={title}
@@ -173,27 +167,41 @@ const AddVariant = (props: VariantProps) => {
               style={styles.checkbox}
             />
           
-          {(<>
-          <Text style={styles.label}>unité de mesure</Text>
-          <Text style={styles.label}>Lb</Text>
-          <CheckBox disabled={!isWeightable}
-              value={unitKg}
-              onValueChange={setUnitKg}
-              style={styles.checkbox}
-            />
-          <Text style={styles.label}>Kg</Text>
-           <CheckBox disabled={!isWeightable}
-              value={unitLb}
-              onValueChange={setUnitLb}
-              style={styles.checkbox}
-            /></>)}
           </View>
 
+          <View style={styles.checkboxContainer}>
+          {(<>
+          <Text style={isWeightable ? styles.label : styles.inactive_label}>Unite de mesure</Text>
+          <Text style={isWeightable ? styles.label : styles.inactive_label}>Lb</Text>
+          <RadioButton
+            disabled={!isWeightable}
+            theme={{ colors: { primary: '#FFA500' } }}
+            value="Lb"
+            status={ unit === 'Lb' ? 'checked' : 'unchecked' }
+            onPress={() => setUnit('Lb')}
+          />
+          <Text style={isWeightable ? styles.label : styles.inactive_label}>Kg</Text>
+          <RadioButton
+            disabled={!isWeightable}
+            theme={{ colors: { primary: '#FFA500' } }}
+            value="Kg"
+            status={ unit === 'Kg' ? 'checked' : 'unchecked' }
+            onPress={() => setUnit('Kg')}
+          />
+          </>)}
+          
+        </View>
+
+
+
           <TextInput
+          underlineColor="transparent"
+          activeUnderlineColor="#FFA500"
             style={styles.input}
             label='Prix*'
             keyboardType= "numeric"
-            onChangeText={text => setPrice(parseFloat(text))}
+            onChangeText={text => setPrice(parseFloat(parseFloat(text).toFixed(2)))}
+            value={price.toString()}
             />
           <HelperText type='error'>
           </HelperText>
@@ -208,6 +216,8 @@ const AddVariant = (props: VariantProps) => {
           </View>
           
           <TextInput
+          underlineColor="transparent"
+          activeUnderlineColor="#FFA500"
             style={styles.input}
             label='Sku'
             value={sku}
@@ -217,6 +227,8 @@ const AddVariant = (props: VariantProps) => {
           </HelperText>
 
           <TextInput
+          underlineColor="transparent"
+          activeUnderlineColor="#FFA500"
             style={styles.input}
             label='Stock*'
             keyboardType= "numeric"
@@ -269,6 +281,13 @@ const AddVariant = (props: VariantProps) => {
       borderWidth: 1,
       padding: 0,
       backgroundColor: '#FFFFFF',
+      borderColor: '#FFA500',
+      borderRadius: 10,
+      width: '90%',
+      fontFamily: text_font_family,
+      fontStyle: text_font_style,
+      fontWeight: 'normal',
+      fontSize: 15,
     },
     checkboxContainer: {
       flexDirection: "row",
@@ -280,10 +299,12 @@ const AddVariant = (props: VariantProps) => {
     label: {
       margin: 5,
       fontFamily: text_font_family,
-        fontStyle: text_font_style,
-        fontWeight: 'normal',
-        fontSize: 15,
-    },
+      fontStyle: text_font_style,
+      fontWeight: 'normal',
+      fontSize: 15,
+      lineHeight: 18,
+      color: 'black'    
+      },
     button: {
       marginTop: 20,
         width: 200,
@@ -301,7 +322,15 @@ const AddVariant = (props: VariantProps) => {
       fontStyle: text_font_style,
       margin: 10,
       color: '#FFA500'
-    }
+    },
+    inactive_label: {
+      margin: 5,
+      fontFamily: text_font_family,
+      fontStyle: text_font_style,
+      fontWeight: 'normal',
+      fontSize: 15,
+      lineHeight: 18,
+      },
   });
 
   export default AddVariant;

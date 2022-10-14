@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client/react";
 import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useState } from "react";
-import { Keyboard, ScrollView, StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity  } from "react-native";
+import { Keyboard, ScrollView, StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, Alert  } from "react-native";
 import { Button, Chip, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { Variant } from "../../../interfaces/VariantInterfaces";
 import { ADD_PRODUCT } from "../../graphql/mutations";
@@ -17,11 +17,12 @@ const AddProduct = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [brand, setBrand] = useState("");
-  const [tags, setTags] = useState(["lol","okok"]);
+  const [tags, setTags] = useState([""]);
   const [isPublished, setPublished] = useState(false);
   const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
   const [productNameError, setError] = useState("");
-  const [deleteError, setDeleteError] = useState("");
+
+  const deleteError = "You must have at least one variant"
 
   const [productImage, setProductImage] = useState("")
 
@@ -91,6 +92,15 @@ const AddProduct = () => {
     }])
   }
 
+  const alertOnDelete = (message: string) =>
+    Alert.alert(
+      "Alert",
+      message,
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+
   useEffect(() => {
       if (addLoading || addError || !addData) return
       if (addData.addNewProductToStore.code === 200) {
@@ -152,7 +162,10 @@ const AddProduct = () => {
                 disabled={submitButtonShouldBeDisabled()}
                   mode="contained"
                   icon="content-save"
-                  size={30}/>
+                  size={30}
+                  containerColor="#FFA50047"
+                  iconColor="#FFA500"
+                  />
                 <Text></Text>
                 
             </View>
@@ -179,7 +192,10 @@ const AddProduct = () => {
                   onPress={handleTakePhotoFromCamera}
                   mode="contained"
                   icon="camera"
-                  size={40}/>
+                  size={40}
+                  containerColor="#FFA50047"
+                  iconColor="#FFA500"
+                  />
                 <Text>
                   Prendre une photo
                 </Text>
@@ -188,7 +204,10 @@ const AddProduct = () => {
                   onPress={handleTakePhotoFromGallery}
                   mode="contained"
                   icon="upload"
-                  size={40}/>
+                  size={40}
+                  containerColor="#FFA50047"
+                  iconColor="#FFA500"
+                  />
                 <Text style={{textAlign: 'center'}}>
                   Importer une photo de la galerie
                 </Text>
@@ -197,17 +216,27 @@ const AddProduct = () => {
           <Divider bold style={styles.divider}></Divider>
 
           <TextInput
+          underlineColor="transparent"
+          activeUnderlineColor="#FFA500"
             style={styles.input}
             label='Titre du produit*'
             onChangeText={text => setTitle(text)}
             />
-          <HelperText type='error' style={{
-                height: title.length < 1  ? 'auto' : 0,
-              }}>
-                {productNameError}
-          </HelperText>
+
+          <>
+          {productNameError && (
+            <HelperText type='error' style={{
+                  height: title.length < 1  ? 'auto' : 0,
+                }}>
+                  {productNameError}
+            </HelperText>
+          )}
+          
+          </>
           
           <TextInput
+            underlineColor="transparent"
+            activeUnderlineColor="#FFA500"
             style={styles.input}
             label='Description'
             onChangeText={text => setDescription(text)}
@@ -215,18 +244,22 @@ const AddProduct = () => {
 
 
           <TextInput
+            underlineColor="transparent"
+            activeUnderlineColor="#FFA500"
             style={styles.input}
             label='Marque'
             onChangeText={text => setBrand(text)}
             />
 
           <TextInput
+            underlineColor="transparent"
+            activeUnderlineColor="#FFA500"
             style={styles.input}
             label='Tags (separate your tags with a space)'
             onChangeText={text => setTags(text.split(" "))}
             value={tags.join(" ")}
           />
-          <ScrollView horizontal>
+          <ScrollView horizontal style = {{paddingTop:5}}>
             {tags.map((tag , index) => (
               tag.trim() && (
                 // put close icon right
@@ -238,11 +271,12 @@ const AddProduct = () => {
                     newTags.splice(index, 1);
                     setTags(newTags);
                   }}
-                  style={{margin: 2, color: "white", backgroundColor:'lightgrey' , 
+                  style={{margin: 2, color: "white", backgroundColor:'#FFA50047' , 
                   fontSize: 15,
                   fontWeight: 'bold',
                   fontFamily: text_font_family,
                   fontStyle: text_font_style,
+                  borderColor: '#FFA500',
                   borderWidth: 1, borderRadius: 5}}
                 >
                 {tag}</Chip>
@@ -252,10 +286,6 @@ const AddProduct = () => {
           
 
           <Text style={styles.titleText}>VARIANTS</Text>
-
-            <HelperText type='error' >
-                {deleteError}
-          </HelperText>
 
           <ScrollView >
           {variants.map((field, index) => (    
@@ -287,11 +317,7 @@ const AddProduct = () => {
               setVariants(newVariants);
             }
             else {
-              setDeleteError("You must have at least one variant");
-              // Hide the error message afetr 5 seconds
-              setTimeout(() => {
-                setDeleteError("");
-              }, 5000);
+              alertOnDelete(deleteError);
             }
           }}
                               
@@ -302,10 +328,6 @@ const AddProduct = () => {
         <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
               Ajouter un variant
           </Button>
-          
-
-          <Divider bold style={styles.divider}></Divider>
-
 
           <View style={styles.checkboxContainer}>
             <Text style={styles.label}>Publier l'article </Text>
@@ -327,23 +349,34 @@ const AddProduct = () => {
       margin: "4%"
     },
     input: {
-      height: 50,
       margin: 10,
+      marginBottom: 0,
       borderWidth: 1,
-      padding: 2,
+      padding: 0,
       backgroundColor: '#FFFFFF',
+      borderColor: '#FFA500',
+      borderRadius: 10,
+      width: '90%',
       fontFamily: text_font_family,
       fontStyle: text_font_style,
+      fontWeight: 'normal',
+      fontSize: 15,
     },
     checkboxContainer: {
       flexDirection: "row",
-      marginBottom: 20,
+      marginBottom: 10,
     },
     checkbox: {
       alignSelf: "center",
     },
     label: {
       margin: 5,
+      fontFamily: text_font_family,
+      fontStyle: text_font_style,
+      fontWeight: 'normal',
+      fontSize: 15,
+      lineHeight: 18,
+      color: 'black'        
     },
     button: {
       borderColor: '#FF0000',
