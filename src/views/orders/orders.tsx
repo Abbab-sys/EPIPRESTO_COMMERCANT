@@ -1,5 +1,5 @@
 //create a simple react native component
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import React, { Component, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -14,19 +14,19 @@ const text_font_style = 'normal';
 //TODO: TRANSLATION FR/ENG
 
 const Orders = ({ navigation }: any) => {
-    const { data, loading, error } = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
+    const { data, loading, error ,refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
         variables: {
             idStore: "633cfb2bf7bdb731e893e28b"
         }
     });
 
-    //TODO: GET THE STORE ID FROM THE USER
 
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         console.log("Orders page rendered");
-    //     });
-    // }, [navigation]);
+    useEffect(() => {
+         navigation.addListener('focus', () => {
+            refetch();
+        });
+
+    }, [navigation]);
 
     if (loading) {
         return (
@@ -42,7 +42,7 @@ const Orders = ({ navigation }: any) => {
     }
 
     
-
+    
         const orders: Order[] = data.getStoreById.store.orders.map((order: any) => {
 
             const products: Product[] = order.productsVariantsOrdered.map(({ relatedProductVariant, quantity }: any) => {
