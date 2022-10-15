@@ -7,6 +7,7 @@ import Home from "../home/Home";
 import Inventory from "../inventory/Inventory";
 import Settings from "../settings/Settings";
 import Orders from "../orders/Orders";
+import { ORDERS_TITLE_KEY } from "../../translations/keys/OrdersTranslationKeys";
 
 export const NavigationTabScreens: TabScreenProps[] = [{
     title: HOME_TITLE_KEY,
@@ -21,7 +22,7 @@ export const NavigationTabScreens: TabScreenProps[] = [{
     iconName: "database"
 },
 {
-    title: "ORDERS",
+    title: ORDERS_TITLE_KEY,
     navigationName: "Orders",
     component: Orders,
     iconName: "shopping-cart"

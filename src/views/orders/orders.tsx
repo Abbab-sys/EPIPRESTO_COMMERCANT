@@ -1,34 +1,27 @@
 //create a simple react native component
-import { useLazyQuery, useQuery } from '@apollo/client';
-import React, { Component, useContext, useEffect } from 'react';
+import {useQuery } from '@apollo/client';
+import React, {useContext, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import { GET_ALL_ORDERS_BY_STORE_ID } from '../../graphql/queries';
 import { Client, Order, Product } from '../../interfaces/OrderInterface';
 import { VendorContext } from '../../context/Vendor';
+import { useTranslation } from 'react-i18next';
+import { ORDERS_CUSTOMER_KEY, ORDERS_DETAILS_BUTTON_KEY, ORDERS_FILTERING_KEY, ORDERS_STATUS_KEY, ORDERS_TITLE_KEY, ORDER_DETAILS_PAYMENT_TOTAL } from '../../translations/keys/OrdersTranslationKeys';
 
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
-const orderStatus = [
-    { label: "Waiting", value: "WAITING_CONFIRMATION" },
-    { label: "Confirmed", value: "CONFIRMED" },
-    { label: "In Delivery", value: "IN_DELIVERY" },
-    { label: "Delivered", value: "DELIVERED" },
-    { label: "Closed", value: "CLOSED" }
-]
-
-
-//TODO: TRANSLATION FR/ENG
 
 const Orders = ({ navigation }: any) => {
-    // const {storeId} = useContext(VendorContext);
-    // const [orders, setOrders] = React.useState<Order[]>([]);
+    const {storeId} = useContext(VendorContext);
+    const {t: translation} = useTranslation('translation');
 
     const { data, loading, error ,refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
         variables: {
             //TODO : id store should come from vendor context
-            idStore: "633cfb2bf7bdb731e893e28b"
+            // idStore: "633cfb2bf7bdb731e893e28b"
+            idStore: storeId
         }
     });
 
@@ -130,9 +123,10 @@ const Orders = ({ navigation }: any) => {
     }
 
     const status_bar_text = (status: string) => {
-        const statusLabel = orderStatus.find((item) => item.value === status)?.label;
-        return statusLabel;
+        return translation('order.status.'+status);
     }
+
+   
 
     const renderOrderContainer = ({ item }: any) => {
         const order_date = new Date(item.logs[0].time);
@@ -144,9 +138,9 @@ const Orders = ({ navigation }: any) => {
                 </View>
                 <View style={styles.order_details}>
                     <View style={styles.order_details_left}>
-                        <Text style={styles.order_details_left_text}>Client</Text>
-                        <Text style={styles.order_details_left_text}>Total</Text>
-                        <Text style={styles.order_details_left_text}>Status</Text>
+                        <Text style={styles.order_details_left_text}>{translation(ORDERS_CUSTOMER_KEY)}</Text>
+                        <Text style={styles.order_details_left_text}>{translation(ORDER_DETAILS_PAYMENT_TOTAL)}</Text>
+                        <Text style={styles.order_details_left_text}>{translation(ORDERS_STATUS_KEY)}</Text>
                     </View>
                     <View style={styles.order_details_right}>
                         <Text style={styles.order_details_right_text}>{item.client.firstName} {item.client.lastName}</Text>
@@ -164,7 +158,7 @@ const Orders = ({ navigation }: any) => {
                     onPress={() => navigation.navigate('OrderPage', { order: item })}
 
                 >
-                    <Text style={styles.view_order_button_text}>Détails</Text>
+                    <Text style={styles.view_order_button_text}>{translation(ORDERS_DETAILS_BUTTON_KEY)}</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -178,7 +172,7 @@ const Orders = ({ navigation }: any) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
             <View>
                 <Text style={styles.titleText}>
-                    COMMANDES
+                    {translation(ORDERS_TITLE_KEY)}
                 </Text>
 
             </View>
@@ -188,7 +182,7 @@ const Orders = ({ navigation }: any) => {
                     mode="contained"
                     onPress={() => console.log('Pressed')}
                 >
-                    Trier
+                    {translation(ORDERS_FILTERING_KEY)}
                 </Button>
 
             </View>

@@ -138,5 +138,41 @@
     "boughtByWeight": "Product sold by weight",
     "unit": "Unit of measure",
     "taxable": "Taxable product"
+  },
+  "orders":{
+    "title":"Orders",
+    "filtering":"Sort",
+    "customer":"Customer",
+    "status":"Status",
+    "view":"Details"
+  },
+  "order":{
+    "status":{
+      "WAITING_CONFIRMATION":"Pending",
+      "CONFIRMED":"Confirmed",
+      "IN_DELIVERY":"In delivery",
+      "DELIVERED":"Delivered",
+      "CLOSED":"Closed"
+    },
+    "details":{
+      "payment":{
+        "title":"Payment",
+        "subTotal":"Subtotal",
+        "taxes":"Taxes",
+        "deliveryFees":"Delivery Fees",
+        "total":"Total",
+        "method":"Payment method"
+      },
+      "product":{
+        "title":"Product"
+      },
+      "save":{
+        "button":"Save"
+      },
+      "update":{
+        "success":"Status updated successfully",
+        "failed":"Oops something went wrong"
+      }
+    }
   }
 }

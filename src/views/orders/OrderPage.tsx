@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React from 'react';
 import { SafeAreaView, View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Button } from 'react-native-paper'
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -6,21 +6,25 @@ import { OrderPageStyles } from './OrderPageStyles';
 import { Product } from '../../interfaces/OrderInterface';
 import { CHANGE_ORDER_STATUS } from '../../graphql/mutations';
 import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
+import { ORDERS_CUSTOMER_KEY, ORDERS_TITLE_KEY, ORDER_DETAILS_PAYMENT_DELIVERYFEES, ORDER_DETAILS_PAYMENT_METHOD, ORDER_DETAILS_PAYMENT_SUBTOTAL, ORDER_DETAILS_PAYMENT_TAXES, ORDER_DETAILS_PAYMENT_TITLE, ORDER_DETAILS_PAYMENT_TOTAL, ORDER_DETAILS_PRODUCT_TITLE, ORDER_DETAILS_SAVE_BUTTON, ORDER_STATUS_CLOSED_KEY, ORDER_STATUS_CONFIRMED_KEY, ORDER_STATUS_DELIVERED_KEY, ORDER_STATUS_IN_DELIVERY_KEY, ORDER_STATUS_WAITING_KEY, UPDATE_ALERT_FAILED, UPDATE_ALERT_SUCESS } from '../../translations/keys/OrdersTranslationKeys';
 
 
 const styles = OrderPageStyles
-const orderStatus = [
-    { label: "Waiting for confirmation", value: "WAITING_CONFIRMATION" },
-    { label: "Confirmed", value: "CONFIRMED" },
-    { label: "In Delivery", value: "IN_DELIVERY" },
-    { label: "Delivered", value: "DELIVERED" },
-    { label: "Closed", value: "CLOSED" }
-]
+
 const OrderPage = ({ route, navigation }: any) => {
     const { order } = route.params;
     const [open, setOpen] = React.useState(false);
     const [current_order_status, set_current_order_status] = React.useState(order.logs[order.logs.length-1].status);
+    const {t: translation} = useTranslation('translation');
 
+    const orderStatus = [
+        { label: translation(ORDER_STATUS_WAITING_KEY), value: "WAITING_CONFIRMATION" },
+        { label: translation(ORDER_STATUS_CONFIRMED_KEY), value: "CONFIRMED" },
+        { label: translation(ORDER_STATUS_IN_DELIVERY_KEY), value: "IN_DELIVERY" },
+        { label: translation(ORDER_STATUS_DELIVERED_KEY), value: "DELIVERED" },
+        { label: translation(ORDER_STATUS_CLOSED_KEY), value: "CLOSED" }
+    ]
 
     const calculateProductTotal = (price: any, quantity: any): any => {
         return (price * quantity).toFixed(2);
@@ -36,7 +40,7 @@ const OrderPage = ({ route, navigation }: any) => {
                         style={styles.saveButtonText}
                         onPress={() => sendStatusUpdate(current_order_status)}
                     >
-                        Save
+                        {translation(ORDER_DETAILS_SAVE_BUTTON)}
                     </Button>
                 </View>
             )
@@ -45,9 +49,9 @@ const OrderPage = ({ route, navigation }: any) => {
 
     const receivedUpdateStatus = (data:any) => {
         if (data.updateOrderStatus.code === 200) {
-            Alert.alert("Status Updated Successfully")
+            Alert.alert(translation(UPDATE_ALERT_SUCESS))
         }else{
-            Alert.alert("Error Updating Status")
+            Alert.alert(translation(UPDATE_ALERT_FAILED))
         }
     }
 
@@ -93,7 +97,7 @@ const OrderPage = ({ route, navigation }: any) => {
                 </TouchableOpacity>
 
                 <Text style={styles.header_text}>
-                    COMMANDE #{order.number}
+                    {translation(ORDERS_TITLE_KEY)} #{order.number}
                 </Text>
             </View>
             <View style={styles.subHeader}>
@@ -113,7 +117,7 @@ const OrderPage = ({ route, navigation }: any) => {
             <View style={styles.details_container}>
                     <View style={styles.client_header}>
                         <Text style={styles.details_title}>
-                            Client
+                            {translation(ORDERS_CUSTOMER_KEY)}
                         </Text>
                         <TouchableOpacity
                             style={styles.chat_button}
@@ -143,33 +147,33 @@ const OrderPage = ({ route, navigation }: any) => {
                 <View style={styles.details_container}>
                     <View style={styles.client_header}>
                         <Text style={styles.details_title}>
-                            Paiement
+                            {translation(ORDER_DETAILS_PAYMENT_TITLE)}
                         </Text>
 
                         <Text style={styles.total_price}>
-                            Total: {order.total} $
+                            {translation(ORDER_DETAILS_PAYMENT_TOTAL)}: {order.total} $
                         </Text>
                     </View>
 
 
                     <Text style={styles.product_information}>
-                        Sous-total : {order.subTotal} $
+                        {translation(ORDER_DETAILS_PAYMENT_SUBTOTAL)} : {order.subTotal} $
                     </Text>
                     <Text style={styles.product_information}>
-                        Taxes: {order.taxs} $
+                        {translation(ORDER_DETAILS_PAYMENT_TAXES)}: {order.taxs} $
                     </Text>
                     <Text style={styles.product_information}>
-                        Frais de livraison: {order.deliveryFee} $
+                        {translation(ORDER_DETAILS_PAYMENT_DELIVERYFEES)}: {order.deliveryFee} $
                     </Text>
                     <Text style={styles.product_information}>
-                        Méthode de paiement: {order.paymentMethod}
+                        {translation(ORDER_DETAILS_PAYMENT_METHOD)}: {order.paymentMethod}
                     </Text>
 
                     
                 </View>
 
                 <View style={styles.details_container}>
-                    <Text style={styles.details_title}>Produits</Text>
+                    <Text style={styles.details_title}>{translation(ORDER_DETAILS_PRODUCT_TITLE)}</Text>
 
                     <View style={styles.product_details_body}>
                         <ScrollView>
