@@ -9,50 +9,68 @@ import { addVariantStyles } from './AddVariantStyles'
 import { commonStyles } from "./CommonStyles";
 import { useTranslation } from "react-i18next";
 
+const activeUnderlineColor = "#FFA500";
+const underlineColor = "transparent";
+
 interface VariantProps {
     variantId: string,
     variantIndex: number,
     variantTitle: string;
-    price: number;
+    price: string;
     sku: string;
     taxable: boolean;
     imgSrc: string;
     byWeight: boolean;
     availableForSale: boolean;
-    stock: number;
+    stock: string;
     isValid: boolean;
     isHidden: boolean;
+    isRefreshed: number;
     updateSelf: (variant: Variant) => void;
     deleteSelf: () => void;
 }
 
 const AddVariant = (props: VariantProps) => {
   const {t} = useTranslation()
-  const [title, setTitle] = useState(props.variantTitle);
-  const [price, setPrice] = useState(0);
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
   const [sku, setSku] = useState("");
-  const [stock, setStock] = useState(0);
+  const [stock, setStock] = useState("");
   const [isWeightable, setWeightable] = useState(false);
-  const [isAvailableForSale, setAvailableForSale] = useState(false);
-  const [isTaxable, setTaxable] = useState(false); 
+  const [isAvailableForSale, setAvailableForSale] = useState(true);
+  const [isTaxable, setTaxable] = useState(true); 
 
   const [isValidInput, setValid] = useState("Veuillez remplir tous les champs obligatoires*");
   const [isHidden, setHide] = useState(false);
   const [variantImage, setVariantImage] = useState<any>()
 
-  const [unit, setUnit] = React.useState('first');
+  const [unit, setUnit] = React.useState('Lb');
 
 
 
   useEffect(() => {
-    props.updateSelf({variantId: props.variantId, variantTitle: title, price: price, sku: sku, taxable: isTaxable,
-         imgSrc: "", byWeight: isWeightable, availableForSale: isAvailableForSale, stock: stock, isValid: isVariantValid(), isHidden: isHidden});
-    console.log("valid", props.isValid)
+    props.updateSelf({variantId: props.variantId, variantTitle: title, price: parseFloat(price), sku: sku, taxable: isTaxable,
+         imgSrc: "", byWeight: isWeightable, availableForSale: isAvailableForSale, stock: parseFloat(stock), isValid: isVariantValid(), isHidden: isHidden});
   }, [title, price, sku, stock, isWeightable, isAvailableForSale, isTaxable, isHidden])
+
+  useEffect(() => {
+    // reset all fields after saving product
+    setTitle("")
+    setPrice("")
+    setSku("")
+    setStock("")
+    setWeightable(false)
+    setAvailableForSale(true)
+    setTaxable(true)
+    setHide(false)
+    setVariantImage(null)
+    setUnit('Lb')
+  }, [props.isRefreshed])
 
 
   const isVariantValid = () => {
-    if (title.trim() && price > 0 && stock > 0) {
+    // check if all required fields are filled
+    if (title.trim() && parseFloat(price) > 0 && parseFloat(stock) > 0) {
       setValid("");
       return true;
     } else {
@@ -63,6 +81,7 @@ const AddVariant = (props: VariantProps) => {
   }
 
   const handleTakePhotoFromCamera = () => {
+    // open camera to take photo
     ImagePicker.openCamera({
       width: 300,
       height: 400,
@@ -73,6 +92,7 @@ const AddVariant = (props: VariantProps) => {
   }
 
   const handleTakePhotoFromGallery = () => {
+    // open gallery to select photo
     ImagePicker.openPicker({
       width: 300,
       height: 400,
@@ -83,8 +103,10 @@ const AddVariant = (props: VariantProps) => {
   }
 
     if(isHidden) return (
+      // if variant is hidden, show only title & isValid icon
       <View style={addVariantStyles.view}>
-        <View style={commonStyles.imageInnerView} >
+        <View style={commonStyles.imageContainer} >
+        <>{!props.isValid && (<IconButton icon="alert" iconColor="#ce1212d9" size={20}/>)}</>
         <Text
           style={addVariantStyles.title}
           >  Variant # {props.variantIndex +1}</Text>
@@ -153,10 +175,10 @@ const AddVariant = (props: VariantProps) => {
             </View>
           <Divider bold style={commonStyles.bottomDivider}></Divider>
           <TextInput
-          underlineColor="transparent"
-          activeUnderlineColor="#FFA500"
+          underlineColor={underlineColor}
+          activeUnderlineColor={activeUnderlineColor}
             style={addVariantStyles.input}
-            label='Titre du variant*'
+            label={t('addVariant.labels.name')}
             value={title}
             onChangeText={text => setTitle(text)}
             />
@@ -196,16 +218,14 @@ const AddVariant = (props: VariantProps) => {
           
         </View>
 
-
-
           <TextInput
-          underlineColor="transparent"
-          activeUnderlineColor="#FFA500"
+          underlineColor={underlineColor}
+          activeUnderlineColor={activeUnderlineColor}
             style={addVariantStyles.input}
             label={t('addVariant.labels.price')}
             keyboardType= "numeric"
-            onChangeText={text => setPrice(parseFloat(parseFloat(text).toFixed(2)))}
-            value={price.toString()}
+            onChangeText={text => setPrice(parseFloat(text).toFixed(2))}
+            value={price}
             />
           <HelperText type='error'>
           </HelperText>
@@ -220,8 +240,8 @@ const AddVariant = (props: VariantProps) => {
           </View>
           
           <TextInput
-          underlineColor="transparent"
-          activeUnderlineColor="#FFA500"
+          underlineColor={underlineColor}
+          activeUnderlineColor={activeUnderlineColor}
             style={addVariantStyles.input}
             label={t('addVariant.labels.sku')}
             value={sku}
@@ -231,12 +251,13 @@ const AddVariant = (props: VariantProps) => {
           </HelperText>
 
           <TextInput
-          underlineColor="transparent"
-          activeUnderlineColor="#FFA500"
+          underlineColor={underlineColor}
+          activeUnderlineColor={activeUnderlineColor}
             style={addVariantStyles.input}
             label={t('addVariant.labels.stock')}
             keyboardType= "numeric"
-            onChangeText={text => setStock(parseFloat(text))}
+            value = {stock}
+            onChangeText={text => setStock(text)}
             />
           <HelperText type='error'>
           </HelperText>

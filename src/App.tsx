@@ -57,7 +57,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{headerShown: false}}
-            initialRouteName="Chat">
+            initialRouteName="Inventory">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen name="SignUp" component={SignUp} />
@@ -65,6 +65,7 @@ export default function App() {
             <Stack.Screen name="AddProduct" component={AddProduct} />
             <Stack.Screen name="Orders" component={Orders} />
             <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="Inventory" component={Inventory} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>
