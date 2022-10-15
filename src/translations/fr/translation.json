@@ -109,5 +109,34 @@
     "language":{
       "title":"Langue"
     }
+  },
+  "addProduct": {
+    "title": "Ajout de produit à la boutique",
+    "deletePhoto": "Supprimer la photo",
+    "takePicture": "Prendre une photo",
+    "importPicture": "Importer une photo",
+    "labels": {
+      "name": "Titre du produit*",
+      "description": "Description",
+      "brand": "Marque",
+      "tags": "Tags (séparez vos tags avec un espace)"
+    },
+    "addVariant": "Ajouter un variant",
+    "publishProduct": "Publier le produit",
+    "deleteError": "Vous devez au minimum avoir un variant"
+  },
+  "addVariant": {
+    "errorMessage": "Veuillez remplir tous les champs obligatoires*",
+    "labels": {
+      "name": "Nom du variant*",
+      "description": "Description",
+      "price": "Prix*",
+      "sku": "Sku",
+      "stock": "Stock",
+      "forSale": "Produit disponible a la vente"
+    },
+    "boughtByWeight": "Produit vendu au poids",
+    "unit": "Unité de mesure",
+    "taxable": "Taxable product"
   }
 }

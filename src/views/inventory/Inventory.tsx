@@ -53,9 +53,11 @@ const Inventory = ({navigation}: any) => {
       </View>
       <SafeAreaView style={{flex: 1}}>
         {loading ? (
-          <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator>
+            <View style={inventoryStyles.innerContainer}>
+              <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator>
+            </View>
           ) : error ? (
-            <View style={inventoryStyles.errorTextContainer}>
+            <View style={inventoryStyles.innerContainer}>
               <Text style={inventoryStyles.errorText}>OOPS UNE ERREUR EST SURVENUE</Text>
             </View>)
           : (

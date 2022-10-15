@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useReducer} from 'react';
 import {Text, Button, Snackbar} from 'react-native-paper';
-import {View, Image, KeyboardAvoidingView, Platform} from 'react-native';
+import {View, Image, KeyboardAvoidingView, Platform, Alert} from 'react-native';
 import {LOGIN_BY_EMAIL, LOGIN_BY_USERNAME} from '../../graphql/queries';
 import {useLazyQuery} from '@apollo/client/react';
 import {LoginStyles} from './LoginStyles';
@@ -21,6 +21,7 @@ import {
 } from '../../translations/keys/LoginTranslationKeys';
 import CredentialInput from '../../components/credential-input/CredentialInput';
 import LanguageSelector from '../../components/language-selection/LanguageSelector';
+import { ApolloError } from '@apollo/client';
 
 const Login = ({navigation}: any) => {
   const [{credentials, errorMessage}, dispatchCredentialsState] = useReducer(
@@ -29,19 +30,15 @@ const Login = ({navigation}: any) => {
   );
   const {t: translation} = useTranslation('translation');
 
-  const [
-    loginByEmail,
-    {loading: emailAuthLoading, error: emailAuthError, data: emailAuthData},
-  ] = useLazyQuery(LOGIN_BY_EMAIL);
-
-  const [
-    loginByUsername,
-    {
-      loading: usernameAuthLoading,
-      error: usernameAuthError,
-      data: usernameAuthData,
-    },
-  ] = useLazyQuery(LOGIN_BY_USERNAME);
+  const alert = (message: string) => {
+    Alert.alert(
+      "Alert",
+      message,
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+  }
 
   const {storeId, setStoreId} = useContext(VendorContext);
   useEffect(() => {
@@ -50,49 +47,56 @@ const Login = ({navigation}: any) => {
       navigation.navigate('Navigation');
     }
   }, [storeId]);
-
-  useEffect(() => {
-    console.log('LOL');
-    if (
-      emailAuthLoading ||
-      emailAuthError ||
-      !emailAuthData ||
-      !emailAuthData.loginVendorByEmail !== null
-    ) {
+  
+  const onLoginByEmailCompleted = (emailAuthData: any) => {
+    console.log(emailAuthData)
+    const serverResponse = emailAuthData.loginVendorByEmail
+    const loggedWithSuccess = serverResponse.code === 200
+    const vendorNotVerified = serverResponse.code === 401
+    const invalidCredentials = serverResponse.code === 404
+    if (loggedWithSuccess) {
+      setStoreId(serverResponse.vendorAccount.store._id)
       return;
     }
-    const serverResponse = emailAuthData.loginVendorByEmail;
-    const loggedWithSuccess = serverResponse.code === 200;
-    if (loggedWithSuccess) {
-      setStoreId(serverResponse.vendorAccount.store._id);
-    } else {
-      dispatchCredentialsState({
-        type: 'CHANGE_SNACKBAR_VISIBILITY',
-        showSnackBar: true,
-      });
-    }
-  }, [emailAuthLoading, emailAuthError, emailAuthData]);
-
-  useEffect(() => {
-    if (
-      usernameAuthLoading ||
-      usernameAuthError ||
-      !usernameAuthData ||
-      !usernameAuthData.loginVendorByUsername
-    ) {
+    if (vendorNotVerified) {
+      alert("Please verify your account")
       return;
     }
-    const serverResponse = usernameAuthData.loginVendorByUsername;
-    const loggedWithSuccess = serverResponse.code === 200;
-    if (loggedWithSuccess) {
-      setStoreId(serverResponse.vendorAccount.store._id);
-    } else {
-      dispatchCredentialsState({
-        type: 'CHANGE_SNACKBAR_VISIBILITY',
-        showSnackBar: true,
-      });
+    if (invalidCredentials) {
+      alert("Your username or password is incorrect")
+      return;
     }
-  }, [usernameAuthLoading, usernameAuthError, usernameAuthData]);
+  }
+  const onLoginByUsernameCompleted = (usernameAuthData: any) => {
+    console.log(usernameAuthData)
+    const serverResponse = usernameAuthData.loginVendorByUsername
+    const loggedWithSuccess = serverResponse.code === 200
+    const vendorNotVerified = serverResponse.code === 401
+    const invalidCredentials = serverResponse.code === 404
+    if (loggedWithSuccess) {
+      setStoreId(serverResponse.vendorAccount.store._id)
+    }
+    if (vendorNotVerified) {
+      alert("Please verify your account")
+      return;
+    }
+    if (invalidCredentials) {
+      alert("Your username or password is incorrect")
+      return;
+    }
+  }
+  const onLoginError = (error: ApolloError) => {
+    console.log(error)
+    alert("Oops something went wrong")
+  }
+
+  const [loginByEmail, {
+    loading: emailAuthLoading,
+  }] = useLazyQuery(LOGIN_BY_EMAIL, {onCompleted: onLoginByEmailCompleted, onError: onLoginError,fetchPolicy:'no-cache'});
+
+  const [loginByUsername, {
+    loading: usernameAuthLoading,
+  }] = useLazyQuery(LOGIN_BY_USERNAME, {onCompleted: onLoginByUsernameCompleted, onError: onLoginError,fetchPolicy:'no-cache'});
 
   const areAllCredentialsFieldsValid = (
     credsState: LoginCredentialsReducerState,

@@ -62,7 +62,7 @@ export const inventoryStyles = StyleSheet.create({
     errorText: {
         textAlign: 'center',
     },
-    errorTextContainer: {
+    innerContainer: {
         justifyContent: 'center',
         flex: 1
     }

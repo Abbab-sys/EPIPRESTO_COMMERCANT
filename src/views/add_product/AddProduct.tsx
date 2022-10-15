@@ -10,12 +10,11 @@ import ImagePicker from 'react-native-image-crop-picker'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { addProductsStyles } from "./AddProductStyles";
 import { commonStyles } from "./CommonStyles";
-
-const text_font_family = 'Lato';
-const text_font_style = 'normal';
+import { useTranslation } from "react-i18next";
 
 const AddProduct = () => {
 
+  const {t} = useTranslation('translation')
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [brand, setBrand] = useState("");
@@ -24,7 +23,7 @@ const AddProduct = () => {
   const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
   const [productNameError, setError] = useState("");
 
-  const deleteError = "You must have at least one variant"
+  const deleteError = t('addProduct.deleteError')
 
   const [productImage, setProductImage] = useState("")
 
@@ -145,51 +144,50 @@ const AddProduct = () => {
 
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
-        <View style={styles.headerFix}>
-        <TouchableOpacity
-                    style={styles.back_button}
-                    onPress={() => console.log("navigation BACK")}
-                >
-                    <Image
-                        style={styles.back_button_icon}
-                        source={require('../../assets/icons/back.png')}
-                    />
-                </TouchableOpacity>
+        <View style={addProductsStyles.headerFix}>
+          <TouchableOpacity
+            style={addProductsStyles.back_button}
+            onPress={() => console.log("navigation BACK")}>
+              <Image
+                style={addProductsStyles.back_button_icon}
+                source={require('../../assets/icons/back.png')}
+              />
+          </TouchableOpacity>
+          <Text style = {addProductsStyles.header_text}>{t('addProduct.title')}</Text>
 
-                <Text style = {styles.header_text}>Ajout Produit à la boutique</Text>
-
-                <IconButton 
-                style={styles.save_button}
-                onPress={() => handleAdd()}
-                disabled={submitButtonShouldBeDisabled()}
-                  mode="contained"
-                  icon="content-save"
-                  size={30}
-                  containerColor="#FFA50047"
-                  iconColor="#FFA500"
-                  />
-                <Text></Text>
-                
-            </View>
+          <IconButton
+            style={addProductsStyles.save_button}
+            onPress={() => handleAdd()}
+            disabled={submitButtonShouldBeDisabled()}
+            mode="contained"
+            icon="content-save"
+            size={30}
+            containerColor="#FFA50047"
+            iconColor="#FFA500"
+            />                
+        </View>
 
         <ScrollView 
-        style={styles.root}
-        showsVerticalScrollIndicator={false}
+          style={addProductsStyles.root}
+          showsVerticalScrollIndicator={false}
         >
-
-          <View style={{justifyContent: 'center', alignItems: 'center'
-          }} >
-          <Divider bold style={styles.divider}></Divider>
-          <View style={{flex: 1, flexDirection: 'row'}}>
-            <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-              {productImage ? (
-                <>
-                  <Image source={{ uri: productImage }} style={{ resizeMode: 'contain', height: 100, width: 100 }}></Image>
-                  <Button onPress={() => setProductImage("")}><Text style={{color: "#ce1212d9" }}>Supprimer la photo</Text></Button></>
-              ) : (
-                <Icon name="image" size={100}></Icon>
-              )}
-            </View>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Divider bold style={addProductsStyles.divider}></Divider>
+            <View style={commonStyles.imageContainer}>
+              <View style={commonStyles.imageInnerView}>
+                {productImage ? (
+                  <>
+                    <Image source={{ uri: productImage }} style={commonStyles.image}></Image>
+                    <Button onPress={() => setProductImage("")}>
+                      <Text style={{color: "#ce1212d9" }}>
+                        {t('addProduct.deletePhoto')}
+                      </Text>
+                    </Button>
+                  </>
+                  ) : (
+                  <Icon name="image" size={100}></Icon>
+                )}
+              </View>
               <View style={commonStyles.imageInnerView}>
                 <IconButton 
                   onPress={handleTakePhotoFromCamera}
@@ -200,277 +198,141 @@ const AddProduct = () => {
                   iconColor="#FFA500"
                   />
                 <Text>
-                  Prendre une photo
+                  {t('addProduct.takePicture')}
                 </Text>
                 <Divider bold style={commonStyles.divider}></Divider>
                 <IconButton 
                   onPress={handleTakePhotoFromGallery}
                   mode="contained"
                   icon="upload"
-                  size={40}/>
+                  size={40}
+                  containerColor="#FFA50047"
+                  iconColor="#FFA500"
+                  />
                 <Text style={commonStyles.innerText}>
-                  Importer une photo de la galerie
+                  {t('addProduct.importPicture')}
                 </Text>
               </View>
             </View>
-          <Divider bold style={styles.divider}></Divider>
+            <Divider bold style={commonStyles.divider}></Divider>
 
-          <TextInput
-          underlineColor="transparent"
-          activeUnderlineColor="#FFA500"
-            style={styles.input}
-            label='Titre du produit*'
-            onChangeText={text => setTitle(text)}
+            <TextInput
+              underlineColor="transparent"
+              activeUnderlineColor="#FFA500"
+              style={addProductsStyles.input}
+              label={t('addProduct.labels.name')}
+              onChangeText={text => setTitle(text)}
+              />
+
+            {productNameError && (
+              <HelperText type='error' style={{
+                    height: title.length < 1  ? 'auto' : 0,
+                  }}>
+                    {productNameError}
+              </HelperText>
+            )}
+            
+            
+            <TextInput
+              multiline={true}
+              underlineColor="transparent"
+              activeUnderlineColor="#FFA500"
+              style={addProductsStyles.inputDescription}
+              label={t('addProduct.labels.description')}
+              onChangeText={text => setDescription(text)}
+              />
+
+
+            <TextInput
+              underlineColor="transparent"
+              activeUnderlineColor="#FFA500"
+              style={addProductsStyles.input}
+              label={t('addProduct.labels.brand')}
+              onChangeText={text => setBrand(text)}
+              />
+
+            <TextInput
+              underlineColor="transparent"
+              activeUnderlineColor="#FFA500"
+              style={addProductsStyles.input}
+              label={t('addProduct.labels.tags')}
+              onChangeText={text => setTags(text.split(" "))}
+              value={tags.join(" ")}
             />
+            <ScrollView horizontal style = {{paddingTop:5}}>
+              {tags.map((tag , index) => (
+                tag.trim() && (
+                  // put close icon right
+                  <Chip
+                    key={index}
+                    icon="close"
+                    onPress={() => {
+                      const newTags = [...tags];
+                      newTags.splice(index, 1);
+                      setTags(newTags);
+                    }}
+                    style={addProductsStyles.chip}
+                  >
+                  {tag}</Chip>
+              )))}
+            </ScrollView>
+          </View>
 
-          <>
-          {productNameError && (
-            <HelperText type='error' style={{
-                  height: title.length < 1  ? 'auto' : 0,
-                }}>
-                  {productNameError}
-            </HelperText>
-          )}
-          
-          </>
-          
-          <TextInput
-          multiline={true}
-            underlineColor="transparent"
-            activeUnderlineColor="#FFA500"
-            style={styles.inputDescription}
-            label='Description'
-            onChangeText={text => setDescription(text)}
-            />
+          <Text style={addProductsStyles.titleText}>VARIANTS</Text>
 
-
-          <TextInput
-            underlineColor="transparent"
-            activeUnderlineColor="#FFA500"
-            style={styles.input}
-            label='Marque'
-            onChangeText={text => setBrand(text)}
-            />
-
-          <TextInput
-            underlineColor="transparent"
-            activeUnderlineColor="#FFA500"
-            style={styles.input}
-            label='Tags (separate your tags with a space)'
-            onChangeText={text => setTags(text.split(" "))}
-            value={tags.join(" ")}
-          />
-          <ScrollView horizontal style = {{paddingTop:5}}>
-            {tags.map((tag , index) => (
-              tag.trim() && (
-                // put close icon right
-                <Chip
-                  key={index}
-                  icon="close"
-                  onPress={() => {
-                    const newTags = [...tags];
-                    newTags.splice(index, 1);
-                    setTags(newTags);
-                  }}
-                  style={{margin: 2, color: "white", backgroundColor:'#FFA50047' , 
-                  fontSize: 15,
-                  fontWeight: 'bold',
-                  fontFamily: text_font_family,
-                  fontStyle: text_font_style,
-                  borderColor: '#FFA500',
-                  borderWidth: 1, borderRadius: 5}}
-                >
-                {tag}</Chip>
-            )))}
+          <ScrollView>
+            {variants.map((field, index) => (    
+            <AddVariant 
+              key={field.variantId}
+              variantIndex={index}
+              variantId={field.variantId}
+              variantTitle={field.variantTitle}
+              price={field.price}
+              sku={field.sku}
+              taxable={field.taxable}
+              imgSrc={field.imgSrc}
+              byWeight={field.byWeight}
+              availableForSale={field.availableForSale}
+              stock={field.stock}
+              isValid={field.isValid}
+              isHidden={field.isHidden}
+              updateSelf={(variant: Variant) => {
+                const newVariants = [...variants];
+                newVariants[index] = variant;
+                setVariants(newVariants);
+              }}
+              deleteSelf={() => {
+                const newVariants = [...variants];
+                console.log("newVariants", newVariants)
+                if (newVariants.length > 1) {
+                  console.log(index)
+                  newVariants.splice(index, 1);
+                  setVariants(newVariants);
+                }
+                else {
+                  alertOnDelete(deleteError);
+                }
+              }}                    
+              />
+            ))}
           </ScrollView>
-          </View>
+
+        <Button style={addProductsStyles.button} mode="contained" onPress={() => addDefaultVariant()}>
+          {t('addProduct.addVariant')}
+        </Button>
+
+        <View style={addProductsStyles.checkboxContainer}>
+          <Text style={addProductsStyles.label}>{t('addProduct.publishProduct')}</Text>
+          <CheckBox
+            value={isPublished}
+            onValueChange={setPublished}
+            style={addProductsStyles.checkbox}
+          />
+        </View>
           
-
-          <Text style={styles.titleText}>VARIANTS</Text>
-
-          <ScrollView >
-          {variants.map((field, index) => (    
-          <AddVariant 
-          key={field.variantId}
-          variantIndex={index}
-          variantId={field.variantId}
-          variantTitle={field.variantTitle}
-          price={field.price}
-          sku={field.sku}
-          taxable={field.taxable}
-          imgSrc={field.imgSrc}
-          byWeight={field.byWeight}
-          availableForSale={field.availableForSale}
-          stock={field.stock}
-          isValid={field.isValid}
-          isHidden={field.isHidden}
-          updateSelf={(variant: Variant) => {
-            const newVariants = [...variants];
-            newVariants[index] = variant;
-            setVariants(newVariants);
-          }}
-          deleteSelf={() => {
-            const newVariants = [...variants];
-            console.log("newVariants", newVariants)
-            if (newVariants.length > 1) {
-              console.log(index)
-              newVariants.splice(index, 1);
-              setVariants(newVariants);
-            }
-            else {
-              alertOnDelete(deleteError);
-            }
-          }}
-                              
-          ></AddVariant>
-        ))}
-        </ScrollView>
-
-        <Button style={styles.button} mode="contained" onPress={() => addDefaultVariant()}>
-              Ajouter un variant
-          </Button>
-
-          <View style={addProductsStyles.checkboxContainer}>
-            <Text style={addProductsStyles.label}>Publier l'article </Text>
-            <CheckBox
-              value={isPublished}
-              onValueChange={setPublished}
-              style={addProductsStyles.checkbox}
-            />
-          </View>
-          
-    </ScrollView>
+      </ScrollView>
     </SafeAreaView>
   )
   };
-
-  const styles = StyleSheet.create({
-    root: {
-      flex: 1,
-      margin: "4%",
-    },
-    input: {
-      margin: 10,
-      marginBottom: 0,
-      borderWidth: 1,
-      padding: 0,
-      backgroundColor: '#FFFFFF',
-      borderColor: '#FFA500',
-      borderRadius: 10,
-      width: '90%',
-      fontFamily: text_font_family,
-      fontStyle: text_font_style,
-      fontWeight: 'normal',
-      fontSize: 15,
-    },
-    checkboxContainer: {
-      flexDirection: "row",
-      marginBottom: 10,
-    },
-    checkbox: {
-      alignSelf: "center",
-    },
-    label: {
-      margin: 5,
-      fontFamily: text_font_family,
-      fontStyle: text_font_style,
-      fontWeight: 'normal',
-      fontSize: 15,
-      lineHeight: 18,
-      color: 'black'        
-    },
-    button: {
-      borderColor: '#FF0000',
-      backgroundColor: '#FFA500',
-      flex: 1,
-      margin: '3%'
-    },
-    header: {
-      fontSize: 20,
-      fontWeight: "bold",
-      textAlign: 'center',
-      margin: 10,
-      color: '#FFA500',
-      fontFamily: text_font_family,
-      fontStyle: text_font_style,
-  },
-    titleText: {
-      fontSize: 17,
-        fontWeight: "bold",
-        textAlign: 'center',
-        margin: 10,
-        color: '#FFA500',
-        fontFamily: text_font_family,
-        fontStyle: text_font_style,
-    },
-    divider: {
-      backgroundColor: "#FFA500",
-      marginVertical: '4%',
-      width: "100%"
-    },
-    headerFix: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#EAEAEA',
-      height: 50,
-      width: '100%',
-      padding: 10,
-      marginBottom: 10,
-  },
-  back_button: {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      bottom: 0,
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: 50,
-      height: 50,
-      marginLeft: 10,
-
-  },
-  back_button_icon: {
-      width: 35,
-      height: 35,
-      tintColor: '#FFA500',
-  },
-
-  header_text: {
-      fontFamily: text_font_family,
-      fontStyle: text_font_style,
-      fontWeight: 'bold',
-      fontSize: 20,
-      textAlign: 'center',
-      color: '#FFA500',
-  },
-  save_button: {
-      position: 'absolute',
-      right: 0,
-      top: 0,
-      bottom: 0,
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: 50,
-      height: 50,
-      marginRight: 10,
-  },
-  inputDescription: {
-    margin: 10,
-      marginBottom: 0,
-      borderWidth: 1,
-      padding: 0,
-      backgroundColor: '#FFFFFF',
-      borderColor: '#FFA500',
-      borderRadius: 10,
-      width: '90%',
-      fontFamily: text_font_family,
-      fontStyle: text_font_style,
-      fontWeight: 'normal',
-      fontSize: 15,
-      minHeight: 120,
-  }
-
-  });
 
   export default AddProduct;
