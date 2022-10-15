@@ -59,4 +59,11 @@ export const inventoryStyles = StyleSheet.create({
     data: {
         color: "#FFA500"
     },
+    errorText: {
+        textAlign: 'center',
+    },
+    innerContainer: {
+        justifyContent: 'center',
+        flex: 1
+    }
 })

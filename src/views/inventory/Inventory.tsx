@@ -53,8 +53,13 @@ const Inventory = ({navigation}: any) => {
       </View>
       <SafeAreaView style={{flex: 1}}>
         {loading ? (
-          <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator>
-          ) : error ? <Text>OOPS UNE ERREUR EST SURVENUE</Text>
+            <View style={inventoryStyles.innerContainer}>
+              <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator>
+            </View>
+          ) : error ? (
+            <View style={inventoryStyles.innerContainer}>
+              <Text style={inventoryStyles.errorText}>OOPS UNE ERREUR EST SURVENUE</Text>
+            </View>)
           : (
             products.length === 0 ? 
               (<Text>YOUR RESEARCH DOES NOT MATCH ANY ITEM</Text>)

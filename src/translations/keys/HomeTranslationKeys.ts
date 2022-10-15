@@ -1,0 +1,1 @@
+export const HOME_TITLE_KEY = 'home.title';

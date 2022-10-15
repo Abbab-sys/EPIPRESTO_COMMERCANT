@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import {
   Button,
@@ -38,24 +39,62 @@ const SignUp = ({navigation}: any) => {
     {verifyPassword, accountInput, signUpErrorMessage},
     dispatchCredentialsState,
   ] = React.useReducer(signUpCredentialsReducer, initialSignUpCredentialsState);
-  const {storeId, setStoreId} = useContext(VendorContext);
+  // const {storeId, setStoreId} = useContext(VendorContext);
 
-  const [
-    isEmailUsed,
-    {loading: emailUsedLoading, error: emailUsedError, data: emailUsedData},
-  ] = useLazyQuery(IS_VENDOR_EMAIL_USED);
-  const [
-    isUsernameUsed,
-    {
-      loading: usernameUsedLoading,
-      error: usernameUsedError,
-      data: usernameUsedData,
-    },
-  ] = useLazyQuery(IS_VENDOR_USERNAME_USED);
-  const [
-    signUp,
-    {loading: signUpLoading, error: signUpError, data: signUpData},
-  ] = useMutation(SIGN_UP);
+  const alert = (message: string) => {
+    Alert.alert(
+      "Alert",
+      message,
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+  }
+
+  // const [
+  //   isEmailUsed,
+  //   {loading: emailUsedLoading, error: emailUsedError, data: emailUsedData},
+  // ] = useLazyQuery(IS_VENDOR_EMAIL_USED);
+  // const [
+  //   isUsernameUsed,
+  //   {
+  //     loading: usernameUsedLoading,
+  //     error: usernameUsedError,
+  //     data: usernameUsedData,
+  //   },
+  // ] = useLazyQuery(IS_VENDOR_USERNAME_USED);
+  // const [
+  //   signUp,
+  //   {loading: signUpLoading, error: signUpError, data: signUpData},
+  // ] = useMutation(SIGN_UP);
+
+  const handleEmailUsed = (emailUsedData: any) => {
+    if (!emailUsedData) return
+    (emailUsedData.isVendorEmailUsed)
+      ? dispatchCredentialsState({type: "SET_EMAIL_AS_ALREADY_USED"})
+      : dispatchCredentialsState({type: "SET_EMAIL_AS_UNUSED"})
+  }
+  const handleUsernameUsed = (usernameUsedData: any) => {
+    if (!usernameUsedData) return
+    (usernameUsedData.isVendorUsernameUsed)
+      ? dispatchCredentialsState({type: "SET_USERNAME_AS_ALREADY_USED"})
+      : dispatchCredentialsState({type: "SET_USERNAME_AS_UNUSED"})
+  }
+  const signUpResponse = (signUpData: any) => {
+    console.log(signUpData)
+    if (!signUpData) return
+    if (signUpData.vendorSignUp.code !== 200) {
+      alert("OOPS SOMETHING WENT WRONG")
+      return;
+    }
+    setTimeout(() => {
+      navigation.navigate("Login")
+    }, 1000)
+  }
+
+  const [isEmailUsed, {loading: emailUsedLoading}] = useLazyQuery(IS_VENDOR_EMAIL_USED, {onCompleted: handleEmailUsed});
+  const [isUsernameUsed, {loading: usernameUsedLoading}] = useLazyQuery(IS_VENDOR_USERNAME_USED, {onCompleted: handleUsernameUsed});
+  const [signUp] = useMutation(SIGN_UP, {onCompleted: signUpResponse});
 
   const [errorOpen, setErrorOpen] = useState(false);
 
@@ -65,15 +104,15 @@ const SignUp = ({navigation}: any) => {
     callbackVars: {variables: {email: accountInput.email}},
     dependencies: [accountInput.email],
   });
-  useEffect(() => {
-    if (!emailUsedData) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!emailUsedData) {
+  //     return;
+  //   }
 
-    emailUsedData.isVendorEmailUsed
-      ? dispatchCredentialsState({type: 'SET_EMAIL_AS_ALREADY_USED'})
-      : dispatchCredentialsState({type: 'SET_EMAIL_AS_UNUSED'});
-  }, [emailUsedData]);
+  //   emailUsedData.isVendorEmailUsed
+  //     ? dispatchCredentialsState({type: 'SET_EMAIL_AS_ALREADY_USED'})
+  //     : dispatchCredentialsState({type: 'SET_EMAIL_AS_UNUSED'});
+  // }, [emailUsedData]);
 
   useTimeout({
     callback: isUsernameUsed,
@@ -81,37 +120,38 @@ const SignUp = ({navigation}: any) => {
     callbackVars: {variables: {username: accountInput.username}},
     dependencies: [accountInput.username],
   });
-  useEffect(() => {
-    if (!usernameUsedData) {
-      return;
-    }
-    usernameUsedData.isVendorUsernameUsed
-      ? dispatchCredentialsState({type: 'SET_USERNAME_AS_ALREADY_USED'})
-      : dispatchCredentialsState({type: 'SET_USERNAME_AS_UNUSED'});
-  }, [usernameUsedData]);
+  // useEffect(() => {
+  //   if (!usernameUsedData) {
+  //     return;
+  //   }
+  //   usernameUsedData.isVendorUsernameUsed
+  //     ? dispatchCredentialsState({type: 'SET_USERNAME_AS_ALREADY_USED'})
+  //     : dispatchCredentialsState({type: 'SET_USERNAME_AS_UNUSED'});
+  // }, [usernameUsedData]);
 
-  useEffect(() => {
-    if (signUpError) {
-      setErrorOpen(true);
-      console.log(signUpError);
-    }
-  }, [signUpError]);
-  useEffect(() => {
-    if (!signUpData) {
-      return;
-    }
-    if (signUpData.vendorSignUp.code === 200) {
-      setStoreId(signUpData.vendorSignUp.vendorAccount.store._id);
-    } else {
-      setErrorOpen(true);
-    }
-  }, [signUpData]);
-  useEffect(() => {
-    if (storeId.length > 0) {
-      console.log('store id is set ', storeId);
-      navigation.navigate('Home');
-    }
-  }, [storeId]);
+  // useEffect(() => {
+  //   if (signUpError) {
+  //     setErrorOpen(true);
+  //     console.log(signUpError);
+  //   }
+  // }, [signUpError]);
+  // useEffect(() => {
+  //   if (!signUpData) {
+  //     return;
+  //   }
+  //   if (signUpData.vendorSignUp.code === 200) {
+  //     setStoreId(signUpData.vendorSignUp.vendorAccount.store._id);
+  //   } else {
+  //     setErrorOpen(true);
+  //   }
+  // }, [signUpData]);
+
+  // useEffect(() => {
+  //   if (storeId.length > 0) {
+  //     console.log('store id is set ', storeId);
+  //     navigation.navigate('Home');
+  //   }
+  // }, [storeId]);
 
   const handleSnackbarClosing = (
     event?: React.SyntheticEvent | Event,
@@ -217,7 +257,7 @@ const SignUp = ({navigation}: any) => {
                   disabled={submitButtonShouldBeDisabled()}
                   style={signUpStyles.button}
                   mode="contained"
-                  onPress={() => handleCreateAccount()}>
+                  onPress={handleCreateAccount}>
                   {translation(SIGN_UP_CREATE_ACCOUNT_KEY)}
                 </Button>
               </View>

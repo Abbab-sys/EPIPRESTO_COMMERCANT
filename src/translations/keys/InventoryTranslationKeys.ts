@@ -1,0 +1,1 @@
+export const INVENTORY_TITLE_KEY = 'inventory.title';
