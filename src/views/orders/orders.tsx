@@ -27,8 +27,7 @@ const Orders = ({ navigation }: any) => {
 
     const { data, loading, error ,refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
         variables: {
-            //id store should come from vendor context
-            // idStore: storeId
+            //TODO : id store should come from vendor context
             idStore: "633cfb2bf7bdb731e893e28b"
         }
     });
@@ -131,7 +130,6 @@ const Orders = ({ navigation }: any) => {
     }
 
     const status_bar_text = (status: string) => {
-        //get label orderStatus labwl by value(status)
         const statusLabel = orderStatus.find((item) => item.value === status)?.label;
         return statusLabel;
     }
