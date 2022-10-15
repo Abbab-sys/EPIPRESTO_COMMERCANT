@@ -68,6 +68,7 @@ export default function App() {
             <Stack.Screen name="Orders" component={Orders} />
             <Stack.Screen name="OrderPage" component={OrderPage} />
             <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="Inventory" component={Inventory} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>

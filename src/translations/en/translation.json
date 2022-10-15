@@ -132,7 +132,7 @@
       "description": "Description",
       "price": "Price*",
       "sku": "Sku",
-      "stock": "Stock",
+      "stock": "Stock*",
       "forSale": "Product available for sale"
     },
     "boughtByWeight": "Product sold by weight",
