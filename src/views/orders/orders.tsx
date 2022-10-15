@@ -10,11 +10,20 @@ import { VendorContext } from '../../context/Vendor';
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
+const orderStatus = [
+    { label: "Waiting", value: "WAITING_CONFIRMATION" },
+    { label: "Confirmed", value: "CONFIRMED" },
+    { label: "In Delivery", value: "IN_DELIVERY" },
+    { label: "Delivered", value: "DELIVERED" },
+    { label: "Closed", value: "CLOSED" }
+]
+
 
 //TODO: TRANSLATION FR/ENG
 
 const Orders = ({ navigation }: any) => {
     // const {storeId} = useContext(VendorContext);
+    // const [orders, setOrders] = React.useState<Order[]>([]);
 
     const { data, loading, error ,refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
         variables: {
@@ -46,8 +55,7 @@ const Orders = ({ navigation }: any) => {
     }
 
     
-    
-        const orders: Order[] = data.getStoreById.store.orders.map((order: any) => {
+    const orders: Order[] = data.getStoreById.store.orders.map((order: any) => {
 
             const products: Product[] = order.productsVariantsOrdered.map(({ relatedProductVariant, quantity }: any) => {
                 const newProduct: Product = {
@@ -88,6 +96,8 @@ const Orders = ({ navigation }: any) => {
 
     
 
+    
+
     const status_bar_color = (status: string) => {
         let style = StyleSheet.create({
             status_bar: {
@@ -120,6 +130,12 @@ const Orders = ({ navigation }: any) => {
         }
     }
 
+    const status_bar_text = (status: string) => {
+        //get label orderStatus labwl by value(status)
+        const statusLabel = orderStatus.find((item) => item.value === status)?.label;
+        return statusLabel;
+    }
+
     const renderOrderContainer = ({ item }: any) => {
         const order_date = new Date(item.logs[0].time);
         return (
@@ -140,7 +156,7 @@ const Orders = ({ navigation }: any) => {
 
                         <View style={status_bar_color(item.logs[item.logs.length - 1].status)}>
 
-                            <Text style={styles.order_status_text}>{item.logs[item.logs.length - 1].status}</Text>
+                            <Text style={styles.order_status_text}>{status_bar_text(item.logs[item.logs.length - 1].status)}</Text>
 
                         </View>
                     </View>
@@ -313,7 +329,7 @@ const styles = StyleSheet.create({
     order_details_right: {
         width: '100%',
         height: '100%',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
         paddingLeft: 10,
     },

@@ -19,7 +19,7 @@ const orderStatus = [
 const OrderPage = ({ route, navigation }: any) => {
     const { order } = route.params;
     const [open, setOpen] = React.useState(false);
-    const [current_order_status, set_current_order_status] = React.useState(order.logs[order.logs.length-1].status); //TODO: get the current order status from the server
+    const [current_order_status, set_current_order_status] = React.useState(order.logs[order.logs.length-1].status);
 
 
     const calculateProductTotal = (price: any, quantity: any): any => {
@@ -76,6 +76,7 @@ const OrderPage = ({ route, navigation }: any) => {
             )
         }
     }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
 
@@ -107,7 +108,8 @@ const OrderPage = ({ route, navigation }: any) => {
 
             </View>
 
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container}
+            >
             <View style={styles.details_container}>
                     <View style={styles.client_header}>
                         <Text style={styles.details_title}>
@@ -173,17 +175,14 @@ const OrderPage = ({ route, navigation }: any) => {
                         <ScrollView>
                             {order.products.map((product:Product) => {
                                 return (
-                                    <View style={styles.product_container}>
+                                    <View style={styles.product_container} key={product._id}>
                                         <View style={styles.product_image_container}>
-                                            {/* <Image
-                                                source={{ uri: product.imgSrc}}
-                                                style={styles.product_image} /> */}
                                                 {renderProductImage(product.imgSrc)}
                                         </View>
                                         <View style={styles.product_details}>
                                             <Text style={styles.product_name}>{product.title}</Text>
                                             <Text style={styles.product_information}>{product.vendor}</Text>
-                                            <Text style={styles.product_information}>300 mL</Text>
+                                            {/* <Text style={styles.product_information}>300 mL</Text> */}
                                             <Text style={styles.product_information}>{calculateProductTotal(product.price, product.quantity)}$ ({product.price}$ x {product.quantity})</Text>
                                         </View>
 
