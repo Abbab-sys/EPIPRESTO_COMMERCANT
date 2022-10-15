@@ -7,7 +7,7 @@ import { Product } from '../../interfaces/OrderInterface';
 import { CHANGE_ORDER_STATUS } from '../../graphql/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { ORDERS_CUSTOMER_KEY, ORDERS_TITLE_KEY, ORDER_DETAILS_PAYMENT_DELIVERYFEES, ORDER_DETAILS_PAYMENT_METHOD, ORDER_DETAILS_PAYMENT_SUBTOTAL, ORDER_DETAILS_PAYMENT_TAXES, ORDER_DETAILS_PAYMENT_TITLE, ORDER_DETAILS_PAYMENT_TOTAL, ORDER_DETAILS_PRODUCT_TITLE, ORDER_DETAILS_SAVE_BUTTON, ORDER_DETAILS_TITLE, ORDER_STATUS_CLOSED_KEY, ORDER_STATUS_CONFIRMED_KEY, ORDER_STATUS_DELIVERED_KEY, ORDER_STATUS_IN_DELIVERY_KEY, ORDER_STATUS_WAITING_KEY, UPDATE_ALERT_FAILED, UPDATE_ALERT_SUCESS } from '../../translations/keys/OrdersTranslationKeys';
+import { ORDERS_CUSTOMER_KEY, ORDER_DETAILS_PAYMENT_DELIVERYFEES, ORDER_DETAILS_PAYMENT_METHOD, ORDER_DETAILS_PAYMENT_SUBTOTAL, ORDER_DETAILS_PAYMENT_TAXES, ORDER_DETAILS_PAYMENT_TITLE, ORDER_DETAILS_PAYMENT_TOTAL, ORDER_DETAILS_PRODUCT_TITLE, ORDER_DETAILS_SAVE_BUTTON, ORDER_DETAILS_TITLE, ORDER_STATUS_CLOSED_KEY, ORDER_STATUS_CONFIRMED_KEY, ORDER_STATUS_DELIVERED_KEY, ORDER_STATUS_IN_DELIVERY_KEY, ORDER_STATUS_WAITING_KEY, UPDATE_ALERT_FAILED, UPDATE_ALERT_SUCESS } from '../../translations/keys/OrdersTranslationKeys';
 
 
 const styles = OrderPageStyles
@@ -63,7 +63,6 @@ const OrderPage = ({ route, navigation }: any) => {
     
     }
 
-    //TODO: A REGLER
     const renderProductImage = (imgSrc: any) => {
         if (imgSrc !== "") {
             return (
@@ -186,7 +185,6 @@ const OrderPage = ({ route, navigation }: any) => {
                                         <View style={styles.product_details}>
                                             <Text style={styles.product_name}>{product.title}</Text>
                                             <Text style={styles.product_information}>{product.vendor}</Text>
-                                            {/* <Text style={styles.product_information}>300 mL</Text> */}
                                             <Text style={styles.product_information}>{calculateProductTotal(product.price, product.quantity)}$ ({product.price}$ x {product.quantity})</Text>
                                         </View>
 

@@ -19,8 +19,6 @@ const Orders = ({ navigation }: any) => {
 
     const { data, loading, error ,refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
         variables: {
-            //TODO : id store should come from vendor context
-            // idStore: "633cfb2bf7bdb731e893e28b"
             idStore: storeId
         }
     });
