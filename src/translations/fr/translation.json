@@ -155,6 +155,7 @@
         "CLOSED":"Fermée"
       },
       "details":{
+        "title":"Commande",
         "payment":{
           "title":"Paiement",
           "subTotal":"Sous-Total",

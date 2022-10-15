@@ -155,6 +155,7 @@
       "CLOSED":"Closed"
     },
     "details":{
+      "title":"Order",
       "payment":{
         "title":"Payment",
         "subTotal":"Subtotal",

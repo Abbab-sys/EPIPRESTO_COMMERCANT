@@ -17,7 +17,8 @@ const Navigation = () => {
   const {t: translation} = useTranslation('translation');
 
   return(
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{headerShown:false}}>
+      
       {NavigationTabScreens.map((screen, index) => (
         <Tab.Screen 
         name={screen.navigationName} 
