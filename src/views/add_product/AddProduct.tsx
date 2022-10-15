@@ -187,7 +187,7 @@ const AddProduct = ({ navigation }: any) => {
 
           <IconButton
             style={addProductsStyles.save_button}
-            onPress={() => save()}
+            onPress={() => handleAdd()}
             disabled={submitButtonShouldBeDisabled()}
             mode="contained"
             icon="content-save"
