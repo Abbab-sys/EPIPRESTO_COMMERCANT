@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client/react";
 import CheckBox from "@react-native-community/checkbox";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Keyboard, ScrollView, StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity, Alert  } from "react-native";
 import { Button, Chip, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { Variant } from "../../../interfaces/VariantInterfaces";
@@ -11,15 +11,20 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { addProductsStyles } from "./AddProductStyles";
 import { commonStyles } from "./CommonStyles";
 import { useTranslation } from "react-i18next";
+import { VendorContext } from "../../context/Vendor";
 
-const AddProduct = () => {
+const activeUnderlineColor = "#FFA500";
+const underlineColor = "transparent";
 
+const AddProduct = ({ navigation }: any) => {
+
+  const {storeId, setStoreId} = useContext(VendorContext)
   const {t} = useTranslation('translation')
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [brand, setBrand] = useState("");
   const [tags, setTags] = useState([""]);
-  const [isPublished, setPublished] = useState(false);
+  const [isPublished, setPublished] = useState(true);
   const [addProduct, {loading: addLoading, error: addError, data: addData}] = useMutation(ADD_PRODUCT);
   const [productNameError, setError] = useState("");
 
@@ -27,21 +32,39 @@ const AddProduct = () => {
 
   const [productImage, setProductImage] = useState("")
 
-  const [variants, setVariants]  = useState([
-    { 
-      variantId: "",
-      variantTitle: "",
-      price: 0,
-      sku: "",
-      taxable: false,
-      imgSrc: "",
-      byWeight: false,
-      availableForSale:false,
-      stock: 0,
-      isValid: false,
-      isHidden: false}]);
+  const [refreshed, setRefreshed] = useState(0)
 
+  const defaultVariant: Variant = 
+  { 
+    variantId: new Date().getTime().toString(),
+    variantTitle: "",
+    price: 0,
+    sku: "",
+    taxable: false,
+    imgSrc: "",
+    byWeight: false,
+    availableForSale:false,
+    stock: 0,
+    isValid: false,
+    isHidden: false}
+
+  const [variants, setVariants]  = useState([defaultVariant]);
+
+  const resetAll= () => {
+    setTitle("");
+    setDescription("");
+    setBrand("");
+    setTags([""]);
+    setPublished(true);
+    setProductImage("");
+    setVariants([defaultVariant]);
+    setError("");
+  }
+
+  
   const submitButtonShouldBeDisabled = () => {
+    // enable submit button if all variants are valid
+    // & product name is not empty
     return (
       variants.some((variant) => !variant.isValid) ||
       !title.trim()
@@ -68,9 +91,7 @@ const AddProduct = () => {
       imgSrc: productImage,
       variants: variantsWithoutId
     }
-    console.log("OKOK", product)
-    addProduct({variables:{storeId: "633ce2e380d8336eb96ea105", newProduct: product} })
-    console.log("DONE")
+    addProduct({variables:{storeId: storeId, newProduct: product} })
     }
 
   const addDefaultVariant = () => {
@@ -78,22 +99,11 @@ const AddProduct = () => {
     if (!title.trim()) {
       setError("Veuillez remplir le titre du produit");
     }
-    setVariants([...variants, {
-      variantId: new Date().getTime().toString(),
-      variantTitle: "",
-      price: 0,
-      sku: "",
-      taxable: false,
-      imgSrc: "",
-      byWeight: false,
-      availableForSale:false,
-      stock: 0,
-      isValid: false,
-      isHidden: false
-    }])
+    setVariants([...variants, defaultVariant]);
   }
 
   const alertOnDelete = (message: string) =>
+    // Show this alert when user tries to delete the default variant
     Alert.alert(
       "Alert",
       message,
@@ -103,24 +113,42 @@ const AddProduct = () => {
     );
 
   useEffect(() => {
-      if (addLoading || addError || !addData) return
-      if (addData.addNewProductToStore.code === 200) {
-          console.log("PRODUIT AJOUTÉ")
-      } else {
-        console.log("FAIL")
+    if (addLoading || addError || !addData) {
+      if(addError) {
+        // if an error occurs, show an alert
+        alertOnSave(false)
       }
+      return
+    }
+    if (addData.addNewProductToStore.code === 200) {
+      // if product is added successfully, show an alert
+        save()
+    } else {
+      // if an error occurs, show an alert
+      alertOnSave(false)
+    }
   }, [addLoading, addError, addData])
 
-  let options = {
-    title: 'Select Image',
-    customButtons: [
-      { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
-    ],
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
-  };
+  const save = () => {
+    setRefreshed(refreshed+1)
+    resetAll();
+    alertOnSave(true)
+  }
+
+  const succesAddMessage = "Produit ajouté avec succès. Voulez-vous ajouter un autre produit ?"
+  const failAddMessage = "Une erreur est survenue lors de l'ajout du produit. Veuillez réessayer."
+  
+  const alertOnSave = (succes: boolean) =>
+  Alert.alert(
+    succes? "Succes" : "Erreur",
+    succes? succesAddMessage: failAddMessage,
+    succes? [
+      { text: "Oui", onPress: () =>  {}},
+      { text: "Non", onPress: () =>{navigation.navigate("Inventory")}}
+    ] : [
+      { text: "OK", onPress: () =>  {} }
+    ]
+  );
 
   const handleTakePhotoFromCamera = () => {
     ImagePicker.openCamera({
@@ -128,6 +156,7 @@ const AddProduct = () => {
       height: 400,
       cropping: true,
       includeBase64: true
+      // ts-ignore is used because data is a property of image but still showing error
       // @ts-ignore
     }).then(image => setProductImage("data:image/png;base64,"+image.data));
   }
@@ -138,6 +167,7 @@ const AddProduct = () => {
       height: 400,
       cropping: true,
       includeBase64: true
+      // ts-ignore is used because data is a property of image but still showing error
       // @ts-ignore
     }).then(image => setProductImage("data:image/png;base64,"+image.data));
   }
@@ -147,7 +177,7 @@ const AddProduct = () => {
         <View style={addProductsStyles.headerFix}>
           <TouchableOpacity
             style={addProductsStyles.back_button}
-            onPress={() => console.log("navigation BACK")}>
+            onPress={() => {navigation.navigate('Inventory');}}>
               <Image
                 style={addProductsStyles.back_button_icon}
                 source={require('../../assets/icons/back.png')}
@@ -157,7 +187,7 @@ const AddProduct = () => {
 
           <IconButton
             style={addProductsStyles.save_button}
-            onPress={() => handleAdd()}
+            onPress={() => save()}
             disabled={submitButtonShouldBeDisabled()}
             mode="contained"
             icon="content-save"
@@ -169,8 +199,7 @@ const AddProduct = () => {
 
         <ScrollView 
           style={addProductsStyles.root}
-          showsVerticalScrollIndicator={false}
-        >
+          showsVerticalScrollIndicator={false}>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Divider bold style={addProductsStyles.divider}></Divider>
             <View style={commonStyles.imageContainer}>
@@ -217,11 +246,12 @@ const AddProduct = () => {
             <Divider bold style={commonStyles.divider}></Divider>
 
             <TextInput
-              underlineColor="transparent"
-              activeUnderlineColor="#FFA500"
+              underlineColor={underlineColor}
+              activeUnderlineColor={activeUnderlineColor}
               style={addProductsStyles.input}
               label={t('addProduct.labels.name')}
               onChangeText={text => setTitle(text)}
+              value={title}
               />
 
             {productNameError && (
@@ -235,25 +265,27 @@ const AddProduct = () => {
             
             <TextInput
               multiline={true}
-              underlineColor="transparent"
-              activeUnderlineColor="#FFA500"
+              underlineColor={underlineColor}
+              activeUnderlineColor={activeUnderlineColor}
               style={addProductsStyles.inputDescription}
               label={t('addProduct.labels.description')}
+              numberOfLines={4}
               onChangeText={text => setDescription(text)}
+              value={description}
               />
 
-
             <TextInput
-              underlineColor="transparent"
-              activeUnderlineColor="#FFA500"
+              underlineColor={underlineColor}
+              activeUnderlineColor={activeUnderlineColor}
               style={addProductsStyles.input}
               label={t('addProduct.labels.brand')}
               onChangeText={text => setBrand(text)}
+              value={brand}
               />
 
             <TextInput
-              underlineColor="transparent"
-              activeUnderlineColor="#FFA500"
+              underlineColor={underlineColor}
+              activeUnderlineColor={activeUnderlineColor}
               style={addProductsStyles.input}
               label={t('addProduct.labels.tags')}
               onChangeText={text => setTags(text.split(" "))}
@@ -282,18 +314,19 @@ const AddProduct = () => {
 
           <ScrollView>
             {variants.map((field, index) => (    
-            <AddVariant 
+            <AddVariant
+              isRefreshed={refreshed} 
               key={field.variantId}
               variantIndex={index}
               variantId={field.variantId}
               variantTitle={field.variantTitle}
-              price={field.price}
+              price={field.price.toString()}
               sku={field.sku}
               taxable={field.taxable}
               imgSrc={field.imgSrc}
               byWeight={field.byWeight}
               availableForSale={field.availableForSale}
-              stock={field.stock}
+              stock={field.stock.toString()}
               isValid={field.isValid}
               isHidden={field.isHidden}
               updateSelf={(variant: Variant) => {
@@ -313,7 +346,7 @@ const AddProduct = () => {
                   alertOnDelete(deleteError);
                 }
               }}                    
-              />
+            />
             ))}
           </ScrollView>
 
@@ -326,11 +359,11 @@ const AddProduct = () => {
           <CheckBox
             value={isPublished}
             onValueChange={setPublished}
-            style={addProductsStyles.checkbox}
-          />
+            style={addProductsStyles.checkbox}/>
         </View>
-          
+
       </ScrollView>
+
     </SafeAreaView>
   )
   };
