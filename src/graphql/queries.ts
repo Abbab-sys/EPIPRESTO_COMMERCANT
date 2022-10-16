@@ -58,19 +58,49 @@ export const GET_STORE_PRODUCTS_BY_ID = gql`
   }
 `
 
-// export const GET_PRODUCTS = gql`
-//   query GetStoreById($idStore: ID!) {
-//     getStoreById(idStore: $idStore) {
-//       code
-//       message
-//       store {
-//         _id
-//         products(first:2) {
-//           _id
-//           title
-//           imgSrc
-//         }
-//       }
-//     }
-//   }
-// `
+export const GET_ALL_ORDERS_BY_STORE_ID = gql`
+  query GetStoreById($idStore: ID!) {
+    getStoreById(idStore: $idStore) {
+      code
+      message
+      store {
+        orders {
+          _id
+          orderNumber
+          productsVariantsOrdered {
+            relatedProductVariant {
+              displayName
+              price
+              imgSrc
+              _id
+              relatedProduct {
+                relatedStore {
+                  name
+                }
+              }
+            }
+            quantity
+          }
+          relatedVendors {
+            name
+          }
+          relatedClient {
+            lastName
+            firstName
+            email
+            phone
+            address
+          }
+          logs {
+            status
+            time
+          }
+          subTotal
+          taxs
+          deliveryFee
+        }
+      }
+    }
+  }
+
+`

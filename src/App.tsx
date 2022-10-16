@@ -19,7 +19,8 @@ import Navigation from "./views/navigation/Navigation";
 import Inventory from "./views/inventory/Inventory";
 import { VendorContext } from "./context/Vendor";
 import AddProduct from "./views/add_product/AddProduct";
-import Orders from "./views/orders/orders";
+import Orders from "./views/orders/Orders";
+import OrderPage from "./views/orders/OrderPage";
 import Settings from "./views/settings/Settings";
 import Chat from "./views/chat/Chat";
 
@@ -38,8 +39,9 @@ export default function App() {
       },
     };
   });
+  //TODO: A CHANGER
   const httpLink = createHttpLink({
-    uri: 'https://epipresto.pagekite.me/',
+    uri: 'http://localhost:4000',
   });
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
@@ -57,13 +59,14 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{headerShown: false}}
-            initialRouteName="Inventory">
+            initialRouteName="Login">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Navigation" component={Navigation} />
             <Stack.Screen name="AddProduct" component={AddProduct} />
             <Stack.Screen name="Orders" component={Orders} />
+            <Stack.Screen name="OrderPage" component={OrderPage} />
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Inventory" component={Inventory} />
           </Stack.Navigator>
@@ -78,4 +81,5 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFA500',
   },
+  
 });

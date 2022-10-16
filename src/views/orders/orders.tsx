@@ -1,33 +1,191 @@
 //create a simple react native component
-import React, { Component } from 'react';
-//import all the components we are going to use
-import { SafeAreaView, StyleSheet, View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import {useQuery } from '@apollo/client';
+import React, {useContext, useEffect } from 'react';
+import { SafeAreaView, StyleSheet, View, Text, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
+import { GET_ALL_ORDERS_BY_STORE_ID } from '../../graphql/queries';
+import { Client, Order, Product } from '../../interfaces/OrderInterface';
+import { VendorContext } from '../../context/Vendor';
+import { useTranslation } from 'react-i18next';
+import { ORDERS_CUSTOMER_KEY, ORDERS_DETAILS_BUTTON_KEY, ORDERS_FILTERING_KEY, ORDERS_STATUS_KEY, ORDERS_TITLE_KEY, ORDER_DETAILS_PAYMENT_TOTAL } from '../../translations/keys/OrdersTranslationKeys';
 
-const OrderList = [
-    { id: 1, date: '23-10-2022', number: '#EP89391', client: 'KHALIL ZRIBA', total: '$ 100', status: 'En attente' },
-    { id: 2, date: '23-10-2022', number: '#EP89391', client: 'ADAM NAOUI', total: '$ 100', status: 'En attente' },
-    { id: 3, date: '23-10-2022', number: '#EP89391', client: 'ZOUHAIR DEROUICH', total: '$ 100', status: 'En attente' },
-    { id: 4, date: '23-10-2022', number: '#EP89391', client: 'RYMA MESSEDAA', total: '$ 100', status: 'En attente' },
-    { id: 5, date: '23-10-2022', number: '#EP89391', client: 'ALESSANDRO VAN REUSEL', total: '$ 100', status: 'En attente' },
-]
+const text_font_family = 'Lato';
+const text_font_style = 'normal';
 
-//add a button after each order details that will redirect to the order details page. bUTTON MUST BE ON THE RIGHT
-//add a filtering icon on the top right of the page next to COMMANDES title
 
-const Orders = () => {
+const Orders = ({ navigation }: any) => {
+    const {storeId} = useContext(VendorContext);
+    const {t: translation} = useTranslation('translation');
+
+    const { data, loading, error ,refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
+        variables: {
+            idStore: storeId
+        }
+    });
+
+
+    useEffect(() => {
+         navigation.addListener('focus', () => {
+            refetch();
+        });
+
+    }, [navigation]);
+
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center" }}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        )
+
+    }
+
+    if (error) {
+        return <Text>Error while loading orders</Text>;
+    }
+
+    
+    const orders: Order[] = data.getStoreById.store.orders.map((order: any) => {
+
+            const products: Product[] = order.productsVariantsOrdered.map(({ relatedProductVariant, quantity }: any) => {
+                const newProduct: Product = {
+                    _id: relatedProductVariant._id,
+                    title: relatedProductVariant.displayName,
+                    imgSrc: relatedProductVariant.imgSrc,
+                    quantity: quantity,
+                    vendor: relatedProductVariant.relatedProduct.relatedStore.name,
+                    price: relatedProductVariant.price
+                }
+                return newProduct;
+
+            })
+
+            const client: Client = {
+                _id: order.relatedClient._id,
+                lastName: order.relatedClient.lastName,
+                firstName: order.relatedClient.firstName,
+                email: order.relatedClient.email,
+                phone: order.relatedClient.phone,
+                address: order.relatedClient.address,
+            }
+            const newOrder: Order = {
+                _id: order._id,
+                number: order.orderNumber,
+                products: products,
+                client: client,
+                logs: order.logs,
+                total: (order.subTotal + order.taxs + order.deliveryFee).toFixed(2),
+                subTotal: order.subTotal.toFixed(2),
+                taxs: order.taxs.toFixed(2),
+                deliveryFee: order.deliveryFee.toFixed(2),
+                paymentMethod: "Apple Pay", //TODO: ADD TO SERVER
+            }
+            return newOrder;
+
+        })
+
+    
+
+    
+
+    const status_bar_color = (status: string) => {
+        let style = StyleSheet.create({
+            status_bar: {
+                width: 100,
+                height: 30,
+                backgroundColor: '#FFA500',
+                borderRadius: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+            }
+        })
+        switch (status) {
+            case "WAITING_CONFIRMATION":
+                style.status_bar.backgroundColor = 'gold';
+                return style.status_bar;
+            case "CONFIRMED":
+                style.status_bar.backgroundColor = 'green';
+                return style.status_bar;
+            case "IN_DELIVERY":
+                style.status_bar.backgroundColor = 'blue';
+                return style.status_bar;
+            case "DELIVERED":
+                style.status_bar.backgroundColor = 'grey';
+                return style.status_bar;
+            case "CLOSED":
+                style.status_bar.backgroundColor = 'red';
+                return style.status_bar;
+            default:
+                return style.status_bar;
+        }
+    }
+
+    const status_bar_text = (status: string) => {
+        return translation('order.status.'+status);
+    }
+
+   
+
+    const renderOrderContainer = ({ item }: any) => {
+        const order_date = new Date(item.logs[0].time);
+        return (
+            <View style={styles.order_container}>
+                <View style={styles.order_header}>
+                    <Text style={styles.order_date}>{order_date.toDateString()}</Text>
+                    <Text style={styles.order_number}>{item.number}</Text>
+                </View>
+                <View style={styles.order_details}>
+                    <View style={styles.order_details_left}>
+                        <Text style={styles.order_details_left_text}>{translation(ORDERS_CUSTOMER_KEY)}</Text>
+                        <Text style={styles.order_details_left_text}>{translation(ORDER_DETAILS_PAYMENT_TOTAL)}</Text>
+                        <Text style={styles.order_details_left_text}>{translation(ORDERS_STATUS_KEY)}</Text>
+                    </View>
+                    <View style={styles.order_details_right}>
+                        <Text style={styles.order_details_right_text}>{item.client.firstName} {item.client.lastName}</Text>
+                        <Text style={styles.order_details_right_text}>{item.total} $</Text>
+
+                        <View style={status_bar_color(item.logs[item.logs.length - 1].status)}>
+
+                            <Text style={styles.order_status_text}>{status_bar_text(item.logs[item.logs.length - 1].status)}</Text>
+
+                        </View>
+                    </View>
+                </View>
+                <TouchableOpacity
+                    style={styles.order_button_text}
+                    onPress={() => navigation.navigate('OrderPage', { order: item })}
+
+                >
+                    <Text style={styles.view_order_button_text}>{translation(ORDERS_DETAILS_BUTTON_KEY)}</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+
+
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
-
             <View>
                 <Text style={styles.titleText}>
-                    COMMANDES
+                    {translation(ORDERS_TITLE_KEY)}
                 </Text>
 
             </View>
+            <View style={styles.filtering}>
+                <Button
+                    style={styles.filtering_button}
+                    mode="contained"
+                    onPress={() => console.log('Pressed')}
+                >
+                    {translation(ORDERS_FILTERING_KEY)}
+                </Button>
+
+            </View>
             <FlatList
-                data={OrderList}
+                data={orders}
                 renderItem={renderOrderContainer}
             ></FlatList>
         </SafeAreaView>
@@ -36,36 +194,9 @@ const Orders = () => {
 };
 
 
-const renderOrderContainer = ({ item }: any) => {
-    return (
-        <View style={styles.order_container}>
-            <View style={styles.order_header}>
-                <Text style={styles.order_date}>{item.date}</Text>
-                <Text style={styles.order_number}>{item.number}</Text>
-            </View>
-            <View style={styles.order_details}>
-                <View style={styles.order_details_left}>
-                    <Text style={styles.order_details_left_text}>Client</Text>
-                    <Text style={styles.order_details_left_text}>Total</Text>
-                    <Text style={styles.order_details_left_text}>Status</Text>
-                </View>
-                <View style={styles.order_details_right}>
-                    <Text style={styles.order_details_right_text}>{item.client}</Text>
-                    <Text style={styles.order_details_right_text}>{item.total}</Text>
-                    <Text style={styles.order_details_right_text}>{item.status}</Text>
-                </View>
-            </View>
-                <TouchableOpacity
-                    style={styles.order_button_text}
-                >
-                    <Text>Détails</Text>
-                </TouchableOpacity>
-        </View>
-    )
-}
 
 
-//add some style to our components
+
 
 const styles = StyleSheet.create({
     container: {
@@ -84,10 +215,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         margin: 10,
         color: '#FFA500',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
 
     order_container: {
-        width: 300,
+        width: '90%',
         height: 200,
         backgroundColor: 'white',
         justifyContent: 'center',
@@ -103,7 +236,6 @@ const styles = StyleSheet.create({
 
         elevation: 5,
         marginBottom: 20,
-        //container must be centered
         alignSelf: 'center',
 
 
@@ -136,10 +268,14 @@ const styles = StyleSheet.create({
     order_date: {
         fontSize: 15,
         fontWeight: 'bold',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_number: {
         fontSize: 15,
         fontWeight: 'bold',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_details: {
         width: '90%',
@@ -168,6 +304,8 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 20,
         fontWeight: 'bold',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_details_left: {
         width: '50%',
@@ -176,11 +314,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         paddingLeft: 10,
 
+
     },
     order_details_right: {
-        width: '50%',
+        width: '100%',
         height: '100%',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
         paddingLeft: 10,
     },
@@ -188,21 +327,18 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         marginBottom: 10,
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     order_details_right_text: {
-        fontSize: 15,
-        fontWeight: 'bold',
+        fontSize: 12,
+        // fontWeight: 'bold',
         marginBottom: 10,
-
+        width: '100%',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
 
     },
-    // order_button: {
-    //     width: '100%',
-    //     height: 50,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     marginTop: 10,
-    // },
     order_button_text: {
         width: '30%',
         height: 40,
@@ -214,13 +350,49 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginRight: 20,
         marginBottom: 10,
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
-
-
-
-
-
-
+    order_status: {
+        width: 100,
+        height: 30,
+        // backgroundColor: '#FFA500',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    order_status_text: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'white',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
+    },
+    filtering: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        width: '100%',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        marginBottom: 10,
+    },
+    filtering_button: {
+        width: '100%',
+        height: 40,
+        backgroundColor: '#FFA500',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
+    },
+    view_order_button_text: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'white',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
+    },
 });
 
 
