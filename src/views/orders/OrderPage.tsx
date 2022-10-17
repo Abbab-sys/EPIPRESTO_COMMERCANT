@@ -31,6 +31,7 @@ const OrderPage = ({ route, navigation }: any) => {
 
     }
 
+    //Save button that will be showed only if the status is changing
     const showSaveButton = () => {
         if (current_order_status !== order.logs[order.logs.length-1].status) {
             return (
@@ -47,6 +48,7 @@ const OrderPage = ({ route, navigation }: any) => {
         }
     }
 
+    //Alert that will be showed when the status is updated
     const receivedUpdateStatus = (data:any) => {
         if (data.updateOrderStatus.code === 200) {
             Alert.alert(translation(UPDATE_ALERT_SUCESS))
@@ -58,11 +60,13 @@ const OrderPage = ({ route, navigation }: any) => {
     const [changeOrderStatus] = useMutation(CHANGE_ORDER_STATUS, {onCompleted: receivedUpdateStatus});
 
 
+    //call the mutation to update the status
     const sendStatusUpdate = (status: any) => {
         changeOrderStatus({ variables: { orderId: order._id, newStatus: status  } })
     
     }
 
+    //If the image of a product is not available, show a default image
     const renderProductImage = (imgSrc: any) => {
         if (imgSrc !== "") {
             return (
