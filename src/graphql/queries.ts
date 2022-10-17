@@ -98,6 +98,7 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
           subTotal
           taxs
           deliveryFee
+          paymentMethod
         }
       }
     }

@@ -23,12 +23,11 @@ const Orders = ({ navigation }: any) => {
         }
     });
 
-
+    // Update status in the UI when navigating back to orders page
     useEffect(() => {
          navigation.addListener('focus', () => {
             refetch();
         });
-
     }, [navigation]);
 
     if (loading) {
@@ -44,7 +43,7 @@ const Orders = ({ navigation }: any) => {
         return <Text>Error while loading orders</Text>;
     }
 
-    
+    //Get Orders from server and map them
     const orders: Order[] = data.getStoreById.store.orders.map((order: any) => {
 
             const products: Product[] = order.productsVariantsOrdered.map(({ relatedProductVariant, quantity }: any) => {
@@ -78,7 +77,7 @@ const Orders = ({ navigation }: any) => {
                 subTotal: order.subTotal.toFixed(2),
                 taxs: order.taxs.toFixed(2),
                 deliveryFee: order.deliveryFee.toFixed(2),
-                paymentMethod: "Apple Pay", //TODO: ADD TO SERVER
+                paymentMethod: order.paymentMethod,
             }
             return newOrder;
 
@@ -87,7 +86,7 @@ const Orders = ({ navigation }: any) => {
     
 
     
-
+    //This is to chagne the color of the status field for each order based on the status
     const status_bar_color = (status: string) => {
         let style = StyleSheet.create({
             status_bar: {
@@ -120,12 +119,13 @@ const Orders = ({ navigation }: any) => {
         }
     }
 
+    //Status text based on language
     const status_bar_text = (status: string) => {
         return translation('order.status.'+status);
     }
 
    
-
+//This is to render each order in the list
     const renderOrderContainer = ({ item }: any) => {
         const order_date = new Date(item.logs[0].time);
         return (
