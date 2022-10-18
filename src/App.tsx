@@ -18,11 +18,11 @@ import Home from "./views/home/Home";
 import Navigation from "./views/navigation/Navigation";
 import Inventory from "./views/inventory/Inventory";
 import { VendorContext } from "./context/Vendor";
-import AddProduct from "./views/add_product/AddProduct";
 import Orders from "./views/orders/Orders";
 import OrderPage from "./views/orders/OrderPage";
 import Settings from "./views/settings/Settings";
 import Chat from "./views/chat/Chat";
+import AddProduct from "./views/Product/AddProduct";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,7 +59,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{headerShown: false}}
-            initialRouteName="Login">
+            initialRouteName="AddProduct">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen name="SignUp" component={SignUp} />
