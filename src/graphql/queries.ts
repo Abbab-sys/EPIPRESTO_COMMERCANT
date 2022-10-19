@@ -105,3 +105,47 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
   }
 
 `
+export const GET_ORDER_BY_ID= gql`
+  query GetOrderById($idOrder: ID!) {
+    getOrderById(idOrder: $idOrder) {
+      code
+      message
+      order {
+        _id
+        orderNumber
+        productsVariantsOrdered {
+          relatedProductVariant {
+            _id
+            displayName
+            price
+            imgSrc
+            relatedProduct {
+              relatedStore {
+                name
+              }
+            }
+          }
+          quantity
+        }
+        relatedVendors {
+          name
+        }
+        relatedClient {
+          lastName
+          firstName
+          email
+          address
+          phone
+        }
+        logs {
+          status
+          time
+        }
+        subTotal
+        deliveryFee
+        taxs
+        paymentMethod
+      }
+    }
+  }
+`

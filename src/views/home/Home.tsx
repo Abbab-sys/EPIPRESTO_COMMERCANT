@@ -22,6 +22,8 @@ const Home = () => {
   ]
 
   return(
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
+
     <View style={homeStyles.root}>
       <View style={homeStyles.view}>
         <Text variant="headlineMedium" style={homeStyles.headline}>
@@ -55,6 +57,7 @@ const Home = () => {
         <OrderTemplate clientName="ADAM NAOUI" orderNum={5}/>
       </Swiper>
     </View>
+    </SafeAreaView>
   )
 }
 
