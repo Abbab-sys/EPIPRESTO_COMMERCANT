@@ -153,7 +153,7 @@ const Orders = ({ navigation }: any) => {
                 </View>
                 <TouchableOpacity
                     style={styles.order_button_text}
-                    onPress={() => navigation.navigate('OrderPage', { order: item })}
+                    onPress={() => navigation.navigate('OrderPage', { idOrder: item._id })}
 
                 >
                     <Text style={styles.view_order_button_text}>{translation(ORDERS_DETAILS_BUTTON_KEY)}</Text>
