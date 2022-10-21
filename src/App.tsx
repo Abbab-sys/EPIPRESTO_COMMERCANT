@@ -1,85 +1,95 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React, {useContext} from 'react';
 import {
   ApolloClient,
   ApolloProvider,
-  createHttpLink,
+  HttpLink,
   InMemoryCache,
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import SignUp from "./views/sign_up/SignUp";
-import { I18nextProvider, useTranslation } from "react-i18next";
-import i18next from "i18next";
+  split,
+} from '@apollo/client';
+import SignUp from './views/sign_up/SignUp';
 import '../i18n';
-import Login from "./views/login/Login";
-import { NavigationContainer, StackActions } from "@react-navigation/native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from "./views/home/Home";
-import Navigation from "./views/navigation/Navigation";
-import Inventory from "./views/inventory/Inventory";
-import { VendorContext } from "./context/Vendor";
-import AddProduct from "./views/add_product/AddProduct";
-import Orders from "./views/orders/Orders";
-import OrderPage from "./views/orders/OrderPage";
-import Settings from "./views/settings/Settings";
-import Chat from "./views/chat/Chat";
+import Login from './views/login/Login';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Navigation from './views/navigation/Navigation';
+import Inventory from './views/inventory/Inventory';
+import {VendorContext} from './context/Vendor';
+import AddProduct from './views/add_product/AddProduct';
+import OrderPage from './views/orders/OrderPage';
+import Settings from './views/settings/Settings';
+import Chat from './views/chat/Chat';
+import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
+import {createClient} from 'graphql-ws';
+import {getMainDefinition} from '@apollo/client/utilities';
+import AllChats from './views/chat/AllChats';
+import {useChatManager} from './hooks/ChatManagerHook';
+import {ChatContext} from './context/ChatContext';
+import Orders from './views/orders/Orders';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const { t, i18n } = useTranslation("translation");
-  const [language, setLanguage] = React.useState(i18n.language);
-  const [storeId, setStoreId] = React.useState<string>("");
-  const storeIdContext = { storeId, setStoreId };
-  const authLink = setContext((_, { headers }) => {
-    return {
-      headers: {
-        ...headers,
-        authorization: `{"storeId":"` + storeId + `"}`,
-      },
-    };
+  const [storeId, setStoreId] = React.useState<string>('');
+  const storeIdContext = {storeId, setStoreId};
+
+  const wsLink = new GraphQLWsLink(
+    createClient({
+      url: 'wss://epipresto.pagekite.me/graphql',
+    }),
+  );
+
+  const httpLink = new HttpLink({
+    uri: 'https://epipresto.pagekite.me/',
   });
-  //TODO: A CHANGER
-  const httpLink = createHttpLink({
-    uri: 'http://localhost:4000',
-  });
+
+  const splitLink = split(
+    ({query}) => {
+      const definition = getMainDefinition(query);
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      );
+    },
+    wsLink,
+    httpLink,
+  );
+
   const client = new ApolloClient({
-    link: authLink.concat(httpLink),
+    link: splitLink,
     cache: new InMemoryCache(),
   });
-  const handleChange = (event: any) => {
-    setLanguage(event.target.value as string);
-    i18n.changeLanguage(event.target.value).then(() => {
-      console.log('Language changed to ' + event.target.value);
-    });
-  };
+
   return (
     <VendorContext.Provider value={storeIdContext}>
       <ApolloProvider client={client}>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{headerShown: false}}
-            initialRouteName="Login">
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Settings" component={Settings} />
-            <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="Navigation" component={Navigation} />
-            <Stack.Screen name="AddProduct" component={AddProduct} />
-            <Stack.Screen name="Orders" component={Orders} />
-            <Stack.Screen name="OrderPage" component={OrderPage} />
-            <Stack.Screen name="Chat" component={Chat} />
-            <Stack.Screen name="Inventory" component={Inventory} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <NavigationStack />
       </ApolloProvider>
     </VendorContext.Provider>
-    );
-};
+  );
+}
 
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#FFA500',
-  },
-  
-});
+function NavigationStack() {
+  const {storeId} = useContext(VendorContext);
+  const chatManager = useChatManager(storeId);
+  const chatContext = {chatManager};
+  return (
+    <ChatContext.Provider value={chatContext}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{headerShown: false}}
+          initialRouteName="Login">
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Navigation" component={Navigation} />
+          <Stack.Screen name="AddProduct" component={AddProduct} />
+          <Stack.Screen name="AllChats" component={AllChats} />
+          <Stack.Screen name="ChatPage" component={Chat} />
+          <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="Orders" component={Orders} />
+          <Stack.Screen name="OrderPage" component={OrderPage} />
+          <Stack.Screen name="Inventory" component={Inventory} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ChatContext.Provider>
+  );
+}
