@@ -5,9 +5,7 @@ import {VendorContext} from '../../context/Vendor';
 import {Message} from '../../hooks/ChatManagerHook';
 import {MessageStatus, Role} from '../../interfaces/ChatInterfaces';
 import {SafeAreaView, View} from 'react-native';
-import {Button, Text} from 'react-native-paper';
-import {Divider} from 'react-native-paper';
-import {signUpStyles} from '../sign_up/SignUpStyles';
+import {Button} from 'react-native-paper';
 
 interface message {
   _id: string;
@@ -22,7 +20,7 @@ interface message {
   };
 }
 
-const Chat = ({route}: any) => {
+const Chat = ({navigation, route}: any) => {
   const {chatId} = route.params;
 
   const {
@@ -57,10 +55,11 @@ const Chat = ({route}: any) => {
     [chatId, sendMessage],
   );
 
+  const chat = getChatById(chatId);
   const navigateToOrder = () => {
     console.log('Navigate to order'); //TODO: Navigate to order
+    navigation.navigate('OrderPage', {idOrder: chat?.relatedOrderId});
   };
-  const chat = getChatById(chatId);
   const messages = chat?.messages.map((message: Message) => {
     return {
       _id: message.id,

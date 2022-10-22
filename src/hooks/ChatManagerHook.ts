@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {useQuery, useSubscription} from '@apollo/client';
 import {useMutation} from '@apollo/client/react';
 import {GET_INITIAL_CHATS} from '../graphql/queries';
@@ -46,7 +46,6 @@ export type ChatManager = [
 export const useChatManager = (storeId: string): ChatManager => {
   const chatsById = useStateMap<string, Chat>(new Map<string, Chat>());
   const [chats, setChats] = useState<Chat[]>([]);
-  const [sentMessageId, setSentMessageId] = useState<string | null>(null);
 
   const onInitialFetchComplete = (data: any) => {
     chatsById.clear();
@@ -82,11 +81,18 @@ export const useChatManager = (storeId: string): ChatManager => {
       chatsById.set(chatId, chatToAdd);
     });
 
-    const chatsSortedByDate = Array.from(chatsById.values()).sort(
-      (a, b) =>
+    const chatsSortedByDate = Array.from(chatsById.values()).sort((a, b) => {
+      if (a.messages.length === 0) {
+        return 1;
+      }
+      if (b.messages.length === 0) {
+        return -1;
+      }
+      return (
         new Date(b.messages[0].date).getTime() -
-        new Date(a.messages[0].date).getTime(),
-    );
+        new Date(a.messages[0].date).getTime()
+      );
+    });
     setChats(chatsSortedByDate);
   };
 
@@ -151,7 +157,6 @@ export const useChatManager = (storeId: string): ChatManager => {
     if (!relatedChat) {
       return;
     }
-    console.log('MESSAGES BEFORE: ', relatedChat.messages[0]);
     const messageIsFromThisUser = newMessage.role === 'VENDOR';
     if (messageIsFromThisUser) {
       relatedChat.messages[0].id = message.id;

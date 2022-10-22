@@ -19,7 +19,9 @@ const AllChats = ({navigation}: any) => {
               navigation.navigate('ChatPage', {chatId: item.id})
             }
             contactName={item.relatedClientUsername}
-            lastMessage={item.messages[0].message}
+            lastMessage={
+              item.messages.length > 0 ? item.messages[0].message : ''
+            }
           />
         )}
         keyExtractor={item => item.id}

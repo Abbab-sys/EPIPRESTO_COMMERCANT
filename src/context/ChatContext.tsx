@@ -9,5 +9,4 @@ export const ChatContext = createContext({
       getChatById: (chatId: string) => {},
     },
   ] as ChatManager,
-  // setChatManager: () => {},
 });
