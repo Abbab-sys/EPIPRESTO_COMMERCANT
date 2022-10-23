@@ -17,6 +17,31 @@ export const UPDATE_PRODUCT = gql`
     }
   }
 `
+export const UPDATE_VARIANT = gql`
+  mutation UpdateProductVariant($variantId: ID!, $fieldsToUpdate: UpdateProductVariant!) {
+    updateProductVariant(variantId: $variantId, fieldsToUpdate: $fieldsToUpdate) {
+      code
+      message
+    }
+  }
+`
+
+export const ADD_NEW_VARIANT_TO_PRODUCT = gql`
+  mutation AddNewVariantToProduct($productId: ID!, $newVariant: ProductVariantInput!) {
+    addNewVariantToProduct(productId: $productId, newVariant: $newVariant) {
+      code
+      message
+    }
+  }
+`
+export const REMOVE_VARIANT_BY_ID = gql`
+  mutation RemoveVariantById($productVariantId: ID!) {
+    removeVariantById(productVariantId: $productVariantId) {
+      code
+      message
+    }
+  }
+`
 
 export const SIGN_UP = gql`
   mutation Mutation($accountInput: VendorAccountInput) {

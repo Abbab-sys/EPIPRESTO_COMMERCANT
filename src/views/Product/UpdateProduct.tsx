@@ -9,7 +9,7 @@ import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react";
 import { GET_PRODUCT_BY_ID, GET_STORE_PRODUCTS_BY_ID } from "../../graphql/queries";
 import { useIsFocused } from "@react-navigation/native";
 import { commonStyles } from "./Styles/CommonStyles";
-import { UPDATE_PRODUCT } from "../../graphql/mutations";
+import { ADD_NEW_VARIANT_TO_PRODUCT, REMOVE_VARIANT_BY_ID, UPDATE_PRODUCT, UPDATE_VARIANT } from "../../graphql/mutations";
 
 
 interface ProductFields {
@@ -34,63 +34,90 @@ interface ProductFields {
     isHidden: boolean
     }
 
-const UpdateProduct = ({ navigation }: any) => {
+const UpdateProduct = ({ route, navigation }: any) => {
 
-
-  const idProduct = "6354a775ab90d4cdffe49b46"  
+  console.log("params", route.params.idProduct)
+  const [idProduct, setIdProduct] = useState(route.params.idProduct)
+  console.log("idProduct", idProduct)
   const isFocused = useIsFocused()
 
-  useEffect(() => {
-    if(!isFocused) return
-    getProduct()
-  }, [isFocused])
+
+  const {data, loading, error} = useQuery(GET_PRODUCT_BY_ID, {
+    variables: {
+      idProduct: idProduct,
+    },
+    fetchPolicy: 'network-only',
+    onCompleted(data) {
+      const object = data.getProductById.product;
+      console.log("object", object)
+      setProduct({
+        title: object.title,
+        description: object.description,
+        brand: object.brand,
+        published: object.published,
+        tags: object.tags,
+        imgSrc: object.imgSrc
+      })
+    },
+  });
+
+  
+
+  // useEffect(() => {
+  //   if(!isFocused) return
+  //   setIdProduct(route.params.idProduct)
+  //   console.log("ID ICII", idProduct)
+  //   //getProduct()
+  //   console.log("data", data)
+  //   if(data && data.getProductById) {
+  //     //setProduct(data.getProductById.product)
+  //     const myProduct = data.getProductById.product
+  //     console.log("product ICIII", data.getProductById.product)
+  //     setProduct(
+  //       {
+  //         title: myProduct.title,
+  //         description: myProduct.description,
+  //         brand: myProduct.brand,
+  //         published: myProduct.published,
+  //         tags: myProduct.tags,
+  //         imgSrc: myProduct.imgSrc
+  //       }
+  //     )     
+  //     const myVariants = myProduct.variants.map((variant: any) => {
+  //       return {
+  //         ...variant,
+  //         variantId: variant._id,
+  //         isValid: true,
+  //         isHidden: false
+  //       }
+        
+  //     })
+  //     // dont return _id 
+  //     const myVariants2 = myVariants.map((variant: any) => {
+  //       const {_id, __typename, ...rest} = variant
+  //       return rest
+  //     })
+  //     setVariants(myVariants2)
+  //   }
+  // }, [isFocused])
 
     const {t} = useTranslation('translation')
     const [refreshed, setRefreshed] = useState(0);
     const deleteError = t('addProduct.deleteError')
     const [productNameError, setError] = useState("");
 
-    const [getProduct, { loading, error, data } ]= useLazyQuery(GET_PRODUCT_BY_ID, {variables: {idProduct: idProduct}})
+    //const [getProduct, { loading, error, data } ]= useLazyQuery(GET_PRODUCT_BY_ID, {variables: {idProduct: route.params.idProduct}})
 
     const [updateProduct, {loading: updateLoading, error: updateError, data: UpdateData}] = useMutation(UPDATE_PRODUCT);
 
+    const [addNewVariantToProduct, {loading: addVariantLoading, error: aaddVariantError, data: addVariantData}] = useMutation(ADD_NEW_VARIANT_TO_PRODUCT);
 
+    const [removeVariantById, {loading: removeVariantLoading, error: removeVariantError, data: removeVariantData}] = useMutation(REMOVE_VARIANT_BY_ID);
     
+    const [updateVariant, {loading: updateVariantLoading, error: updateVariantError, data: updateVariantData}] = useMutation(UPDATE_VARIANT);
+
   const [product, setProduct] = useState<ProductFields>();
 
-    useEffect(() => {
-      if(data && data.getProductById) {
-        //setProduct(data.getProductById.product)
-        const myProduct = data.getProductById.product
-        //console.log("product", data.getProductById.product)
-        setProduct(
-          {
-            title: myProduct.title,
-            description: myProduct.description,
-            brand: myProduct.brand,
-            published: myProduct.published,
-            tags: myProduct.tags,
-            imgSrc: myProduct.imgSrc
-          }
-        )     
-        const myVariants = myProduct.variants.map((variant: any) => {
-          return {
-            ...variant,
-            variantId: variant._id,
-            isValid: true,
-            isHidden: false
-          }
-          
-        })
-        // dont return _id 
-        const myVariants2 = myVariants.map((variant: any) => {
-          const {_id, __typename, ...rest} = variant
-          return rest
-        })
-        console.log("myVariants222", myVariants2)
-        setVariants(myVariants2)
-      }
-    }, [data])
 
     // states to count variants and products updates
     // count 
@@ -114,38 +141,31 @@ const UpdateProduct = ({ navigation }: any) => {
     isHidden: false,
     }
     const [variants , setVariants] = useState<VariantFields[]>([]);
-    const [newVariants, setNewVariants] = useState<VariantFields[]>([]);
+    const [newVariants, setNewVariants] = useState<string[]>([]);
     const [deletedVariants, setDeletedVariants] = useState<string[]>([]);
-
-    // const handleAdd =  () => {
-    //     Keyboard.dismiss()
-    //     // return variants without variantId, isHidden and isValid
-    //     const variantsWithoutId = variants.map((variant) => {
-    //       const {variantId, isHidden, isValid, ...rest} = variant;
-    //       return rest;
-    //     })
-    //     // consider only tags that are not empty
-    //     const filteredTags = product.tags.filter((tag) => tag.trim());
-    //     let finalProduct;
-    //     finalProduct = {
-    //       title: product.title,
-    //       description: product.description,
-    //       brand: product.brand,
-    //       published: product.published,
-    //       tags: filteredTags,
-    //       imgSrc: product.imgSrc,
-    //       variants: variantsWithoutId
-    //     }
-    //     addProduct({variables:{storeId: storeId, newProduct: product} })
-    //     }
 
     const handleUpdate = () => {
         Keyboard.dismiss()
-        // remvoe variants from updatedVariants if they are in newVariants
+        // remvoe newVariants from updatedVariants
         const filteredUpdatedVariants = updatedVariants.filter((variantId) => {
-          const variant = newVariants.find((variant) => variant.variantId === variantId);
+          const variant = newVariants.find((variantId) => variantId === variantId);
           return !variant;
         })
+        // consider only delted variants that are not in newVariants
+        const filteredDeletedVariants = deletedVariants.filter((deletedVariantId) => {
+          const variant = newVariants.find((variantId) => deletedVariantId === variantId);
+          return !variant;
+        })
+
+        // cpnsider only new variants that are not in deletedVariants
+        console.log("newVariants", newVariants)
+        console.log("deletedVariants", deletedVariants)
+        const filteredNewVariants = newVariants.filter((newVariantId) => {
+          const variant = deletedVariants.find((variantId) => newVariantId === variantId);
+          console.log("variantFound", variant)
+          return !variant;
+        })
+        console.log("filteredNewVariants", filteredNewVariants)
       
         // if product fields changed, update product
         if (updateProductCount > 1) {
@@ -153,20 +173,52 @@ const UpdateProduct = ({ navigation }: any) => {
             // TODO: voir si update de l'image ralenti le process
             updateProduct({variables: {productId: idProduct, fieldsToUpdate: product}})
         }
-        if( newVariants.length > 0) {
+        if( filteredNewVariants.length > 0) {
             console.log("addNewVariantToProduct(productId, newVariant)")
-            //for each new variant, add it to the product
+            // get variants that id is in newVariants
+            const newVariantsToAdd = variants.filter((variant) => {
+              const variantId = filteredNewVariants.find((variantId) => variantId === variant.variantId);
+              return variantId;
+            })
+            console.log("newVariantsToAdd", newVariantsToAdd)
+            const variantsWithoutId = newVariantsToAdd.map((variant) => {
+              const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
+              return {...rest, price: parseFloat(price), stock: parseInt(stock)};
+            })
+            console.log("variantsWithoutId", variantsWithoutId)
+            // add new variants
+            variantsWithoutId.forEach((variant) => {
+              console.log("variant", variant)
+              //addNewVariantToProduct({variables: {productId: idProduct, newVariant: variant}})
+            })
         }            
-        if(deletedVariants.length > 0) {
+        if(filteredDeletedVariants.length > 0) {
             console.log("removeVariantById(productVariantId)")
+            console.log("deletedVariants", filteredDeletedVariants)
             //for each deleted variant, remove it from the product
-    
+            filteredDeletedVariants.forEach((variantId) => {
+              //removeVariantById({variables: {productVariantId: variantId}})
+            })    
         }
         // call updateVariant mutation for each variant in filtredUpdatedVariants
         if(filteredUpdatedVariants.length > 0){
-          filteredUpdatedVariants.forEach((variantId) => {
-            console.log("updateProductVariant(variantId,fieldsToUpdate)", variantId)
-          })  
+          // get variants that id is in updatedVariants
+          const updatedVariantsToUpdate = variants.filter((variant) => {
+            const variantId = filteredUpdatedVariants.find((variantId) => variantId === variant.variantId);
+            return variantId;
+          })
+          console.log("updatedVariantsToUpdate", updatedVariantsToUpdate)
+          // update variants
+          updatedVariantsToUpdate.forEach((variant) => {
+            console.log("variant ICI", variant)
+            // dont consider variantId, isHidden and isValid
+            const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
+            // change price and stock to number
+            const fieldsToUpdate = {...rest, price: parseFloat(price), stock: parseInt(stock)};
+            console.log("rest", fieldsToUpdate)
+            updateVariant({variables: {variantId: variant.variantId, fieldsToUpdate: fieldsToUpdate}})
+          }
+          )
       }         
                   
     }
@@ -197,13 +249,13 @@ const UpdateProduct = ({ navigation }: any) => {
         return false;
     }
     
-    // const refreshPage = () => {
-    //     setRefreshed(refreshed + 1); // update state to trigger useEffect
-    //     setVariants([defaultVariant]);
-    //     setError("");
-    //     setUpdateProductCount(0);
-    //     setUpdateVariantCount(0);
-    // }
+    const refreshPage = () => {
+        setRefreshed(refreshed + 1); // update state to trigger useEffect
+        setVariants([defaultVariant]);
+        setError("");
+        setUpdateProductCount(0);
+        setUpdateVariantCount(0);
+    }
     
       // TDOO: add message translation
     const succesAddMessage = "Produit modifié avec succès!"
@@ -225,6 +277,7 @@ const UpdateProduct = ({ navigation }: any) => {
       Keyboard.dismiss()
       if(submitButtonShouldBeDisabled()){
         navigation.navigate("Inventory")
+        refreshPage()
       }
       else{
         Alert.alert(
@@ -239,11 +292,13 @@ const UpdateProduct = ({ navigation }: any) => {
     }
 
     useEffect(() => {
+      console.log("useEffect", updateLoading, updateError, UpdateData)
         if (updateLoading || updateError || !UpdateData) {
-          if(updateError) {
+          if(updateError || (updateLoading && !updateError)) {
             // if an error occurs, show an alert
             alertOnSave(false)
           }
+          console.log("loading or error")
           return
         }
         console.log("UpdateData", UpdateData)
@@ -271,7 +326,7 @@ const UpdateProduct = ({ navigation }: any) => {
       if (product && !product.title.trim()) {
         setError("Veuillez remplir les champs obligatoires du produit");
       }
-      setNewVariants([...newVariants, defaultVariant]);
+      setNewVariants([...newVariants, defaultVariant.variantId]);
       setVariants([...variants, defaultVariant]);
     }      
 

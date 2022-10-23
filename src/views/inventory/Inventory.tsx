@@ -72,7 +72,7 @@ const Inventory = ({navigation}: any) => {
                   <Product
                     _id={item._id}
                     title={item.title}
-                    imgSrc={item.imgSrc} /> 
+                    imgSrc={item.imgSrc}/> 
                 }
                 keyExtractor={item => item._id}
                 />
@@ -84,6 +84,22 @@ const Inventory = ({navigation}: any) => {
           onPress={() => {navigation.navigate('AddProduct');}}
           mode="contained"
           containerColor="black"
+          iconColor="#FFA500"
+          icon="plus"
+          size={30}/>
+
+        <IconButton 
+          onPress={() => {navigation.navigate('UpdateProduct', {idProduct: "6354a775ab90d4cdffe49b46"})}}
+          mode="contained"
+          containerColor="red"
+          iconColor="#FFA500"
+          icon="plus"
+          size={30}/>
+
+<IconButton 
+          onPress={() => {navigation.navigate('UpdateProduct', {idProduct: "6354a6feab90d4cdffe49b44"})}}
+          mode="contained"
+          containerColor="blue"
           iconColor="#FFA500"
           icon="plus"
           size={30}/>
