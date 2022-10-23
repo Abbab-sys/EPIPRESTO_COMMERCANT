@@ -284,7 +284,7 @@ const UpdateProduct = ({ navigation }: any) => {
               <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator>
             </View>
           ) : error ? (
-            <View style={commonStyles.innerContainer}>
+            <View >
               <Text style={{textAlign: 'center'}}>OOPS UNE ERREUR EST SURVENUE</Text>
             </View>)
           : (
