@@ -105,14 +105,34 @@
     "title": "Paramètres",
     "store":{
       "title":"Ma boutique",
+      "modify":"Modifier",
+      "modifyError": "Erreur : Certains champs renseignés sont incorrects",
+      "modifySuccess": "Votre boutique a été modifiée avec succès!",
       "status": {
-        "title": "Statut",
+        "title": "État de ma boutique",
         "open":"Ouvert",
         "closed":"Fermé"
       }
     },
     "language":{
       "title":"Changement de langue"
+    }
+  },
+  "disponibility": {
+    "title": "Disponibilités",
+    "day" : "Jour",
+    "openHour": "Ouverture",
+    "closeHour": "Fermeture",
+    "errorFormat": "Format incorrect (hh:mm)",
+    "errorOrder": "Mauvaise ordre des heures",
+    "days":{
+      "MONDAY": "Lundi",
+      "TUESDAY": "Mardi",
+      "WEDNESDAY": "Mercredi",
+      "THURSDAY": "Jeudi",
+      "FRIDAY": "Vendredi",
+      "SATURDAY": "Samedi",
+      "SUNDAY": "Dimanche"
     }
   }
 }

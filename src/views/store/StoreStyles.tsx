@@ -9,11 +9,17 @@ export const StoreStyles = StyleSheet.create({
         margin: '5%',
         flexDirection: 'row',
     },
-    text : {
+    text: {
       fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: 19,
-    fontStyle: 'normal',
-    alignSelf: 'center',
+      fontWeight: '500',
+      fontSize: 19,
+      fontStyle: 'normal',
+      alignSelf: 'center',
+    },
+    root: {
+      height: '100%',
+    },
+    button: {
+      margin: 10,
     }
 });

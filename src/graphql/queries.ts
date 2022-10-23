@@ -66,6 +66,7 @@ query getStoreCredentialsById($idStore: ID!) {
     store {
       name
       address
+      isOpen
       disponibilities {
         day
         activesHours {
@@ -73,10 +74,14 @@ query getStoreCredentialsById($idStore: ID!) {
           endingHour
         }
       }
+      relatedVendor {
+        phone
+        _id
+      }
+      
     }
   }
 }
-
 `
 
 // export const GET_PRODUCTS = gql`

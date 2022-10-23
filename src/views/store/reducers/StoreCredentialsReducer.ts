@@ -1,12 +1,12 @@
 import {StoreCredentialsReducerState} from "./StoreCredentialsReducerState";
 import {StoreCredentialsReducerActions} from "./StoreCredentialsReducerActions";
-import {initialStoreErrorMessage} from "../../../interfaces/StoreInterfaces";
+import {ActivesHour, initialStoreErrorMessage} from "../../../interfaces/StoreInterfaces";
 import {
   SIGN_UP_ADRESS_ERROR_MESSAGE_KEY,
   SIGN_UP_PHONE_ERROR_MESSAGE_KEY,
   SIGN_UP_SHOP_NAME_ERROR_MESSAGE_KEY,
-  SIGN_UP_USERNAME_ERROR_EMPTY_KEY, SIGN_UP_USERNAME_ERROR_USED_KEY
 } from "../../../translations/keys/SignUpTranslationKeys";
+import { DISPONIBILITY_ERROR_FORMAT_KEY, DISPONIBILITY_ERROR_ORDER_KEY } from "../../../translations/keys/DisponibilityTranslationKeys";
 
 export function storeCredentialsReducer(state: StoreCredentialsReducerState, action: StoreCredentialsReducerActions): StoreCredentialsReducerState {
   switch (action.type) {
@@ -61,7 +61,7 @@ export function storeCredentialsReducer(state: StoreCredentialsReducerState, act
         ...state,
         storeInput: {
           ...state.storeInput,
-          isStoreActive: !previousState.storeInput.isStoreActive
+          isOpen: !previousState.storeInput.isOpen
         }
       }
     }
@@ -109,17 +109,97 @@ export function storeCredentialsReducer(state: StoreCredentialsReducerState, act
       }
     }
     case 'SET_STORE_CREDENTIALS': {
+      let newDisponibility:Map<string, Array<ActivesHour>> = new Map();
+      action.data.disponibilities.forEach((value:any) => {
+        let activesHours: Array<ActivesHour> = [];
+        value.activesHours.forEach((activesHour:any) => {
+          activesHours.push({
+            openingHour: activesHour.openingHour,
+            endingHour: activesHour.endingHour,
+            errorOpeningHour: "",
+            errorEndingHour: "",
+          })
+        })
+        newDisponibility.set(value.day ,activesHours)
+      })
       return {
         ...state,
         storeInput: {
           ...state.storeInput,
           shopName: action.data.name,
           address: action.data.address,
-          phone: action.data.phone,
+          phone: action.data.relatedVendor.phone,
+          isOpen: action.data.isOpen,
+          disponibilities: newDisponibility,
+          idVendor: action.data.relatedVendor._id,
         },
         storeErrorMessage: {
           ...state.storeErrorMessage,
         }
+      }
+    }
+    case 'SET_OPENING_HOUR': {
+      if (!action.newOpeningHour.includes(':')) return state
+      const oldDisponibilities = state.storeInput.disponibilities
+      const activesHours = oldDisponibilities.get(action.day) as Array<ActivesHour>
+      let oldActiveHour=activesHours[action.activeHourIndex]
+      oldActiveHour = checkErrorMessage(oldActiveHour, "opening",action.newOpeningHour)
+      oldActiveHour.openingHour = action.newOpeningHour
+    
+      activesHours[action.activeHourIndex]=oldActiveHour
+      oldDisponibilities.set(action.day,activesHours)
+      console.log(oldDisponibilities.get(action.day)![action.activeHourIndex].errorOpeningHour)
+      return {
+        ...state,
+        storeInput: {
+          ...state.storeInput,
+          disponibilities: oldDisponibilities
+        },
+      }
+    }
+    case 'SET_CLOSING_HOUR': {
+      if (!action.newClosingHour.includes(':')) return state
+      const oldDisponibilities = state.storeInput.disponibilities
+      const activesHours = oldDisponibilities.get(action.day) as Array<ActivesHour>
+      let oldActiveHour = activesHours[action.activeHourIndex]
+      oldActiveHour=checkErrorMessage(oldActiveHour,'closing', action.newClosingHour)
+      oldActiveHour.endingHour= action.newClosingHour
+      activesHours[action.activeHourIndex]=oldActiveHour
+      oldDisponibilities.set(action.day,activesHours)
+     
+      return {
+        ...state,
+        storeInput: {
+          ...state.storeInput,
+          disponibilities: oldDisponibilities
+        },
+      }
+    }
+    case 'ADD_ACTIVE_HOUR': {
+      const oldDisponibilities = state.storeInput.disponibilities
+      const activesHours = oldDisponibilities.get(action.day) as Array<ActivesHour>
+      activesHours.unshift({openingHour:'00:00',endingHour:'00:00',errorOpeningHour:'',errorEndingHour:''})
+      console.log(activesHours)
+      oldDisponibilities.set(action.day,activesHours)
+      return {
+        ...state,
+        storeInput: {
+          ...state.storeInput,
+          disponibilities: oldDisponibilities
+        },
+      }
+    }
+    case 'REMOVE_ACTIVE_HOUR': {
+      const oldDisponibilities = state.storeInput.disponibilities
+      const activesHours = oldDisponibilities.get(action.day) as Array<ActivesHour>
+      activesHours.splice(action.activeHourIndex,1)
+      oldDisponibilities.set(action.day,activesHours)
+      return {
+        ...state,
+        storeInput: {
+          ...state.storeInput,
+          disponibilities: oldDisponibilities
+        },
       }
     }
     default:
@@ -138,4 +218,15 @@ const manageError = (errorSet: Set<string>, errorKey: string, errorCondition: bo
   return errorSet
 }
 
-
+const checkErrorMessage = (oldActiveHour:ActivesHour, mode:string, newHour:string) => {
+  const hourRegexResult = /^((0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]))$/.test(newHour);
+  const isOrdered = (mode==='opening')?((oldActiveHour.endingHour > newHour)):((oldActiveHour.openingHour < newHour))
+  if (mode==='opening') {
+    oldActiveHour.errorOpeningHour=(hourRegexResult)?((isOrdered)?'':DISPONIBILITY_ERROR_ORDER_KEY):DISPONIBILITY_ERROR_FORMAT_KEY
+    if((hourRegexResult && isOrdered && oldActiveHour.errorEndingHour === DISPONIBILITY_ERROR_ORDER_KEY)) oldActiveHour.errorEndingHour = '' ;
+  } else {
+    oldActiveHour.errorEndingHour=(hourRegexResult)?((isOrdered)?'':DISPONIBILITY_ERROR_ORDER_KEY):DISPONIBILITY_ERROR_FORMAT_KEY
+    if((hourRegexResult && isOrdered && oldActiveHour.errorOpeningHour === DISPONIBILITY_ERROR_ORDER_KEY)) oldActiveHour.errorOpeningHour = '' ;
+  }
+  return oldActiveHour
+}

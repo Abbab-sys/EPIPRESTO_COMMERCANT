@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {KeyboardTypeOptions, View} from 'react-native';
+import {View} from 'react-native';
 import {HelperText, Text, TextInput} from 'react-native-paper';
 import {TextField} from '../../interfaces/textFieldInterface';
+import { SubTitleStyles } from '../../styles/SubTitleStyles';
 import {CredentialInputStyles} from './CredentialInputStyles';
 
 interface CredentialInputProps {
@@ -24,14 +25,13 @@ const CredentialInput = (props: CredentialInputProps) => {
   return (
     <View key={props.field.attribute} style={CredentialInputStyles.fieldView}>
       {!isFocused && (
-        <Text style={CredentialInputStyles.title}>
+        <Text style={SubTitleStyles.text}>
           {translation(props.field.title)}
         </Text>
       )}
       <TextInput
         onFocus={() => setLabel('')}
         onBlur={() => setLabel(translation(props.field.label))}
-        style={CredentialInputStyles.textInput}
         label={label}
         value={props.credential}
         onChangeText={text => props.dispatch(props.field.onChange(text))}

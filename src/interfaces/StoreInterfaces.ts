@@ -1,8 +1,10 @@
 export interface StoreInput {
+    idVendor: string;
     shopName: string;
     address: string;
     phone: string;
-    isStoreActive: boolean;
+    isOpen: boolean;
+    disponibilities: Map<string, Array<ActivesHour>>;
   }
   
   export interface StoreErrorMessage {
@@ -17,3 +19,9 @@ export interface StoreInput {
     phoneError: new Set(),
   };
   
+  export interface ActivesHour {
+    openingHour:string
+    endingHour:string
+    errorOpeningHour:string
+    errorEndingHour:string
+  }

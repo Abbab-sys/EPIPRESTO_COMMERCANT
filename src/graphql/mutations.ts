@@ -40,3 +40,22 @@ export const SYNC_WOOCOMMERCE = gql`
     }
   }
 `;
+
+export const MODIFY_STORE = gql`
+mutation UpdateStore($fieldsToUpdate: UpdateStore!, $storeId: ID!) {
+  updateStore(fieldsToUpdate: $fieldsToUpdate, storeId: $storeId) {
+    code
+    message
+  }
+}
+`;
+
+export const MODIFY_VENDORS = gql`
+mutation UpdateVendorAccount($fieldsToUpdate: UpdateVendorAccount!, $vendorId: ID!) {
+  updateVendorAccount(fieldsToUpdate: $fieldsToUpdate, vendorId: $vendorId) {
+    code
+    message
+  }
+}
+
+`;

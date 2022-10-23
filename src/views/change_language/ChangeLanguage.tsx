@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { TitleSyles } from "../../Styles/TitleStyles";
+import { TitleSyles } from "../../styles/TitleStyles";
 import { SETTINGS_LANGUAGE_TITLE_KEY} from "../../translations/keys/SettingsTranslationsKeys";
 import { Languages } from "./Languages";
 import { ChangeLanguageStyles } from "./ChangeLanguageStyles";

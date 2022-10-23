@@ -8,4 +8,7 @@ export type StoreCredentialsReducerActions =
     | { type: 'CHECK_ADDRESS'}
     | { type: 'CHECK_PHONE'}
     | { type: 'SET_STORE_CREDENTIALS', data: any}
-    
+    | { type: 'SET_OPENING_HOUR', day: string, activeHourIndex:number, newOpeningHour: string}
+    | { type: 'SET_CLOSING_HOUR', day: string, activeHourIndex:number, newClosingHour: string}
+    | { type: 'ADD_ACTIVE_HOUR', day: string}
+    | { type: 'REMOVE_ACTIVE_HOUR', day: string, activeHourIndex:number}
