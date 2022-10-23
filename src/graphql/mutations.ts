@@ -1,24 +1,18 @@
 import {gql} from '@apollo/client';
 
 export const ADD_PRODUCT = gql`
-mutation Mutation($storeId: ID!, $newProduct: ProductInput!) {
+  mutation Mutation($storeId: ID!, $newProduct: ProductInput!) {
     addNewProductToStore(storeId: $storeId, newProduct: $newProduct) {
       code
       message
     }
   }
-`
+`;
 export const SIGN_UP = gql`
   mutation Mutation($accountInput: VendorAccountInput) {
     vendorSignUp(accountInput: $accountInput) {
       code
       message
-      vendorAccount {
-        _id
-        store {
-          _id
-        }
-      }
     }
   }
 `;
@@ -58,4 +52,21 @@ mutation UpdateVendorAccount($fieldsToUpdate: UpdateVendorAccount!, $vendorId: I
   }
 }
 
+`;
+//todo: add the rest of the mutations
+export const CHANGE_ORDER_STATUS = gql`
+  mutation Mutation($orderId: ID!, $newStatus: OrderStatus!) {
+    updateOrderStatus(orderId: $orderId, newStatus: $newStatus) {
+      code
+      message
+    }
+  }
+`;
+export const SEND_MESSAGE = gql`
+  mutation Mutation($message: MessageInput!) {
+    sendMessageToChat(message: $message) {
+      code
+      message
+    }
+  }
 `;

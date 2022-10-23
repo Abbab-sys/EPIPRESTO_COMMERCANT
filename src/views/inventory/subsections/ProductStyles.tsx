@@ -12,12 +12,13 @@ export const productStyles = StyleSheet.create({
     marginVertical: '4%'
   },
   cardStyle: {
+    flex: 1,
     elevation: 4,
     borderRadius: 30,
     margin: '5%',
     padding: '5%',
     flexWrap: "wrap",
-    alignItems: "stretch",
+    alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
   },
@@ -34,5 +35,8 @@ export const productStyles = StyleSheet.create({
   },
   buttonText: {
     color: 'white'
+  },
+  icon: {
+    alignSelf: "center"
   }
 })

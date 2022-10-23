@@ -5,16 +5,25 @@ import { inventoryStyles } from "./InventoryStyles";
 import Product, { ProductProps } from "./subsections/Product";
 import { mockProducts } from './mockProducts';
 import { GET_STORE_PRODUCTS_BY_ID } from "../../graphql/queries";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { VendorContext } from "../../context/Vendor";
+import { useIsFocused } from "@react-navigation/native";
 
 const Inventory = ({navigation}: any) => {
+
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if(!isFocused) return
+    getItems()
+    console.log(data)
+  }, [isFocused])
 
   const {storeId, setStoreId} = useContext(VendorContext)
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { loading, error, data } = useQuery(GET_STORE_PRODUCTS_BY_ID, {variables: {idStore: storeId, "offset": 1, "first": 20}})
+  const [getItems, { loading, error, data } ]= useLazyQuery(GET_STORE_PRODUCTS_BY_ID, {variables: {idStore: storeId, "offset": 1, "first": 20}})
 
   const [products, setProducts] = useState<ProductProps[]>([])
 
@@ -37,7 +46,7 @@ const Inventory = ({navigation}: any) => {
   useEffect(() => {
     if(data && data.getStoreById) {
       setProducts(data.getStoreById.store.products)
-      console.log(data.getStoreById.store.products)
+      // console.log(data.getStoreById.store.products)
     }
   }, [data])
 
@@ -53,8 +62,13 @@ const Inventory = ({navigation}: any) => {
       </View>
       <SafeAreaView style={{flex: 1}}>
         {loading ? (
-          <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator>
-          ) : error ? <Text>OOPS UNE ERREUR EST SURVENUE</Text>
+            <View style={inventoryStyles.innerContainer}>
+              <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator>
+            </View>
+          ) : error ? (
+            <View style={inventoryStyles.innerContainer}>
+              <Text style={inventoryStyles.errorText}>OOPS UNE ERREUR EST SURVENUE</Text>
+            </View>)
           : (
             products.length === 0 ? 
               (<Text>YOUR RESEARCH DOES NOT MATCH ANY ITEM</Text>)

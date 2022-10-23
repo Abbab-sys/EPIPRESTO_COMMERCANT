@@ -134,6 +134,71 @@
         "SUNDAY": "Sunday"
       }
     }
-
+  },
+  "addProduct": {
+    "title": "Add product to the shop",
+    "deletePhoto": "Delete photo",
+    "takePicture": "Take a photo",
+    "importPicture": "Import a photo",
+    "labels": {
+      "name": "Product name*",
+      "description": "Description",
+      "brand": "Brand",
+      "tags": "Tags (separate your tags with a space)"
+    },
+    "addVariant": "Add a variant",
+    "publishProduct": "Publish product",
+    "deleteError": "You must have at least one variant"
+  },
+  "addVariant": {
+    "errorMessage": "Please fill in all required fields*",
+    "labels": {
+      "name": "Variant name*",
+      "description": "Description",
+      "price": "Price*",
+      "sku": "Sku",
+      "stock": "Stock*",
+      "forSale": "Product available for sale"
+    },
+    "boughtByWeight": "Product sold by weight",
+    "unit": "Unit of measure",
+    "taxable": "Taxable product"
+  },
+  "orders":{
+    "title":"Orders",
+    "filtering":"Sort",
+    "customer":"Customer",
+    "status":"Status",
+    "view":"Details"
+  },
+  "order":{
+    "status":{
+      "WAITING_CONFIRMATION":"Pending",
+      "CONFIRMED":"Confirmed",
+      "IN_DELIVERY":"In delivery",
+      "DELIVERED":"Delivered",
+      "CLOSED":"Closed"
+    },
+    "details":{
+      "title":"Order",
+      "payment":{
+        "title":"Payment",
+        "subTotal":"Subtotal",
+        "taxes":"Taxes",
+        "deliveryFees":"Delivery Fees",
+        "total":"Total",
+        "method":"Payment method"
+      },
+      "product":{
+        "title":"Products"
+      },
+      "save":{
+        "button":"Save"
+      },
+      "update":{
+        "success":"Status updated successfully",
+        "failed":"Oops something went wrong"
+      }
+    }
   }
 }
