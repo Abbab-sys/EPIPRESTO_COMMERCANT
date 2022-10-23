@@ -28,7 +28,7 @@ interface ProductProps {
     tags: string[],
     imgSrc: string,
     updateSelf: (Product: Product) => void;
-    refreshed: number;
+    refreshed: number,
     children?: React.ReactNode;
   }  
 
@@ -42,7 +42,6 @@ const Product = (props: ProductProps) => {
 
   const [isPublished, setPublished] = useState(props.published);
   const [productNameError, setError] = useState("");
-
 
   useEffect(() => {
     props.updateSelf({

@@ -23,6 +23,7 @@ import OrderPage from "./views/orders/OrderPage";
 import Settings from "./views/settings/Settings";
 import Chat from "./views/chat/Chat";
 import AddProduct from "./views/Product/AddProduct";
+import UpdateProduct from "./views/Product/UpdateProduct";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,7 +42,7 @@ export default function App() {
   });
   //TODO: A CHANGER
   const httpLink = createHttpLink({
-    uri: 'http://localhost:4000',
+    uri: 'http://192.168.0.19:4000',
   });
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
@@ -59,7 +60,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{headerShown: false}}
-            initialRouteName="AddProduct">
+            initialRouteName="UpdateProduct">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen name="SignUp" component={SignUp} />
@@ -69,6 +70,7 @@ export default function App() {
             <Stack.Screen name="OrderPage" component={OrderPage} />
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Inventory" component={Inventory} />
+            <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>

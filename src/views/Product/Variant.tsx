@@ -70,7 +70,7 @@ const Variant = (props: VariantProps) => {
     
     const isVariantValid = () => {
         // check if all required fields are filled
-        if (title.trim() && parseFloat(price) > 0 && parseFloat(stock) > 0) {
+        if (title && title.trim() && parseFloat(price) > 0 ) {
           setValid("");
           return true;
         } else {

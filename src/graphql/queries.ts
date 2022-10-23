@@ -105,3 +105,31 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
   }
 
 `
+
+export const GET_PRODUCT_BY_ID = gql`
+  query GetProductById($idProduct: ID!) {
+    getProductById(idProduct: $idProduct) {
+      code
+      message
+      product {
+        _id
+        title
+        brand
+        published
+        tags
+        imgSrc
+        variants {
+          _id
+          variantTitle
+          availableForSale
+          price
+          sku
+          taxable
+          imgSrc
+          byWeight
+          stock
+        }
+      }
+    }
+  }
+`

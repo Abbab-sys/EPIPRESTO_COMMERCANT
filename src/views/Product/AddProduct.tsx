@@ -41,6 +41,7 @@ const AddProduct = ({ navigation }: any) => {
     const deleteError = t('addProduct.deleteError')
     const [productNameError, setError] = useState("");
 
+    // TODO: add button to refresh page (calls function )
 
     const productDef = {
         title : "",
@@ -58,10 +59,10 @@ const AddProduct = ({ navigation }: any) => {
     variantTitle: "",
     price: "",
     sku: "",
-    taxable: false,
+    taxable: true,
     imgSrc: "",
     byWeight: false,
-    availableForSale:false,
+    availableForSale:true,
     stock: "",
     isValid: false,
     isHidden: false,
@@ -72,9 +73,10 @@ const AddProduct = ({ navigation }: any) => {
     const handleAdd =  () => {
         Keyboard.dismiss()
         // return variants without variantId, isHidden and isValid
+        // change price and stock to number
         const variantsWithoutId = variants.map((variant) => {
-          const {variantId, isHidden, isValid, ...rest} = variant;
-          return rest;
+          const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
+          return {...rest, price: parseFloat(price), stock: parseInt(stock)};
         })
         // consider only tags that are not empty
         const filteredTags = product.tags.filter((tag) => tag.trim());
@@ -84,14 +86,15 @@ const AddProduct = ({ navigation }: any) => {
           description: product.description,
           brand: product.brand,
           published: product.published,
-          tags: product.tags,
+          tags: filteredTags,
           imgSrc: product.imgSrc,
           variants: variantsWithoutId
         }
-        addProduct({variables:{storeId: storeId, newProduct: product} })
+        addProduct({variables:{storeId: storeId, newProduct: finalProduct} })
         }
 
     const submitButtonShouldBeDisabled = () => {
+      console.log("store id is: ", storeId)
         // enable submit button if all variants are valid
         // & product name is not empty
         return (
@@ -100,12 +103,16 @@ const AddProduct = ({ navigation }: any) => {
         );
         };
     
+    const refreshPage = () => {
+        setRefreshed(refreshed + 1) // update state to trigger useEffect
+        setVariants([defaultVariant])
+        setError("")
+    }
     
     const save = () => {
         console.log("product", product)
         console.log("variants", variants)
-        setRefreshed(refreshed+1) // update state to trigger useEffect
-        setVariants([defaultVariant])
+        refreshPage()
         alertOnSave(true)
       }
     
@@ -176,8 +183,8 @@ const AddProduct = ({ navigation }: any) => {
 
                 <IconButton
                     style={addProductsStyles.save_button}
-                    onPress={() => save()}
-                    //disabled={submitButtonShouldBeDisabled()}
+                    onPress={() => handleAdd()}
+                    disabled={submitButtonShouldBeDisabled()}
                     mode="contained"
                     icon="content-save"
                     size={30}

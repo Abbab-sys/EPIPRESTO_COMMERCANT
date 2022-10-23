@@ -8,6 +8,16 @@ mutation Mutation($storeId: ID!, $newProduct: ProductInput!) {
     }
   }
 `
+
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($productId: ID!, $fieldsToUpdate: UpdateProduct!) {
+    updateProduct(productId: $productId, fieldsToUpdate: $fieldsToUpdate) {
+      code
+      message
+    }
+  }
+`
+
 export const SIGN_UP = gql`
   mutation Mutation($accountInput: VendorAccountInput) {
     vendorSignUp(accountInput: $accountInput) {
