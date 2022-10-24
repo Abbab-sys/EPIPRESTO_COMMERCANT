@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {View} from 'react-native';
 import {HelperText, Text, TextInput} from 'react-native-paper';
 import {TextField} from '../../interfaces/textFieldInterface';
-import { SubTitleStyles } from '../../styles/SubTitleStyles';
+import { SubTitleStyles } from '../../Styles/SubTitleStyles';
 import {CredentialInputStyles} from './CredentialInputStyles';
 
 interface CredentialInputProps {
