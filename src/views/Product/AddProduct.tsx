@@ -108,6 +108,19 @@ const AddProduct = ({ navigation }: any) => {
         setVariants([defaultVariant])
         setError("")
     }
+
+    const messageBack = "Voulez-vous vraiment quitter la page? Le produit n'a pas été ajouté."
+    const backToInventory = () => {
+      Keyboard.dismiss()
+      Alert.alert(
+        "Alert",
+        messageBack,
+        [
+          { text: "Quitter", onPress: () => navigation.navigate("Inventory") },
+          { text: "Annuler", onPress: () => {} }
+        ]
+      );
+    }
     
     const save = () => {
         console.log("product", product)
@@ -173,7 +186,7 @@ const AddProduct = ({ navigation }: any) => {
             <View style={addProductsStyles.headerFix}>
                 <TouchableOpacity
                     style={addProductsStyles.back_button}
-                    onPress={() => {}}>
+                    onPress={() => {backToInventory()}}>
                     <Image
                         style={addProductsStyles.back_button_icon}
                         source={require('../../assets/icons/back.png')}
