@@ -1,30 +1,38 @@
 import React from "react"
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Divider } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 export interface ChatSectionProps {
   id: string;
   imageSrc?: any;
-  contactName: string;
+  orderNum: string;
   lastMessage: string;
+  date: string | null;
   navigation: () => {}
 }
 
 const ChatSection = (props: ChatSectionProps) => {
 
   return(
-    <TouchableOpacity onPress={() => props.navigation()}>
-      <View style={ChatSectionStyles.root}>
-        {props.imageSrc ? 
-          (<Image style={ChatSectionStyles.image} source={{uri: props.imageSrc}}/>) 
-          : 
-          (<Icon style={ChatSectionStyles.icon} name="user" size={30}></Icon>)}
+    <SafeAreaView style={ChatSectionStyles.root}>
+      <TouchableOpacity onPress={() => props.navigation()}>
         <View style={ChatSectionStyles.view}>
-          <Text style={ChatSectionStyles.text}>{props.contactName}</Text>
-          <Text style={ChatSectionStyles.text}>{props.lastMessage}</Text>
+          {props.imageSrc ? 
+            (<Image style={ChatSectionStyles.image} source={{uri: props.imageSrc}}/>)
+            : 
+            (<Icon style={ChatSectionStyles.icon} name="user" size={30}></Icon>)}
+          <View style={ChatSectionStyles.innerView}>
+            <Text style={ChatSectionStyles.contactNameText}>{props.orderNum}</Text>
+            <View style={ChatSectionStyles.bottomTextContainer}>
+              <Text style={ChatSectionStyles.lastMessageText}>{props.lastMessage}</Text>
+              {props.date !== null && (<Text style={ChatSectionStyles.date}>{new Date(props.date).toLocaleDateString()}</Text>)}
+            </View>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      <Divider bold style={ChatSectionStyles.divider}></Divider>
+    </SafeAreaView>
   )
 }
 
@@ -33,30 +41,51 @@ export default ChatSection
 const ChatSectionStyles = StyleSheet.create({
   root: {
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#FFA500",
-    marginVertical: "4%",
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 4
   },
   view: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "row",
+    marginVertical: "4%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  innerView: {
+    flex: 1,
+    flexDirection: "column",
+    marginLeft: '2%'
   },
   image: {
     width: 40,
     height: 40,
     borderRadius: 40/2,
-    marginLeft: "2%"
+    marginLeft: '2%'
   },
-  text: {
-    marginVertical: "1%",
-    marginHorizontal: "2%"
+  contactNameText: {
+    marginTop: "1%",
+    marginHorizontal: "2%",
+    fontWeight: 'bold',
+    color: 'black'
+  },
+  lastMessageText: {
+    marginBottom: "1%",
+    marginHorizontal: "2%",
+    alignSelf: 'flex-start',
+    color: 'black'
+  },
+  date: {
+    marginBottom: "1%",
+    alignSelf: 'flex-end'
+  },
+  bottomTextContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   icon: {
     marginLeft: "2%",
     alignSelf: "center"
+  },
+  divider: {
+    backgroundColor: "#FFA500",
+    width: "100%"
   }
 });

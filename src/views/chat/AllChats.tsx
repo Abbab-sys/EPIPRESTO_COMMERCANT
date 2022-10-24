@@ -18,10 +18,11 @@ const AllChats = ({navigation}: any) => {
             navigation={() =>
               navigation.navigate('ChatPage', {chatId: item.id})
             }
-            contactName={item.relatedClientUsername}
+            orderNum={item.relatedOrderNumber}
             lastMessage={
               item.messages.length > 0 ? item.messages[0].message : ''
             }
+            date={item.messages.length > 0 ? item.messages[item.messages.length - 1].date : null}
           />
         )}
         keyExtractor={item => item.id}

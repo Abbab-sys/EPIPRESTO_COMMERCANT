@@ -4,7 +4,7 @@ import {ChatContext} from '../../context/ChatContext';
 import {VendorContext} from '../../context/Vendor';
 import {Message} from '../../hooks/ChatManagerHook';
 import {MessageStatus, Role} from '../../interfaces/ChatInterfaces';
-import {SafeAreaView, View} from 'react-native';
+import {Image, SafeAreaView, TouchableOpacity, View} from 'react-native';
 import {Button} from 'react-native-paper';
 
 interface message {
@@ -90,7 +90,22 @@ const Chat = ({navigation, route}: any) => {
           style={{
             backgroundColor: '#FF9933',
             elevation: 4,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
+          <TouchableOpacity
+            style={{marginLeft: '2%', position: 'absolute', left: 0}}
+            onPress={() => navigation.goBack()}>
+            <Image
+              style={{
+                width: 35,
+                height: 35,
+                tintColor: 'black',
+              }}
+              source={require('../../assets/icons/back.png')}
+            />
+          </TouchableOpacity>
           <Button
             style={{
               margin: 10,
