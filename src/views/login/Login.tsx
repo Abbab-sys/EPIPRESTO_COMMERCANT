@@ -22,6 +22,7 @@ import {
 import CredentialInput from '../../components/credential-input/CredentialInput';
 import LanguageSelector from '../../components/language-selection/LanguageSelector';
 import { ApolloError } from '@apollo/client';
+import { EMPTY_KEY } from '../../translations/keys/EmptyTranslationKey';
 
 const Login = ({navigation}: any) => {
   const [{credentials, errorMessage}, dispatchCredentialsState] = useReducer(
@@ -162,7 +163,7 @@ const Login = ({navigation}: any) => {
                   ? errorMessage[
                       (field.attribute + 'Error') as keyof LoginErrorMessage
                     ]
-                  : ('' as string)
+                  : (EMPTY_KEY as string)
               }
               dispatch={dispatchCredentialsState}
             />

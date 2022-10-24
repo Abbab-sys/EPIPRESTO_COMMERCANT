@@ -1,4 +1,5 @@
 import {TextField} from '../../interfaces/textFieldInterface';
+import { EMPTY_KEY } from '../../translations/keys/EmptyTranslationKey';
 import {
   SIGN_UP_ADRESS_PLACEHOLDER_KEY,
   SIGN_UP_ADRESS_TITLE_KEY,
@@ -12,7 +13,7 @@ import {
 
 export const StoreTextFields: TextField[] = [
   {
-    label: "",
+    label: EMPTY_KEY,
     title: SIGN_UP_SHOP_NAME_TITLE_KEY,
     attribute: 'shopName',
     keyboardType: 'default',
@@ -25,7 +26,7 @@ export const StoreTextFields: TextField[] = [
     },
   },
   {
-    label: "",
+    label: EMPTY_KEY,
     title: SIGN_UP_ADRESS_TITLE_KEY,
     attribute: 'address',
     keyboardType: 'default',
@@ -38,7 +39,7 @@ export const StoreTextFields: TextField[] = [
     },
   },
   {
-    label: "",
+    label: EMPTY_KEY,
     title: SIGN_UP_PHONE_TITLE_KEY,
     attribute: 'phone',
     keyboardType: 'phone-pad',

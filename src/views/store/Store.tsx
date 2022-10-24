@@ -21,6 +21,7 @@ import { StoreStyles } from "./StoreStyles";
 import { StoreTextFields } from "./StoreTextFields";
 import { useSnackbar } from "../../hooks/UiHooks/UiHooks";
 import { Icon } from "react-native-elements";
+import { EMPTY_KEY } from "../../translations/keys/EmptyTranslationKey";
 
 const weekdays = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 
@@ -66,7 +67,7 @@ const Store = ({navigation}: any) => {
 
     const {storeId, setStoreId} = useContext(VendorContext)
 
-    const { loading, error, data } = useQuery(GET_STORE_CREDENTIALS_BY_ID, {variables: {idStore: storeId}, onCompleted: handleStoreCredentials, fetchPolicy: "no-cache"})
+    const { loading, error, data } = useQuery(GET_STORE_CREDENTIALS_BY_ID, {variables: {idStore: "633cfb2bf7bdb731e893e28b"}, onCompleted: handleStoreCredentials, fetchPolicy: "no-cache"})
     const [storeChanges] = useMutation(MODIFY_STORE, {onCompleted: () => console.log("Store changes saved")});
     const [vendorChanges] = useMutation(MODIFY_VENDORS, {onCompleted: () => console.log("Vendor changes saved")});
 
@@ -108,7 +109,7 @@ const Store = ({navigation}: any) => {
       const areCredentialsValid = areAllCredentialsFieldsValid()
       if (areCredentialsValid) {
         const updateStoreObject = getUpdateStoreObject()
-        storeChanges({variables: {storeId:storeId, fieldsToUpdate: updateStoreObject}}).then( r => {
+        storeChanges({variables: {storeId:"633cfb2bf7bdb731e893e28b", fieldsToUpdate: updateStoreObject}}).then( r => {
           if(r.data.updateStore.code === 200) vendorChanges({variables: {vendorId: storeInput.idVendor, fieldsToUpdate: {phone: storeInput.phone}}}).then(
             r => {
               if(r.data.updateVendorAccount.code === 200) openConfirmModificationSnackbar()
@@ -151,15 +152,14 @@ const Store = ({navigation}: any) => {
                             (field.attribute +
                               'Error') as keyof StoreErrorMessage
                           ].size > 0
-                            ? translation(
+                            ? 
                               storeErrorMessage[
                                   (field.attribute +
                                     'Error') as keyof StoreErrorMessage
                                 ]
                                   .values()
-                                  .next().value,
-                              )
-                            : ''
+                                  .next().value
+                            : (EMPTY_KEY as string)
                         }
                         dispatch={dispatchCredentialsState}
                       />
