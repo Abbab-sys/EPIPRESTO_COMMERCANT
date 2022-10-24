@@ -68,6 +68,7 @@ export const GET_INITIAL_CHATS = gql`
           _id
           relatedOrder {
             _id
+            orderNumber
           }
           messages {
             _id

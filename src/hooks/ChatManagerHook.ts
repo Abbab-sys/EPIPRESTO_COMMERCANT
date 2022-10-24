@@ -10,6 +10,7 @@ export type Chat = {
   relatedClientId: string;
   relatedClientUsername: string;
   relatedOrderId: string;
+  relatedOrderNumber: string;
   messages: Message[];
 };
 
@@ -75,6 +76,7 @@ export const useChatManager = (storeId: string): ChatManager => {
         relatedClientId,
         relatedClientUsername,
         relatedOrderId,
+        relatedOrderNumber: chat.relatedOrder.orderNumber,
         messages,
       };
 
@@ -96,13 +98,14 @@ export const useChatManager = (storeId: string): ChatManager => {
     setChats(chatsSortedByDate);
   };
 
-  const {loading, data, error} = useQuery(GET_INITIAL_CHATS, {
+  useQuery(GET_INITIAL_CHATS, {
     variables: {idStore: storeId},
     onCompleted: onInitialFetchComplete,
   });
 
   const onMessageCorrectlySent = (data: any) => {
     ///TODO DO ACCUSED CHECK
+    console.log('onMessageCorrectlySent', data);
   };
   const [publishMessage] = useMutation(SEND_MESSAGE, {
     onCompleted: onMessageCorrectlySent,
