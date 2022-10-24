@@ -6,7 +6,7 @@ import { Button } from "react-native-paper";
 import { ButtonSections } from "./ButtonSections";
 import { SettingsStyles } from "./SettingsStyles";
 import { SETTINGS_TITLE_KEY } from "../../translations/keys/SettingsTranslationsKeys";
-import { TitleSyles } from "../../styles/TitleStyles";
+import { TitleSyles } from "../../Styles/TitleStyles";
 
 
 

@@ -10,10 +10,10 @@ import CredentialInput from "../../components/credential-input/CredentialInput";
 import { VendorContext } from "../../context/Vendor";
 import { MODIFY_STORE, MODIFY_VENDORS } from "../../graphql/mutations";
 import { GET_STORE_CREDENTIALS_BY_ID } from "../../graphql/queries";
-import { SubTitleStyles } from "../../styles/SubTitleStyles";
+import { SubTitleStyles } from "../../Styles/SubTitleStyles";
 import { ActivesHour, StoreErrorMessage, StoreInput } from "../../interfaces/StoreInterfaces";
-import { ButtonStyles } from "../../styles/ButtonStyles";
-import { TitleSyles } from "../../styles/TitleStyles";
+import { ButtonStyles } from "../../Styles/ButtonStyles";
+import { TitleSyles } from "../../Styles/TitleStyles";
 import { SETTINGS_STORE_ERROR_KEY, SETTINGS_STORE_MODIFY_KEY, SETTINGS_STORE_STATUS_CLOSED_KEY, SETTINGS_STORE_STATUS_OPEN_KEY, SETTINGS_STORE_STATUS_TITLE_KEY, SETTINGS_STORE_SUCCESS_KEY, SETTINGS_STORE_TITLE_KEY } from "../../translations/keys/SettingsTranslationsKeys";
 import { storeCredentialsReducer } from "./reducers/StoreCredentialsReducer";
 import { initialStoreCredentialsState } from "./reducers/StoreCredentialsReducerState";
@@ -65,7 +65,7 @@ const Store = () => {
 
     const {storeId, setStoreId} = useContext(VendorContext)
 
-    const { loading, error, data } = useQuery(GET_STORE_CREDENTIALS_BY_ID, {variables: {idStore: "633cfb2bf7bdb731e893e28b"}, onCompleted: handleStoreCredentials})
+    const { loading, error, data } = useQuery(GET_STORE_CREDENTIALS_BY_ID, {variables: {idStore: storeId}, onCompleted: handleStoreCredentials, fetchPolicy: "no-cache"})
     const [storeChanges] = useMutation(MODIFY_STORE, {onCompleted: () => console.log("Store changes saved")});
     const [vendorChanges] = useMutation(MODIFY_VENDORS, {onCompleted: () => console.log("Vendor changes saved")});
 
