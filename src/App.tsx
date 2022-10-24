@@ -25,6 +25,8 @@ import AllChats from './views/chat/AllChats';
 import {useChatManager} from './hooks/ChatManagerHook';
 import {ChatContext} from './context/ChatContext';
 import Orders from './views/orders/Orders';
+import Store from './views/store/Store';
+import ChangeLanguage from './views/change_language/ChangeLanguage';
 
 const Stack = createNativeStackNavigator();
 
@@ -88,6 +90,8 @@ function NavigationStack() {
           <Stack.Screen name="Orders" component={Orders} />
           <Stack.Screen name="OrderPage" component={OrderPage} />
           <Stack.Screen name="Inventory" component={Inventory} />
+          <Stack.Screen name="Store" component={Store} />
+          <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
         </Stack.Navigator>
       </NavigationContainer>
     </ChatContext.Provider>

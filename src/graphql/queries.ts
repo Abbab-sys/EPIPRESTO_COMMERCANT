@@ -87,6 +87,32 @@ export const GET_INITIAL_CHATS = gql`
   }
 `;
 
+export const GET_STORE_CREDENTIALS_BY_ID = gql`
+query getStoreCredentialsById($idStore: ID!) {
+  getStoreById(idStore: $idStore) {
+    code
+    message
+    store {
+      name
+      address
+      isOpen
+      disponibilities {
+        day
+        activesHours {
+          openingHour
+          endingHour
+        }
+      }
+      relatedVendor {
+        phone
+        _id
+      }
+      
+    }
+  }
+}
+`
+
 // export const GET_PRODUCTS = gql`
 //   query GetStoreById($idStore: ID!) {
 //     getStoreById(idStore: $idStore) {
