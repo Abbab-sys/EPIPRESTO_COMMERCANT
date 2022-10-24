@@ -4,8 +4,8 @@ import { ScrollView, View } from "react-native";
 import { TextElement } from "react-native-elements/dist/text/Text";
 import { Button, HelperText, IconButton, Text, TextInput } from "react-native-paper";
 import { ActivesHour } from "../../interfaces/StoreInterfaces";
-import { SubTitleStyles } from "../../styles/SubTitleStyles";
-import { TitleSyles } from "../../styles/TitleStyles";
+import { SubTitleStyles } from "../../Styles/SubTitleStyles";
+import { TitleSyles } from "../../Styles/TitleStyles";
 import { DISPONIBILITY_CLOSING_HOUR_KEY, DISPONIBILITY_OPEN_HOUR_KEY } from "../../translations/keys/DisponibilityTranslationKeys";
 import { ActiveHoursStyles } from "./ActiveHoursStyles";
 

@@ -96,7 +96,8 @@ const Store = () => {
       return {
         name: storeInput.shopName,
         address: storeInput.address,
-        disponibilities: disponibilitiesObject
+        disponibilities: disponibilitiesObject,
+        isOpen : storeInput.isOpen,
       }
     }
       
