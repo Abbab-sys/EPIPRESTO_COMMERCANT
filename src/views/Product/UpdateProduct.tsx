@@ -36,32 +36,69 @@ interface ProductFields {
 
 const UpdateProduct = ({ route, navigation }: any) => {
 
-  console.log("params", route.params.idProduct)
-  const [idProduct, setIdProduct] = useState(route.params.idProduct)
-  console.log("idProduct", idProduct)
   const isFocused = useIsFocused()
 
+  // states to count variants and products updates
+    // count 
+    const [updateProductCount, setUpdateProductCount] = useState(0);
+    const [updateVariantCount, setUpdateVariantCount] = useState(0);
+
+    const [updatedVariants, setUpdatedVariants] = useState<string[]>([]);
+
+    const [product, setProduct] = useState<ProductFields>()
+    const [variants , setVariants] = useState<VariantFields[]>([]);
+    const [newVariants, setNewVariants] = useState<string[]>([]);
+    const [deletedVariants, setDeletedVariants] = useState<string[]>([]);
+
+ //6354a775ab90d4cdffe49b46 : title=prod1, variant = prod1-var1
+ //6355939b80483828eb8c4fde : title=prod2, variant = prod2-var1
 
   const {data, loading, error} = useQuery(GET_PRODUCT_BY_ID, {
     variables: {
-      idProduct: idProduct,
+      idProduct: route.params.idProduct,
     },
     fetchPolicy: 'network-only',
     onCompleted(data) {
-      const object = data.getProductById.product;
-      console.log("object", object)
-      setProduct({
-        title: object.title,
-        description: object.description,
-        brand: object.brand,
-        published: object.published,
-        tags: object.tags,
-        imgSrc: object.imgSrc
+      const myProduct = data.getProductById.product
+      const productFields: ProductFields = {
+        title: myProduct.title,
+        description: myProduct.description,
+        brand: myProduct.brand,
+        published: myProduct.published,
+        tags: myProduct.tags,
+        imgSrc: myProduct.imgSrc
+      }
+      const myVariants = myProduct.variants.map((variant: any) => {
+        return {
+          ...variant,
+          variantId: variant._id,
+          isValid: true,
+          isHidden: false
+        }
+        
       })
+      // dont return _id 
+      const myVariants2 = myVariants.map((variant: any) => {
+        const {_id, __typename, ...rest} = variant
+        return rest
+      })
+      setProduct(productFields)  
+      setVariants(myVariants2)
     },
   });
 
-  
+
+  // mapping the product from the query
+  // const productObject = data?.getProductById.product;
+  // console.log("productObject", productObject)
+  // let product : ProductFields ={
+  //   title: productObject?.title,
+  //   description: productObject?.description,
+  //   brand: productObject?.brand,
+  //   published: productObject?.published,
+  //   tags: productObject?.tags,
+  //   imgSrc: productObject?.imgSrc
+  // };
 
   // useEffect(() => {
   //   if(!isFocused) return
@@ -116,15 +153,10 @@ const UpdateProduct = ({ route, navigation }: any) => {
     
     const [updateVariant, {loading: updateVariantLoading, error: updateVariantError, data: updateVariantData}] = useMutation(UPDATE_VARIANT);
 
-  const [product, setProduct] = useState<ProductFields>();
+  //const [product, setProduct] = useState<ProductFields>();
 
 
-    // states to count variants and products updates
-    // count 
-    const [updateProductCount, setUpdateProductCount] = useState(0);
-    const [updateVariantCount, setUpdateVariantCount] = useState(0);
-
-    const [updatedVariants, setUpdatedVariants] = useState<string[]>([]);
+    
 
     const defaultVariant: VariantFields = 
     { 
@@ -140,12 +172,11 @@ const UpdateProduct = ({ route, navigation }: any) => {
     isValid: false,
     isHidden: false,
     }
-    const [variants , setVariants] = useState<VariantFields[]>([]);
-    const [newVariants, setNewVariants] = useState<string[]>([]);
-    const [deletedVariants, setDeletedVariants] = useState<string[]>([]);
+    
 
     const handleUpdate = () => {
         Keyboard.dismiss()
+        //console.log("UPDATED product", product)
         // remvoe newVariants from updatedVariants
         const filteredUpdatedVariants = updatedVariants.filter((variantId) => {
           const variant = newVariants.find((variantId) => variantId === variantId);
@@ -158,20 +189,18 @@ const UpdateProduct = ({ route, navigation }: any) => {
         })
 
         // cpnsider only new variants that are not in deletedVariants
-        console.log("newVariants", newVariants)
-        console.log("deletedVariants", deletedVariants)
         const filteredNewVariants = newVariants.filter((newVariantId) => {
           const variant = deletedVariants.find((variantId) => newVariantId === variantId);
-          console.log("variantFound", variant)
           return !variant;
         })
-        console.log("filteredNewVariants", filteredNewVariants)
       
         // if product fields changed, update product
+        console.log("count", updateProductCount)
         if (updateProductCount > 1) {
             console.log("UpdateProduct(productId,fieldsToUpdate)")
             // TODO: voir si update de l'image ralenti le process
-            updateProduct({variables: {productId: idProduct, fieldsToUpdate: product}})
+            // consider only tags that are not empty
+            //updateProduct({variables: {productId: idProduct, fieldsToUpdate: product}})
         }
         if( filteredNewVariants.length > 0) {
             console.log("addNewVariantToProduct(productId, newVariant)")
@@ -180,21 +209,17 @@ const UpdateProduct = ({ route, navigation }: any) => {
               const variantId = filteredNewVariants.find((variantId) => variantId === variant.variantId);
               return variantId;
             })
-            console.log("newVariantsToAdd", newVariantsToAdd)
             const variantsWithoutId = newVariantsToAdd.map((variant) => {
               const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
               return {...rest, price: parseFloat(price), stock: parseInt(stock)};
             })
-            console.log("variantsWithoutId", variantsWithoutId)
             // add new variants
             variantsWithoutId.forEach((variant) => {
-              console.log("variant", variant)
               //addNewVariantToProduct({variables: {productId: idProduct, newVariant: variant}})
             })
         }            
         if(filteredDeletedVariants.length > 0) {
             console.log("removeVariantById(productVariantId)")
-            console.log("deletedVariants", filteredDeletedVariants)
             //for each deleted variant, remove it from the product
             filteredDeletedVariants.forEach((variantId) => {
               //removeVariantById({variables: {productVariantId: variantId}})
@@ -207,16 +232,13 @@ const UpdateProduct = ({ route, navigation }: any) => {
             const variantId = filteredUpdatedVariants.find((variantId) => variantId === variant.variantId);
             return variantId;
           })
-          console.log("updatedVariantsToUpdate", updatedVariantsToUpdate)
           // update variants
           updatedVariantsToUpdate.forEach((variant) => {
-            console.log("variant ICI", variant)
             // dont consider variantId, isHidden and isValid
             const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
             // change price and stock to number
             const fieldsToUpdate = {...rest, price: parseFloat(price), stock: parseInt(stock)};
-            console.log("rest", fieldsToUpdate)
-            updateVariant({variables: {variantId: variant.variantId, fieldsToUpdate: fieldsToUpdate}})
+            //updateVariant({variables: {variantId: variant.variantId, fieldsToUpdate: fieldsToUpdate}})
           }
           )
       }         
@@ -227,13 +249,13 @@ const UpdateProduct = ({ route, navigation }: any) => {
     const submitButtonShouldBeDisabled = () => {
         // if updateProductCount && updateVariantCount is 1, it means that the user has not changed anything
         // First update happens when we load the page, because we set the product and variants
+        // If the user has not changed anything, but deleted variant(s), we should enable the submit button
         console.log("updateProductCount", updateProductCount)
         console.log("updateVariantCount", updateVariantCount)
-        // If the user has not changed anything, but deleted variant(s), we should enable the submit button
         if(updateProductCount === 1 && updateVariantCount === 1 && deletedVariants.length > 0) {
             return false
         }
-        if (updateProductCount === 1 && updateVariantCount === 1) {
+        if (updateProductCount === 1 && updateVariantCount === 2) {
             return true;
         }
         // button disabled if the product name is empty
@@ -250,11 +272,11 @@ const UpdateProduct = ({ route, navigation }: any) => {
     }
     
     const refreshPage = () => {
-        setRefreshed(refreshed + 1); // update state to trigger useEffect
-        setVariants([defaultVariant]);
-        setError("");
-        setUpdateProductCount(0);
-        setUpdateVariantCount(0);
+        // setRefreshed(refreshed + 1); // update state to trigger useEffect
+        // setVariants([defaultVariant]);
+        // setError("");
+        // setUpdateProductCount(0);
+        // setUpdateVariantCount(0);
     }
     
       // TDOO: add message translation
@@ -274,10 +296,11 @@ const UpdateProduct = ({ route, navigation }: any) => {
 
     const messageBack = "Voulez-vous vraiment quitter la page? Toutes les modifications non sauvegardées seront perdues."
     const backToInventory = () => {
+      setUpdateProductCount(0)
+      setUpdateVariantCount(0)
       Keyboard.dismiss()
       if(submitButtonShouldBeDisabled()){
         navigation.navigate("Inventory")
-        refreshPage()
       }
       else{
         Alert.alert(
@@ -355,7 +378,7 @@ const UpdateProduct = ({ route, navigation }: any) => {
                         source={require('../../assets/icons/back.png')}
                     />
                 </TouchableOpacity>
-                <Text style = {addProductsStyles.header_text}>Update Product</Text>
+                <Text style = {addProductsStyles.header_text}>Update Product {route.params.idProduct}</Text>
 
                 <IconButton
                     style={addProductsStyles.save_button}
@@ -372,15 +395,17 @@ const UpdateProduct = ({ route, navigation }: any) => {
 
           {product && (
             <Product
-            title={product.title}
-            description={product.description}
-            brand={product.brand}
+            title={ data.getProductById.product.title}
+            description={ data.getProductById.product.description}
+            brand={ data.getProductById.product.brand}
             published={true}
-            tags= {product.tags}
-            imgSrc={product.imgSrc}
+            tags= { data.getProductById.product.tags}
+            imgSrc={ data.getProductById.product.imgSrc}
             refreshed={refreshed}
-            updateSelf={(product: ProductFields) => {
-                setProduct(product);
+            updateSelf={(updatedProduct: ProductFields) => {
+                //product = updatedProduct;
+                //console.log("updateSelf", updatedProduct)
+                setProduct(updatedProduct);
                 setUpdateProductCount(updateProductCount + 1);
               }}
             >
@@ -398,7 +423,7 @@ const UpdateProduct = ({ route, navigation }: any) => {
             <Text style={addProductsStyles.titleText}>VARIANTS</Text>
 
             <ScrollView>
-            {variants.map((field, index) => (    
+            {variants.map((field, index) => (   
             <Variant
               key={field.variantId}
               variantIndex={index}
@@ -415,6 +440,7 @@ const UpdateProduct = ({ route, navigation }: any) => {
               isHidden={field.isHidden}
               isRefreshed={0}
               updateSelf={(variant: VariantFields) => {
+                //console.log("updatef variant", variant)
                 const newVariants = [...variants];
                 newVariants[index] = variant;
                 setVariants(newVariants);

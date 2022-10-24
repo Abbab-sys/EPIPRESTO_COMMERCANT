@@ -7,9 +7,10 @@ export interface ProductProps {
   _id: string;
   title: string;
   imgSrc: any;
+  navigation: any;
 }
 
-const Product = (props: ProductProps, navigation : any) => {
+const Product = (props: ProductProps) => {
 
   return(
     <View style={productStyles.root}>
@@ -20,9 +21,9 @@ const Product = (props: ProductProps, navigation : any) => {
           {props.title}
         </Text>
         <Button style={productStyles.buttonStyle}
-        onPress={() => {navigation.navigate('UpdateProduct', {idProduct: props._id})}}>
+        onPress={() => {props.navigation.navigate('UpdateProduct', {idProduct: props._id})}}>
           <Text style={productStyles.buttonText}>
-            VOIR
+            Modifier
           </Text>
         </Button>
       </Card>
