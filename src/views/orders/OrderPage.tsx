@@ -78,7 +78,7 @@ const OrderPage = ({ route, navigation }: any) => {
             return (
                 <Image
                     style={styles.product_image}
-                    source={{uri:"http://via.placeholder.com/640x360"}}
+                    source={{uri:"https://img.icons8.com/ios/452/no-image.png"}}
                 />
             )
         }

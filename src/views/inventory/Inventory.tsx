@@ -14,7 +14,7 @@ const Inventory = ({navigation}: any) => {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { loading, error, data } = useQuery(GET_STORE_PRODUCTS_BY_ID, {variables: {idStore: storeId, "offset": 1, "first": 20}})
+  const { loading, error, data } = useQuery(GET_STORE_PRODUCTS_BY_ID, {variables: {idStore: storeId, "offset": 0, "first": 20}})
 
   const [products, setProducts] = useState<ProductProps[]>([])
 
@@ -37,7 +37,7 @@ const Inventory = ({navigation}: any) => {
   useEffect(() => {
     if(data && data.getStoreById) {
       setProducts(data.getStoreById.store.products)
-      //console.log(data.getStoreById.store.products)
+      console.log(data.getStoreById.store.products)
     }
   }, [data])
 
@@ -87,14 +87,14 @@ const Inventory = ({navigation}: any) => {
           containerColor="black"
           iconColor="#FFA500"
           icon="tag-plus"
-          size={30}/>
+          size={40}/>
       <IconButton 
           onPress={() => {navigation.navigate('Stock');}}
           mode="contained"
           containerColor="black"
           iconColor="#FFA500"
           icon="store-check"
-          size={30}/>
+          size={40}/>
       </View>
     </View>
   )

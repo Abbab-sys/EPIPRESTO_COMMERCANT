@@ -116,7 +116,7 @@ const AddProduct = ({ navigation }: any) => {
         "Alert",
         messageBack,
         [
-          { text: "Quitter", onPress: () => navigation.navigate("Inventory") },
+          { text: "Quitter", onPress: () => navigation.goBack() },
           { text: "Annuler", onPress: () => {} }
         ]
       );
@@ -139,7 +139,7 @@ const AddProduct = ({ navigation }: any) => {
         succes? succesAddMessage: failAddMessage,
         succes? [
             { text: "Oui", onPress: () =>  {}},
-            { text: "Non", onPress: () =>{navigation.navigate("Inventory")}}
+            { text: "Non", onPress: () =>{navigation.goBack()}}
         ] : [
             { text: "OK", onPress: () =>  {} }
         ]

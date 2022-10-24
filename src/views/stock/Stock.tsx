@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, Button, FlatList, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, Alert, Button, FlatList, Image, Keyboard, SafeAreaView, TouchableOpacity, View } from "react-native";
 import { IconButton, Searchbar, Text } from 'react-native-paper';
 import { GET_STORE_PRODUCTS_BY_ID, GET_STORE_VARIANTS_BY_ID } from "../../graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
@@ -8,14 +8,15 @@ import Product, { ProductProps } from "../inventory/subsections/Product";
 import { inventoryStyles } from "../inventory/InventoryStyles";
 import Variant, { VariantProps } from "./subsections/Variant";
 import { UPDATE_VARIANT } from "../../graphql/mutations";
+import { addProductsStyles } from "../Product/Styles/AddProductStyles";
 
-const Stock = () => {
+const Stock = ({ navigation }: any) => {
 
   const {storeId, setStoreId} = useContext(VendorContext)
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { loading, error, data } = useQuery(GET_STORE_VARIANTS_BY_ID, {variables: {idStore: storeId, "offset": 0, "first": 20}})
+  //const { loading, error, data } = useQuery(GET_STORE_VARIANTS_BY_ID, {variables: {idStore: storeId, "offset": 0, "first": 20}})
 
   const [updateVariant, {loading: updateVariantLoading, error: updateVariantError, data: updateVariantData}] = useMutation(UPDATE_VARIANT);
 
@@ -28,47 +29,116 @@ const Stock = () => {
   const [updatedVariants, setUpdatedVariants] = useState<VariantProps[]>([])
 
 
-  // TODO: ADAPTER LA RECHERCHE POUR LES VARIANTS
   const handleSearch = (text: React.SetStateAction<string>) => {
     setSearchQuery(text)
     if(text.toString() === "") {
-      setProducts([])
+      setVariants([])
       if(data) {
-        setProducts(data.getStoreById.store.products)
-      }
-    }
-    else {
-      const data = products.filter(product => {
-        return product.title.toLowerCase().includes(text.toString().toLowerCase())
-      })
-      setProducts(data)
-    }
-  }
-
-  const handleUpdate = () => {
-    // for each id in updatedVariants console log id
-    updatedVariants.forEach((variant) => {
-        console.log(variant._id)
-        console.log(variant.stock)
-        updateVariant({variables: {variantId: variant._id, fieldsToUpdate: {stock: variant.stock}}})
-      })
-    
-  }
-
-
-
-  useEffect(() => {
-    if(data && data.getStoreById) {
-      const products = data.getStoreById.store.products
-      // get all variants of all products
+        const products = data.getStoreById.store.products
+        // get all variants of all products
         const variants = products.map((product: any) => {
             return product.variants
             })
         // flatten array of arrays
         const flattened = [].concat.apply([], variants)
         setVariants(flattened)
+      }
     }
-  }, [data])
+    else {
+      const data = variants.filter(variant => {
+        return variant.variantTitle.toLowerCase().includes(text.toString().toLowerCase())
+      })
+      setVariants(data)
+    }
+  }
+
+  const {data, loading, error} = useQuery(GET_STORE_VARIANTS_BY_ID, {
+    variables: {
+        idStore: storeId, "offset": 0, "first": 20
+    },
+    fetchPolicy: 'network-only',
+    onCompleted(data) {
+        console.log("DATA",data)
+        const products = data.getStoreById.store.products
+        // get all variants of all products
+        const variants = products.map((product: any) => {
+            return product.variants
+            })
+        // flatten array of arrays
+        const flattened = [].concat.apply([], variants)
+        setVariants(flattened)
+    },
+  });
+
+
+  const handleUpdate = () => {
+    // for each id in updatedVariants console log id
+    console.log("click")
+    updatedVariants.forEach((variant) => {
+        console.log(variant._id)
+        console.log(variant.stock)
+        updateVariant({variables: {variantId: variant._id, fieldsToUpdate: {stock: variant.stock}}})
+    })
+  }
+
+  useEffect(() => {
+    console.log("useEffect", updateVariantLoading, updateVariantError, updateVariantData)
+      if (updateVariantLoading || updateVariantError || !updateVariantData) {
+        return
+      }
+      console.log("UpdateData", updateVariantData)
+      if (updateVariantData && updateVariantData.updateProductVariant.code === 200) {
+        // if product is added successfully, show an alert
+        alertOnSave(true)
+      } else {
+        // if an error occurs, show an alert
+        alertOnSave(false)
+      }
+    }, [updateVariantLoading, updateVariantError, updateVariantData])
+
+  const succesAddMessage = "Stock modifié avec succès!"
+    const failAddMessage = "Une erreur est survenue lors de la modification du stock. Veuillez réessayer."
+    
+    const alertOnSave = (succes: boolean) =>
+        Alert.alert(
+        succes? "Succes" : "Erreur",
+        succes? succesAddMessage: failAddMessage,
+        succes? [
+            { text: "OK", onPress: () =>{navigation.goBack()}}
+        ] : [
+            { text: "OK", onPress: () =>  {} }
+        ]
+    );
+
+  const messageBack = "Voulez-vous vraiment quitter la page? Toutes les modifications non sauvegardées seront perdues."
+    const backToInventory = () => {
+      setUpdateCount(0)
+      Keyboard.dismiss()
+      if(submitButtonShouldBeDisabled()){
+        navigation.goBack()
+      }
+      else{
+        Alert.alert(
+          "Alert",
+          messageBack,
+          [
+            { text: "Quitter", onPress: () => navigation.goBack() },
+            { text: "Annuler", onPress: () => {} }
+          ]
+        );
+      }
+    }
+
+
+    const submitButtonShouldBeDisabled = () => {
+        console.log("updateCount: " + updateCount)
+        if (updateCount === 1) {
+          return true
+        }
+        else if (updatedVariants.length > 0) {
+          return false
+        }
+    }
 
   return(
     <View style={inventoryStyles.root}>
@@ -78,8 +148,18 @@ const Stock = () => {
         </Text>
       </View>
       <View>
+      <TouchableOpacity
+                    style={addProductsStyles.back_button}
+                    onPress={() => backToInventory()}>
+                    <Image
+                        style={addProductsStyles.back_button_icon}
+                        source={require('../../assets/icons/back.png')}
+                    />
+      </TouchableOpacity>
+                
         <IconButton  style={{alignSelf:'flex-end'}}
           onPress={() => {handleUpdate()}}
+          disabled={submitButtonShouldBeDisabled()}
           mode="contained"
           containerColor="black"
           iconColor="#FFA500"
