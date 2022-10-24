@@ -24,6 +24,7 @@ import Settings from "./views/settings/Settings";
 import Chat from "./views/chat/Chat";
 import AddProduct from "./views/Product/AddProduct";
 import UpdateProduct from "./views/Product/UpdateProduct";
+import Stock from "./views/stock/Stock";
 
 const Stack = createNativeStackNavigator();
 
@@ -71,6 +72,7 @@ export default function App() {
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Inventory" component={Inventory} />
             <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
+            <Stack.Screen name="Stock" component={Stock} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>

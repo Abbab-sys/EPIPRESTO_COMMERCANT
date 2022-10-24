@@ -58,6 +58,27 @@ export const GET_STORE_PRODUCTS_BY_ID = gql`
   }
 `
 
+export const GET_STORE_VARIANTS_BY_ID = gql`
+  query GetStoreById($idStore: ID!, $offset: Int!, $first: Int) {
+    getStoreById(idStore: $idStore) {
+      code
+      message
+      store {
+        products(offset: $offset, first: $first) {
+          title
+          imgSrc
+          variants {
+            _id
+            variantTitle
+            imgSrc
+            stock
+          }
+        }
+      }
+    }
+  }
+`
+
 export const GET_ALL_ORDERS_BY_STORE_ID = gql`
   query GetStoreById($idStore: ID!) {
     getStoreById(idStore: $idStore) {

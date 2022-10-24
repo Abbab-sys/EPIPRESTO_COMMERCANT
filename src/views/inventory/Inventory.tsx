@@ -81,12 +81,19 @@ const Inventory = ({navigation}: any) => {
           ) }
       </SafeAreaView>
       <View style={{position:'absolute',bottom:0,alignSelf:'flex-end'}}>
-        <IconButton 
+      <IconButton 
           onPress={() => {navigation.navigate('AddProduct');}}
           mode="contained"
           containerColor="black"
           iconColor="#FFA500"
-          icon="plus"
+          icon="tag-plus"
+          size={30}/>
+      <IconButton 
+          onPress={() => {navigation.navigate('Stock');}}
+          mode="contained"
+          containerColor="black"
+          iconColor="#FFA500"
+          icon="store-check"
           size={30}/>
       </View>
     </View>

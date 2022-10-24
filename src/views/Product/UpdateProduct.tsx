@@ -385,7 +385,7 @@ const UpdateProduct = ({ route, navigation }: any) => {
                     onPress={() => handleUpdate()}
                     disabled={submitButtonShouldBeDisabled()}
                     mode="contained"
-                    icon="content-save"
+                    icon="content-save-edit"
                     size={30}
                     containerColor="#FFA50047"
                     iconColor="#FFA500"
