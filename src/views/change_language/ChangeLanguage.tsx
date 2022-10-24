@@ -5,16 +5,23 @@ import { TitleSyles } from "../../Styles/TitleStyles";
 import { SETTINGS_LANGUAGE_TITLE_KEY} from "../../translations/keys/SettingsTranslationsKeys";
 import { Languages } from "./Languages";
 import { ChangeLanguageStyles } from "./ChangeLanguageStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const ChangeLanguage = () => {
+const ChangeLanguage = ({navigation}: any) => {
 
     const {t: translation, i18n} = useTranslation('translation');
 
-    
-    
     return (
-       <View>
-            <View style={TitleSyles.View}>
+       <SafeAreaView>
+            <View style={[TitleSyles.View, ChangeLanguageStyles.titleView]}>
+            <TouchableOpacity
+                  style={ChangeLanguageStyles.back_button}
+                  onPress={() => navigation.goBack()}>
+                  <Image
+                    style={ChangeLanguageStyles.back_button_icon}
+                    source={require('../../assets/icons/back.png')}
+                  />
+                </TouchableOpacity>
                 <Text style={TitleSyles.Text}>{translation(SETTINGS_LANGUAGE_TITLE_KEY)}</Text>
             </View>
             <View>
@@ -34,7 +41,7 @@ const ChangeLanguage = () => {
                     </View>
                 ))}
             </View>
-       </View>
+       </SafeAreaView>
     );
 }
 
