@@ -1,5 +1,5 @@
 import React, { useContext, useState,useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Modal, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Modal, ActivityIndicator, Image } from 'react-native';
 import { Button } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -66,13 +66,11 @@ const Analytics = ({ navigation }: any) => {
             idStore: storeId,
             // dateFrom: dateFrom.toUTCString(),
             // dateTo: dateTo.toUTCString()
-            dateFrom: "Sun, 23 Oct 2022 04:22:38 GMT",
-            dateTo: "Tue, 25 Oct 2022 04:22:38 GMT"
+            dateFrom: "Sun, 23 Oct 2022 04:22:38 GMT", //TODO:APRES SYNCHRO
+            dateTo: "Tue, 25 Oct 2022 04:22:38 GMT" //TODO:APRES SYNCHRO
         },
         fetchPolicy: 'network-only',
         onCompleted(data) {
-            // console.log("dateFrom: ", dateFrom.toUTCString())
-            // console.log("dateTo: ", dateTo.toUTCString())
            const result = data.getAnalytics
            const object:AnalyticsInterface = {
                 totalOrders: result.totalOrders,
@@ -105,19 +103,20 @@ const Analytics = ({ navigation }: any) => {
         )
     }
 
-    //list products_mock in scrollview
+    
     const topProductsView = () => {
         return (
 
             <ScrollView>
-                {products_mock.map((product: any) => {
+                {analyticsObject.topProducts?.map((product: any) => {
                     return (
-                        <View style={styles.product_container} key={product.id}>
+                        <View style={styles.product_container} key={product._id}>
+
+                            <View style={styles.product_img_container}>
+                                {renderProductImage(product.imgSrc)}
+                            </View>
                             <View style={styles.product_details}>
-                                <Text style={styles.product_name}>{product.name}</Text>
-                                <Text style={styles.product_information}>
-                                    {product.price * product.quantity} $
-                                </Text>
+                                <Text style={styles.product_name}>{product.displayName}</Text>
                             </View>
                         </View>
                     );
@@ -128,7 +127,18 @@ const Analytics = ({ navigation }: any) => {
 
     }
 
-    //button that displays a modal with a date picker
+    const renderProductImage = (imgSrc: any) => {
+        if (imgSrc !== '') {
+          return <Image source={{uri: imgSrc}} style={styles.product_image} />;
+        } else {
+          return (
+            <Image
+              style={styles.product_image}
+              source={{uri: 'https://img.icons8.com/ios/452/no-image.png'}}
+            />
+          );
+        }
+      };    
     const dateRangeSelection = () => {
         return (
 
@@ -188,6 +198,7 @@ const Analytics = ({ navigation }: any) => {
                 <View style={styles.analytics_container}>
                     <View style={styles.analytics_header}>
                         <Text style={styles.analytics_title}>Total Sales</Text>
+                        <Text style={styles.analytics_subtitle}>Revenue during this period</Text>
                     </View>
                     <View style={styles.analytics_content}>
                         <Text style={styles.analytics_content_text}>{analyticsObject.totalSales} $</Text>
@@ -196,6 +207,7 @@ const Analytics = ({ navigation }: any) => {
                 <View style={styles.analytics_container}>
                     <View style={styles.analytics_header}>
                         <Text style={styles.analytics_title}>Total Number Of Orders</Text>
+                        <Text style={styles.analytics_subtitle}>Orders during this period</Text>
                     </View>
                     <View style={styles.analytics_content}>
                         <Text style={styles.analytics_content_text}>{analyticsObject.totalOrders} Orders</Text>
@@ -205,6 +217,7 @@ const Analytics = ({ navigation }: any) => {
                 <View style={styles.analytics_container}>
                     <View style={styles.analytics_header}>
                         <Text style={styles.analytics_title}>Top 5 products</Text>
+                        <Text style={styles.analytics_subtitle}>Most sold products during this period</Text>
                     </View>
                     <View style={styles.analytics_content}>
                         {topProductsView()}
@@ -212,30 +225,6 @@ const Analytics = ({ navigation }: any) => {
                 </View>
 
             </ScrollView>
-            {/* <View style={styles.body}>
-
-                    <View style={styles.total_orders}>
-                        <Text style={styles.total_orders_text}>Total Sales</Text>
-                        <Text style={styles.total_orders_number}>5 $</Text>
-                    </View>
-                    <View style={styles.total_orders}>
-                        <Text style={styles.total_orders_text}>Number of Orders</Text>
-                        <Text style={styles.total_orders_number}>5</Text>
-                    </View>
-                    <View style={styles.total_orders}>
-                        <Text style={styles.total_orders_text}>Top 5 products</Text>
-                        <Text style={styles.total_orders_number}>5</Text>
-                    </View>
-
-
-                </View> */}
-
-
-
-
-
-
-
         </SafeAreaView>
     );
 };
@@ -243,20 +232,12 @@ const Analytics = ({ navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // flexDirection: 'column',
     },
     header: {
-        // flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
         marginBottom: 20,
-
-
-
-
     },
     header_text: {
         fontFamily: text_font_family,
@@ -296,7 +277,7 @@ const styles = StyleSheet.create({
 
     },
     analytics_header: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         height: 50,
@@ -312,13 +293,21 @@ const styles = StyleSheet.create({
         marginLeft: 10,
 
     },
+    analytics_subtitle: {
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
+        fontSize: 10,
+        lineHeight: 16,
+        color: 'grey',
+        alignSelf: 'flex-start',
+        marginLeft: 10,
+        marginTop: 5,
+    },
     analytics_content: {
-        //The content should be centeed in the middle of the view
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        // height: 50,
         width: '100%',
         marginBottom: 30,
     },
@@ -347,13 +336,11 @@ const styles = StyleSheet.create({
     product_details: {},
     product_name: {},
     product_information: {},
-
     total_orders: {
         flex: 1,
         flexDirection: 'column',
         width: '80%',
         height: "100%",
-        //container height
         margin: 10,
         padding: 10,
         backgroundColor: 'white',
@@ -425,7 +412,15 @@ const styles = StyleSheet.create({
         color: 'black',
         alignSelf: 'flex-start',
         marginLeft: 10,
-    }
+    },
+    product_image: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+        marginRight: 10,
+    },
+    product_img_container: {},
+
 
 
 
@@ -436,44 +431,3 @@ const styles = StyleSheet.create({
 
 
 export default Analytics;
-
-
-{/* <View style={styles.date_picker}>
-                        <Text style={styles.date_picker_text}>From</Text>
-                        <Text style={styles.date_picker_date_text} onPress={() => setOpenFrom(true)}>{dateFrom.toDateString()}</Text>
-
-
-                        <DatePicker
-                            modal
-                            open={openFrom}
-                            date={dateFrom}
-                            onConfirm={(date) => {
-                                setOpenFrom(false)
-                                setDateFrom(date)
-                            }}
-                            onCancel={() => {
-                                setOpenFrom(false)
-                            }}
-                            mode="date"
-                        />
-
-                    </View>
-                    <View style={styles.date_picker}>
-                        <Text style={styles.date_picker_text}>To</Text>
-                        <Text style={styles.date_picker_date_text} onPress={() => setOpenTo(true)}>{dateTo.toDateString()}</Text>
-
-                        <DatePicker
-                            modal
-                            open={openTo}
-                            date={dateTo}
-                            onConfirm={(date) => {
-                                setOpenTo(false)
-                                setDateTo(date)
-                            }}
-                            onCancel={() => {
-                                setOpenTo(false)
-                            }}
-                            mode="date"
-                        />
-
-                    </View> */}
