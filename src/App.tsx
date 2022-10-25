@@ -27,8 +27,10 @@ import {ChatContext} from './context/ChatContext';
 import Orders from './views/orders/Orders';
 import Store from './views/store/Store';
 import ChangeLanguage from './views/change_language/ChangeLanguage';
+import Analytics from './views/analytics/Analytics';
 
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   const [storeId, setStoreId] = React.useState<string>('');
@@ -41,7 +43,7 @@ export default function App() {
   );
 
   const httpLink = new HttpLink({
-    uri: 'https://epipresto.pagekite.me/',
+    uri: 'http://localhost:4000/graphql',
   });
 
   const splitLink = split(
@@ -75,6 +77,7 @@ function NavigationStack() {
   const chatManager = useChatManager(storeId);
   const chatContext = {chatManager};
   return (
+
     <ChatContext.Provider value={chatContext}>
       <NavigationContainer>
         <Stack.Navigator
@@ -92,6 +95,7 @@ function NavigationStack() {
           <Stack.Screen name="Inventory" component={Inventory} />
           <Stack.Screen name="Store" component={Store} />
           <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
+          <Stack.Screen name="Analytics" component={Analytics} />
         </Stack.Navigator>
       </NavigationContainer>
     </ChatContext.Provider>

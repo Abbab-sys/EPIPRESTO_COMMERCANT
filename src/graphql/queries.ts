@@ -220,3 +220,20 @@ export const GET_ORDER_BY_ID = gql`
     }
   }
 `;
+
+export const GET_ANALYTICS = gql`
+  query Query($idStore: ID!, $dateFrom: Date!, $dateTo: Date!) {
+    getAnalytics(idStore: $idStore, dateFrom: $dateFrom, dateTo: $dateTo) {
+      code
+      message
+      totalSales
+      totalOrders
+      topProducts {
+        _id
+        displayName
+        variantTitle
+        imgSrc
+      }
+    }
+  }
+`
