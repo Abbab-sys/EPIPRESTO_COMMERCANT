@@ -44,6 +44,9 @@ const Variant = (props: VariantProps) => {
                 <Text style={productStyles.buttonText}>-</Text>
             </Button>
             <TextInput
+              underlineColor="#FFA500"
+              activeUnderlineColor="transparent"
+              style={{backgroundColor: '#FFFFFF', borderColor: '#FFA500' , textAlign: 'center'}}
               keyboardType= "numeric"
               value = {stock}
               onChangeText={text => handleStock(text)}

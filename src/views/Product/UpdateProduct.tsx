@@ -21,10 +21,11 @@ import {useTranslation} from 'react-i18next';
 import {useMutation, useQuery} from '@apollo/client/react';
 import {GET_PRODUCT_BY_ID} from '../../graphql/queries';
 import {
-  ADD_NEW_VARIANT_TO_PRODUCT,
-  REMOVE_VARIANT_BY_ID,
+  ADD_NEW_VARIANTS_TO_PRODUCT,
+  REMOVE_VARIANTS_BY_ID,
   UPDATE_PRODUCT,
   UPDATE_VARIANT,
+  UPDATE_VARIANTS,
 } from '../../graphql/mutations';
 
 interface ProductFields {
@@ -67,6 +68,7 @@ const UpdateProduct = ({route, navigation}: any) => {
   const deleteError = t('addProduct.deleteError');
   const [productNameError, setError] = useState('');
 
+
   const defaultVariant: VariantFields = {
     variantId: new Date().getTime().toString() + 1,
     variantTitle: '',
@@ -80,32 +82,6 @@ const UpdateProduct = ({route, navigation}: any) => {
     isValid: false,
     isHidden: false,
   };
-
-  // Mutations to update product and variants
-  const [
-    updateProduct,
-    {loading: updateLoading, error: updateError, data: UpdateData},
-  ] = useMutation(UPDATE_PRODUCT);
-  const [
-    addNewVariantToProduct,
-    {loading: addVariantLoading, error: aaddVariantError, data: addVariantData},
-  ] = useMutation(ADD_NEW_VARIANT_TO_PRODUCT);
-  const [
-    removeVariantById,
-    {
-      loading: removeVariantLoading,
-      error: removeVariantError,
-      data: removeVariantData,
-    },
-  ] = useMutation(REMOVE_VARIANT_BY_ID);
-  const [
-    updateVariant,
-    {
-      loading: updateVariantLoading,
-      error: updateVariantError,
-      data: updateVariantData,
-    },
-  ] = useMutation(UPDATE_VARIANT);
 
   const {data, loading, error} = useQuery(GET_PRODUCT_BY_ID, {
     variables: {
@@ -141,98 +117,115 @@ const UpdateProduct = ({route, navigation}: any) => {
     },
   });
 
+  const alertOnSave = (succes: boolean) =>
+    Alert.alert(
+      succes ? 'Succes' : 'Erreur',
+      succes ? succesAddMessage : failAddMessage,
+      succes
+        ? [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.goBack();
+              },
+            },
+          ]
+        : [
+            {
+              text: 'OK',
+              onPress: () => {},
+            },
+          ],
+    );
+
+  const {
+    updateProduct,
+    addNewVariantsToProduct,
+    removeVariantsByIds,
+    updateVariants,
+  } = useUpdateProductManager(()=> alertOnSave(true),()=>alertOnSave(false));
+
   const handleUpdate = () => {
-    const idProduct = route.params.idProduct;
-    Keyboard.dismiss();
+    const idProduct = route.params.idProduct
+    Keyboard.dismiss()
     // remvoe newVariants from updatedVariants
-    const filteredUpdatedVariants = updatedVariants.filter(variantId => {
-      const variant = newVariants.find(variantId => variantId === variantId);
+    const filteredUpdatedVariants = updatedVariants.filter((updatedvariantId) => {
+      const variant = newVariants.find((variantId) => updatedvariantId === variantId);
       return !variant;
-    });
+    })
     // consider only delted variants that are not in newVariants
-    const filteredDeletedVariants = deletedVariants.filter(deletedVariantId => {
-      const variant = newVariants.find(
-        variantId => deletedVariantId === variantId,
-      );
+    const filteredDeletedVariants = deletedVariants.filter((deletedVariantId) => {
+      const variant = newVariants.find((variantId) => deletedVariantId === variantId);
       return !variant;
-    });
+    })
 
-    // cpnsider only new variants that are not in deletedVariants
-    const filteredNewVariants = newVariants.filter(newVariantId => {
-      const variant = deletedVariants.find(
-        variantId => newVariantId === variantId,
-      );
+    // consider only new variants that are not in deletedVariants
+    const filteredNewVariants = newVariants.filter((newVariantId) => {
+      const variant = deletedVariants.find((variantId) => newVariantId === variantId);
       return !variant;
-    });
+    })
 
+    console.log("filteredNewVariants",filteredNewVariants)
+    console.log("updatedVariants",updatedVariants)
+    console.log('filteredUpdatedVariants',filteredUpdatedVariants)
+
+    // set fields to update
+    let productFieldsToUpdate = {} // remplir si updated
+    let variantsToAdd: { price: number; stock: number; variantTitle: string; sku: string; taxable: boolean; imgSrc: string; byWeight: boolean; availableForSale: boolean; }[] = [] 
+    let variantsToDelete: string[] = []
+    let varvariantsToUpdate: { variantId: string; price: number; stock: number; variantTitle: string; sku: string; taxable: boolean; imgSrc: string; byWeight: boolean; availableForSale: boolean; }[] = []
+  
     // if product fields changed, update product
     // the first update happens when the product is loaded
     if (updateProductCount > 1) {
-      console.log('UpdateProduct(productId,fieldsToUpdate)');
-      // consider only tags that are not empty
-      const filteredTags = product?.tags.filter(tag => tag !== '');
-      // replace tags with filteredTags
-      const productFields = {...product, tags: filteredTags};
-      updateProduct({
-        variables: {productId: idProduct, fieldsToUpdate: productFields},
-      });
+        console.log("UpdateProduct(productId,fieldsToUpdate)")
+        // consider only tags that are not empty
+        const filteredTags = product?.tags.filter((tag) => tag !== "")
+        // replace tags with filteredTags
+        const productFields = {...product, tags: filteredTags}
+        productFieldsToUpdate = productFields
     }
-    if (filteredNewVariants.length > 0) {
-      console.log('addNewVariantToProduct(productId, newVariant)');
-      // get variants that id is in newVariants
-      const newVariantsToAdd = variants.filter(variant => {
-        const variantId = filteredNewVariants.find(
-          variantId => variantId === variant.variantId,
-        );
-        return variantId;
-      });
-      const variantsWithoutId = newVariantsToAdd.map(variant => {
-        const {variantId, isHidden, isValid, price, stock, ...rest} = variant;
-        return {...rest, price: parseFloat(price), stock: parseInt(stock)};
-      });
-      // add new variants
-      variantsWithoutId.forEach(variant => {
-        addNewVariantToProduct({
-          variables: {productId: idProduct, newVariant: variant},
-        });
-      });
+    if( filteredNewVariants.length > 0) {
+        console.log("addNewVariantToProduct(productId, newVariant)")
+        // get variants that id is in newVariants
+        const newVariantsToAdd = variants.filter((variant) => {
+          const variantId = filteredNewVariants.find((variantId) => variantId === variant.variantId);
+          return variantId;
+        })
+        const variantsWithoutId = newVariantsToAdd.map((variant) => {
+          const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
+          return {...rest, price: parseFloat(price), stock: parseInt(stock)};
+        })
+        variantsToAdd = variantsWithoutId
+
+    }            
+    if(filteredDeletedVariants.length > 0) {
+        console.log("removeVariantById(productVariantId)")
+        variantsToDelete = filteredDeletedVariants  
     }
-    if (filteredDeletedVariants.length > 0) {
-      console.log('removeVariantById(productVariantId)');
-      //for each deleted variant, remove it from the product
-      filteredDeletedVariants.forEach(variantId => {
-        removeVariantById({variables: {productVariantId: variantId}});
-      });
-    }
-    // call updateVariant mutation for each variant in filtredUpdatedVariants
-    if (filteredUpdatedVariants.length > 0) {
-      console.log('updateVariant(productVariantId, fieldsToUpdate)');
+    if(filteredUpdatedVariants.length > 0){
+      console.log("updateVariant(productVariantId, fieldsToUpdate)")
       // get variants that id is in updatedVariants
-      const updatedVariantsToUpdate = variants.filter(variant => {
-        const variantId = filteredUpdatedVariants.find(
-          variantId => variantId === variant.variantId,
-        );
+      const updatedVariantsToUpdate = variants.filter((variant) => {
+        const variantId = filteredUpdatedVariants.find((variantId) => variantId === variant.variantId);
         return variantId;
-      });
-      // update variants
-      updatedVariantsToUpdate.forEach(variant => {
+      })
+      updatedVariantsToUpdate.forEach((variant) => {
         // dont consider variantId, isHidden and isValid
-        const {variantId, isHidden, isValid, price, stock, ...rest} = variant;
+        const {isHidden, isValid,price, stock, ...rest} = variant;
         // change price and stock to number
-        const fieldsToUpdate = {
-          ...rest,
-          price: parseFloat(price),
-          stock: parseInt(stock),
-        };
-        updateVariant({
-          variables: {
-            variantId: variant.variantId,
-            fieldsToUpdate: fieldsToUpdate,
-          },
-        });
-      });
-    }
-  };
+        const fieldsToUpdate = {...rest, price: parseFloat(price), stock: parseInt(stock)};
+        varvariantsToUpdate.push(fieldsToUpdate)
+      }
+      )
+    } 
+
+    updateProduct({variables: {productId: idProduct, fieldsToUpdate: productFieldsToUpdate}})
+    updateVariants({variables: {variantsToUpdate: varvariantsToUpdate}})
+    addNewVariantsToProduct({variables: {productId: idProduct, newVariants: variantsToAdd}})
+    removeVariantsByIds({variables : {productVariantsIds: variantsToDelete}})
+              
+}
 
   const submitButtonShouldBeDisabled = () => {
     // if updateProductCount && updateVariantCount is 1, it means that the user has not changed anything
@@ -266,27 +259,6 @@ const UpdateProduct = ({route, navigation}: any) => {
   const failAddMessage =
     'Une erreur est survenue lors de la modification du produit. Veuillez réessayer.';
 
-  const alertOnSave = (succes: boolean) =>
-    Alert.alert(
-      succes ? 'Succes' : 'Erreur',
-      succes ? succesAddMessage : failAddMessage,
-      succes
-        ? [
-            {
-              text: 'OK',
-              onPress: () => {
-                navigation.goBack();
-              },
-            },
-          ]
-        : [
-            {
-              text: 'OK',
-              onPress: () => {},
-            },
-          ],
-    );
-
   const messageBack =
     'Voulez-vous vraiment quitter la page? Toutes les modifications non sauvegardées seront perdues.';
   const backToInventory = () => {
@@ -305,21 +277,6 @@ const UpdateProduct = ({route, navigation}: any) => {
       ]);
     }
   };
-
-  useEffect(() => {
-    console.log('useEffect', updateLoading, updateError, UpdateData);
-    if (updateLoading || updateError || !UpdateData) {
-      return;
-    }
-    console.log('UpdateData', UpdateData);
-    if (UpdateData.updateProduct.code === 200) {
-      // if product is added successfully, show an alert
-      alertOnSave(true);
-    } else {
-      // if an error occurs, show an alert
-      alertOnSave(false);
-    }
-  }, [updateLoading, updateError, UpdateData]);
 
   const alertOnDelete = (message: string) =>
     // Show this alert when user tries to delete the default variant
@@ -483,25 +440,25 @@ export const useUpdateProductManager = (
     {loading: updateLoading, error: updateError, data: UpdateData},
   ] = useMutation(UPDATE_PRODUCT);
   const [
-    addNewVariantToProduct,
+    addNewVariantsToProduct,
     {loading: addVariantLoading, error: aaddVariantError, data: addVariantData},
-  ] = useMutation(ADD_NEW_VARIANT_TO_PRODUCT);
+  ] = useMutation(ADD_NEW_VARIANTS_TO_PRODUCT);
   const [
-    removeVariantById,
+    removeVariantsByIds,
     {
       loading: removeVariantLoading,
       error: removeVariantError,
       data: removeVariantData,
     },
-  ] = useMutation(REMOVE_VARIANT_BY_ID);
+  ] = useMutation(REMOVE_VARIANTS_BY_ID);
   const [
-    updateVariant,
+    updateVariants,
     {
       loading: updateVariantLoading,
       error: updateVariantError,
       data: updateVariantData,
     },
-  ] = useMutation(UPDATE_VARIANT);
+  ] = useMutation(UPDATE_VARIANTS);
 
   useEffect(() => {
     // if any errors occured during update, call onError
@@ -543,8 +500,8 @@ export const useUpdateProductManager = (
 
   return {
     updateProduct,
-    addNewVariantToProduct,
-    removeVariantById,
-    updateVariant,
+    addNewVariantsToProduct,
+    removeVariantsByIds,
+    updateVariants,
   };
 };

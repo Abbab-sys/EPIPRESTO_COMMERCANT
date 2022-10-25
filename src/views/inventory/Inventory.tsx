@@ -37,7 +37,6 @@ const Inventory = ({navigation}: any) => {
   useEffect(() => {
     if(data && data.getStoreById) {
       setProducts(data.getStoreById.store.products)
-      console.log(data.getStoreById.store.products)
     }
   }, [data])
 
