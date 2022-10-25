@@ -31,10 +31,8 @@ const Analytics = () => {
     const [getAnalytics, { data, loading, error }] = useLazyQuery(GET_ANALYTICS, {
         variables: {
             idStore: storeId,
-            // dateFrom: dateFrom.toUTCString(),
-            // dateTo: dateTo.toUTCString()
-            dateFrom: "Sun, 23 Oct 2022 04:22:38 GMT", //TODO:APRES SYNCHRO
-            dateTo: "Tue, 25 Oct 2022 04:22:38 GMT" //TODO:APRES SYNCHRO
+            dateFrom: dateFrom.toUTCString(),
+            dateTo: dateTo.toUTCString()
         },
         fetchPolicy: 'network-only',
         onCompleted(data) {
