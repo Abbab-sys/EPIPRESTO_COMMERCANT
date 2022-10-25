@@ -9,6 +9,10 @@ export const StoreStyles = StyleSheet.create({
         margin: '5%',
         flexDirection: 'row',
     },
+    titleView: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
     text: {
       fontFamily: 'Poppins',
       fontWeight: '500',
@@ -18,8 +22,25 @@ export const StoreStyles = StyleSheet.create({
     },
     root: {
       height: '100%',
+      flex: 1, 
+      backgroundColor: '#EAEAEA'
     },
     button: {
       margin: 10,
-    }
+    },
+    back_button: {
+      position: 'absolute',
+      left: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 50,
+      height: 50,
+      marginLeft: 10,
+
+  },
+  back_button_icon: {
+      width: 35,
+      height: 35,
+      tintColor: '#FFA500',
+  },
 });

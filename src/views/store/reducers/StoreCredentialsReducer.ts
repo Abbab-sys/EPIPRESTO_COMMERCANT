@@ -145,10 +145,8 @@ export function storeCredentialsReducer(state: StoreCredentialsReducerState, act
       let oldActiveHour=activesHours[action.activeHourIndex]
       oldActiveHour = checkErrorMessage(oldActiveHour, "opening",action.newOpeningHour)
       oldActiveHour.openingHour = action.newOpeningHour
-    
       activesHours[action.activeHourIndex]=oldActiveHour
       oldDisponibilities.set(action.day,activesHours)
-      console.log(oldDisponibilities.get(action.day)![action.activeHourIndex].errorOpeningHour)
       return {
         ...state,
         storeInput: {
@@ -166,7 +164,6 @@ export function storeCredentialsReducer(state: StoreCredentialsReducerState, act
       oldActiveHour.endingHour= action.newClosingHour
       activesHours[action.activeHourIndex]=oldActiveHour
       oldDisponibilities.set(action.day,activesHours)
-     
       return {
         ...state,
         storeInput: {
@@ -179,7 +176,6 @@ export function storeCredentialsReducer(state: StoreCredentialsReducerState, act
       const oldDisponibilities = state.storeInput.disponibilities
       const activesHours = oldDisponibilities.get(action.day) as Array<ActivesHour>
       activesHours.unshift({openingHour:'00:00',endingHour:'00:00',errorOpeningHour:'',errorEndingHour:''})
-      console.log(activesHours)
       oldDisponibilities.set(action.day,activesHours)
       return {
         ...state,

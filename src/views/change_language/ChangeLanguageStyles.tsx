@@ -28,5 +28,24 @@ export const ChangeLanguageStyles = StyleSheet.create({
     buttonView: {
         padding: '3%',
       },
+    back_button: {
+      position: 'absolute',
+      left: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 50,
+      height: 50,
+      marginLeft: 10,
+  
+    },
+    back_button_icon: {
+        width: 35,
+        height: 35,
+        tintColor: '#FFA500',
+    },
+    titleView: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
     
   });
