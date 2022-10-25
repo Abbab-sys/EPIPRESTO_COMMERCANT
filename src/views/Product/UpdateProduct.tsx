@@ -165,10 +165,6 @@ const UpdateProduct = ({route, navigation}: any) => {
       return !variant;
     })
 
-    console.log("filteredNewVariants",filteredNewVariants)
-    console.log("updatedVariants",updatedVariants)
-    console.log('filteredUpdatedVariants',filteredUpdatedVariants)
-
     // set fields to update
     let productFieldsToUpdate = {} // remplir si updated
     let variantsToAdd: { price: number; stock: number; variantTitle: string; sku: string; taxable: boolean; imgSrc: string; byWeight: boolean; availableForSale: boolean; }[] = [] 
@@ -243,12 +239,10 @@ const UpdateProduct = ({route, navigation}: any) => {
     }
     // button disabled if the product name is empty
     else if (product && product.title === '') {
-      console.log('disabled no name');
       return true;
     }
     // button disabled if one of the variants is not valid
     else if (variants.some(variant => variant.isValid === false)) {
-      console.log('disabled invalid variant');
       return true;
     }
     return false;
@@ -343,8 +337,6 @@ const UpdateProduct = ({route, navigation}: any) => {
               imgSrc={product.imgSrc}
               refreshed={refreshed}
               updateSelf={(updatedProduct: ProductFields) => {
-                //product = updatedProduct;
-                //console.log("updateSelf", updatedProduct)
                 setProduct(updatedProduct);
                 setUpdateProductCount(updateProductCount + 1);
               }}
@@ -380,7 +372,6 @@ const UpdateProduct = ({route, navigation}: any) => {
                 isHidden={field.isHidden}
                 isRefreshed={0}
                 updateSelf={(variant: VariantFields) => {
-                  //console.log("updatef variant", variant)
                   const newVariants = [...variants];
                   newVariants[index] = variant;
                   setVariants(newVariants);
@@ -395,7 +386,6 @@ const UpdateProduct = ({route, navigation}: any) => {
                 }}
                 deleteSelf={() => {
                   const newVariants = [...variants];
-                  console.log('deleted variant', newVariants[index]);
                   // add variantId to deletedVariants
                   setDeletedVariants([
                     ...deletedVariants,
