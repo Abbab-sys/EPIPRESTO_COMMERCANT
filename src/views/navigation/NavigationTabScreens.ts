@@ -9,6 +9,7 @@ import Settings from '../settings/Settings';
 import {ORDERS_TITLE_KEY} from '../../translations/keys/OrdersTranslationKeys';
 import Orders from '../orders/Orders';
 import Analytics from '../analytics/Analytics';
+import { ANALYTICS_TITLE_KEY } from '../../translations/keys/AnalyticsTranslationKeys';
 
 export const NavigationTabScreens: TabScreenProps[] = [
   {
@@ -30,7 +31,7 @@ export const NavigationTabScreens: TabScreenProps[] = [
     iconName: 'shopping-cart',
   },
   {
-    title: 'Analytics',
+    title: ANALYTICS_TITLE_KEY,
     navigationName: 'Analytics',
     component: Analytics,
     iconName: 'bar-chart',

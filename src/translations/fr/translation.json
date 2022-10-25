@@ -200,6 +200,30 @@
           "failed":"Une erreur est survenue lors de la mise à jour du statut"
         }
       }
+    },
+    "analytics":{
+      "title":"Statistiques",
+      "totalSales":{
+        "title":"Ventes totales",
+        "subtitle":"Ventes totales de la boutique durant cette période"
+      },
+      "totalOrders":{
+        "title":"Nombre de commandes",
+        "subtitle":"Commandes totales de la boutique durant cette période",
+        "value":"Commandes"
+      },
+      "topProducts":{
+        "title":"Top 5 produits",
+        "subtitle":"Les 5 produits les plus vendus de la boutique durant cette période"
+      },
+      "selectPeriod":{
+        "title":"Choisir une intervalle de temps pour afficher les données",
+        "from":"Du",
+        "to":"Jusqu'au",
+        "submit":"Valider"
+
+      }
     }
+    
   
 }

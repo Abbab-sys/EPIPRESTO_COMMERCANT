@@ -7,49 +7,15 @@ import { useLazyQuery } from '@apollo/client';
 import { GET_ANALYTICS } from '../../graphql/queries';
 import { VendorContext } from '../../context/Vendor';
 import {AnalyticsInterface} from '../../interfaces/AnalyticsInterfaces';
+import { useTranslation } from 'react-i18next';
+import { ANALYTICS_ORDERS_KEY, ANALYTICS_SELECT_PERIOD_FROM_KEY, ANALYTICS_SELECT_PERIOD_KEY, ANALYTICS_SELECT_PERIOD_SUBMIT_KEY, ANALYTICS_SELECT_PERIOD_TO_KEY, ANALYTICS_TITLE_KEY, ANALYTICS_TOP_PRODUCTS_KEY, ANALYTICS_TOP_PRODUCTS_SUBTITLE_KEY, ANALYTICS_TOTAL_ORDERS_KEY, ANALYTICS_TOTAL_ORDERS_SUBTITLE_KEY, ANALYTICS_TOTAL_SALES_KEY, ANALYTICS_TOTAL_SALES_SUBTITLE_KEY } from '../../translations/keys/AnalyticsTranslationKeys';
 
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
 
 
-//create random products array
-const products_mock = [
-    {
-        id: 1,
-        name: 'Product 1',
-        price: 10,
-        quantity: 1,
-    },
-    {
-        id: 2,
-        name: 'Product 2',
-        price: 20,
-        quantity: 2,
-    },
-    {
-        id: 3,
-        name: 'Product 2',
-        price: 20,
-        quantity: 2,
-    },
-    {
-        id: 4,
-        name: 'Product 2',
-        price: 20,
-        quantity: 2,
-    },
-    {
-        id: 5,
-        name: 'Product 2',
-        price: 20,
-        quantity: 2,
-    },
-
-]
-
-
-const Analytics = ({ navigation }: any) => {
+const Analytics = () => {
     //Default dateFrom is a week ago
     const [dateFrom, setDateFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)))
     const [dateTo, setDateTo] = useState(new Date())
@@ -60,6 +26,7 @@ const Analytics = ({ navigation }: any) => {
         topProducts: null,
     })
     const { storeId } = useContext(VendorContext);
+    const {t: translation} = useTranslation('translation');
 
     const [getAnalytics, { data, loading, error }] = useLazyQuery(GET_ANALYTICS, {
         variables: {
@@ -91,7 +58,7 @@ const Analytics = ({ navigation }: any) => {
     if (loading) {
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#FFA500" />
             </View>
         )
     }
@@ -144,17 +111,17 @@ const Analytics = ({ navigation }: any) => {
 
             <View style={styles.date_range_container}>
                 <Button style={styles.date_button} mode="contained" onPress={() => setModalVisible(true)}>
-                    {dateFrom.toDateString()} to {dateTo.toDateString()}
+                    {dateFrom.toDateString()} {translation(ANALYTICS_SELECT_PERIOD_TO_KEY)} {dateTo.toDateString()}
                 </Button>
 
                 <Modal visible={modalVisible} animationType="slide" transparent={true}>
                     <View style={styles.modal_container}>
                         <View style={styles.modal_header}>
-                            <Text style={styles.modal_title}>Select Analytics Date Range</Text>
+                            <Text style={styles.modal_title}>{translation(ANALYTICS_SELECT_PERIOD_KEY)}</Text>
                         </View>
 
                         <View style={styles.modal_date_picker_container}>
-                            <Text style={styles.modal_date_picker_title}>From</Text>
+                            <Text style={styles.modal_date_picker_title}>{translation(ANALYTICS_SELECT_PERIOD_FROM_KEY)}</Text>
                             <DatePicker
                                 date={dateFrom}
                                 onDateChange={setDateFrom}
@@ -163,7 +130,7 @@ const Analytics = ({ navigation }: any) => {
 
                         </View>
                         <View style={styles.modal_date_picker_container}>
-                            <Text style={styles.modal_date_picker_title}>To</Text>
+                            <Text style={styles.modal_date_picker_title}>{translation(ANALYTICS_SELECT_PERIOD_TO_KEY)}</Text>
                             <DatePicker
                                 date={dateTo}
                                 onDateChange={setDateTo}
@@ -172,7 +139,7 @@ const Analytics = ({ navigation }: any) => {
 
                         </View>
                         <Button style={styles.date_button} mode="contained" onPress={() => {getAnalytics();setModalVisible(false)}}>
-                            Done
+                        {translation(ANALYTICS_SELECT_PERIOD_SUBMIT_KEY)}
                         </Button>
                     </View>
                 </Modal>
@@ -190,15 +157,15 @@ const Analytics = ({ navigation }: any) => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
             <View style={styles.header}>
-                <Text style={styles.header_text}>Analytics</Text>
+                <Text style={styles.header_text}>{translation(ANALYTICS_TITLE_KEY)}</Text>
                 {dateRangeSelection()}
 
             </View>
             <ScrollView style={styles.main_scrollView}>
                 <View style={styles.analytics_container}>
                     <View style={styles.analytics_header}>
-                        <Text style={styles.analytics_title}>Total Sales</Text>
-                        <Text style={styles.analytics_subtitle}>Revenue during this period</Text>
+                        <Text style={styles.analytics_title}>{translation(ANALYTICS_TOTAL_SALES_KEY)}</Text>
+                        <Text style={styles.analytics_subtitle}>{translation(ANALYTICS_TOTAL_SALES_SUBTITLE_KEY)}</Text>
                     </View>
                     <View style={styles.analytics_content}>
                         <Text style={styles.analytics_content_text}>{analyticsObject.totalSales} $</Text>
@@ -206,18 +173,18 @@ const Analytics = ({ navigation }: any) => {
                 </View>
                 <View style={styles.analytics_container}>
                     <View style={styles.analytics_header}>
-                        <Text style={styles.analytics_title}>Total Number Of Orders</Text>
-                        <Text style={styles.analytics_subtitle}>Orders during this period</Text>
+                        <Text style={styles.analytics_title}>{translation(ANALYTICS_TOTAL_ORDERS_KEY)}</Text>
+                        <Text style={styles.analytics_subtitle}>{translation(ANALYTICS_TOTAL_ORDERS_SUBTITLE_KEY)}</Text>
                     </View>
                     <View style={styles.analytics_content}>
-                        <Text style={styles.analytics_content_text}>{analyticsObject.totalOrders} Orders</Text>
+                        <Text style={styles.analytics_content_text}>{analyticsObject.totalOrders} {translation(ANALYTICS_ORDERS_KEY)}</Text>
                     </View>
                 </View>
 
                 <View style={styles.analytics_container}>
                     <View style={styles.analytics_header}>
-                        <Text style={styles.analytics_title}>Top 5 products</Text>
-                        <Text style={styles.analytics_subtitle}>Most sold products during this period</Text>
+                        <Text style={styles.analytics_title}>{translation(ANALYTICS_TOP_PRODUCTS_KEY)}</Text>
+                        <Text style={styles.analytics_subtitle}>{translation(ANALYTICS_TOP_PRODUCTS_SUBTITLE_KEY)}</Text>
                     </View>
                     <View style={styles.analytics_content}>
                         {topProductsView()}
@@ -401,6 +368,13 @@ const styles = StyleSheet.create({
         fontSize: 24,
         lineHeight: 29,
         color: '#FFA500',
+        //center 
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        margin:10
+
 
     },
     modal_date_picker_container: {},

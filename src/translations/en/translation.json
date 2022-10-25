@@ -200,5 +200,28 @@
         "failed":"Oops something went wrong"
       }
     }
+  },
+  "analytics":{
+    "title":"Analytics",
+    "totalSales":{
+      "title":"Total Sales",
+      "subtitle":"Revenue during this period"
+    },
+    "totalOrders":{
+      "title":"Number of orders",
+      "subtitle":"Number of orders during this period",
+      "value":"Orders"
+    },
+    "topProducts":{
+      "title":"Top 5 products",
+      "subtitle":"Most sold products during this period"
+    },
+    "selectPeriod":{
+      "title":"Select a range of dates to display the data",
+      "from":"From",
+      "to":"Until",
+      "submit":"Submit"
+
+    }
   }
 }
