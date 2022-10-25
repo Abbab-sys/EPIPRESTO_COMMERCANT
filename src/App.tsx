@@ -56,9 +56,26 @@ export default function App() {
     httpLink,
   );
 
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          products: {
+            keyArgs: false,
+            merge(existing = [], incoming) {
+              console.log("Existing: ", existing)
+              console.log("Incoming: ", incoming)
+              return [...existing, ...incoming];
+            },
+          }
+        }
+      }
+    }
+  })
+
   const client = new ApolloClient({
     link: splitLink,
-    cache: new InMemoryCache(),
+    cache: cache,
   });
 
   return (
