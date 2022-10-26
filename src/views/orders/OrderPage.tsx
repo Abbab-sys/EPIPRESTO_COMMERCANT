@@ -85,7 +85,7 @@ const OrderPage = ({route, navigation}: any) => {
   if (loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#FFA500" />
       </View>
     );
   }
@@ -211,15 +211,6 @@ const OrderPage = ({route, navigation}: any) => {
             <Text style={styles.details_title}>
               {translation(ORDERS_CUSTOMER_KEY)}
             </Text>
-            {/* <TouchableOpacity
-                            style={styles.chat_button}
-                            onPress={() => navigation.goBack()}
-                        >
-                            <Image
-                                style={styles.back_button_icon}
-                                source={require('../../assets/icons/chat.png')}
-                            />
-                        </TouchableOpacity> */}
           </View>
 
           <Text style={styles.product_name}>

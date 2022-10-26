@@ -8,6 +8,8 @@ import Inventory from '../inventory/Inventory';
 import Settings from '../settings/Settings';
 import {ORDERS_TITLE_KEY} from '../../translations/keys/OrdersTranslationKeys';
 import Orders from '../orders/Orders';
+import Analytics from '../analytics/Analytics';
+import { ANALYTICS_TITLE_KEY } from '../../translations/keys/AnalyticsTranslationKeys';
 
 export const NavigationTabScreens: TabScreenProps[] = [
   {
@@ -29,10 +31,10 @@ export const NavigationTabScreens: TabScreenProps[] = [
     iconName: 'shopping-cart',
   },
   {
-    title: SETTINGS_TITLE_KEY,
-    navigationName: 'Settings',
-    component: Settings,
-    iconName: 'cog',
+    title: ANALYTICS_TITLE_KEY,
+    navigationName: 'Analytics',
+    component: Analytics,
+    iconName: 'bar-chart',
   },
   {
     title: 'Chat',
@@ -40,4 +42,12 @@ export const NavigationTabScreens: TabScreenProps[] = [
     component: AllChats,
     iconName: 'comment',
   },
+  {
+    title: SETTINGS_TITLE_KEY,
+    navigationName: 'Settings',
+    component: Settings,
+    iconName: 'cog',
+  },
+  
+  
 ];
