@@ -45,7 +45,7 @@ export default function App() {
   );
 
   const httpLink = new HttpLink({
-    uri: 'http://localhost:4000/graphql',
+    uri: 'https://epipresto.pagekite.me/',
   });
 
   const splitLink = split(
@@ -85,23 +85,7 @@ export default function App() {
   return (
     <VendorContext.Provider value={storeIdContext}>
       <ApolloProvider client={client}>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{headerShown: false}}
-            initialRouteName="Login">
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Settings" component={Settings} />
-            <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="Navigation" component={Navigation} />
-            <Stack.Screen name="AddProduct" component={AddProduct} />
-            <Stack.Screen name="Orders" component={Orders} />
-            <Stack.Screen name="OrderPage" component={OrderPage} />
-            <Stack.Screen name="Chat" component={Chat} />
-            <Stack.Screen name="Inventory" component={Inventory} />
-            <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
-            <Stack.Screen name="Stock" component={Stock} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <NavigationStack />
       </ApolloProvider>
     </VendorContext.Provider>
   );
@@ -128,7 +112,9 @@ function NavigationStack() {
           <Stack.Screen name="Orders" component={Orders} />
           <Stack.Screen name="OrderPage" component={OrderPage} />
           <Stack.Screen name="Inventory" component={Inventory} />
+          <Stack.Screen name="Stock" component={Stock} />
           <Stack.Screen name="Store" component={Store} />
+          <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
           <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
           <Stack.Screen name="Analytics" component={Analytics} />
         </Stack.Navigator>
