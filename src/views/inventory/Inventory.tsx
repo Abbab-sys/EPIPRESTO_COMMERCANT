@@ -5,43 +5,56 @@ import { inventoryStyles } from "./InventoryStyles";
 import Product, { ProductProps } from "./subsections/Product";
 import { mockProducts } from './mockProducts';
 import { GET_STORE_PRODUCTS_BY_ID } from "../../graphql/queries";
-import { useQuery } from "@apollo/client";
+import { InMemoryCache, useLazyQuery, useQuery } from "@apollo/client";
 import { VendorContext } from "../../context/Vendor";
+import { useIsFocused } from "@react-navigation/native";
 
 const Inventory = ({navigation}: any) => {
+
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if(!isFocused) return
+    getItems()
+    console.log(data)
+  }, [isFocused])
 
   const {storeId, setStoreId} = useContext(VendorContext)
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { loading, error, data } = useQuery(GET_STORE_PRODUCTS_BY_ID, {variables: {idStore: storeId, "offset": 0, "first": 20}})
-
   const [products, setProducts] = useState<ProductProps[]>([])
 
-  const handleSearch = (text: React.SetStateAction<string>) => {
-    setSearchQuery(text)
-    if(text.toString() === "") {
-      setProducts([])
-      if(data) {
+  const [getItems, { loading, error, data, fetchMore }] = useLazyQuery(
+    GET_STORE_PRODUCTS_BY_ID, 
+    {
+      variables: {
+        idStore: storeId,
+        offset: 0,
+        first: 20,
+        searchText: searchQuery
+      },
+      onCompleted(data){
         setProducts(data.getStoreById.store.products)
       }
     }
-    else {
-      const data = products.filter(product => {
-        return product.title.toLowerCase().includes(text.toString().toLowerCase())
-      })
-      setProducts(data)
-    }
+  )
+
+  const handleSearch = (text: React.SetStateAction<string>) => {
+    setSearchQuery(text)
+    getItems()
   }
 
   useEffect(() => {
+    console.log("DATA: ", data)
     if(data && data.getStoreById) {
       setProducts(data.getStoreById.store.products)
+      console.log("PRODUCTS: ", products)
     }
   }, [data])
 
   return(
-    <View style={inventoryStyles.root}>
+    <SafeAreaView style={inventoryStyles.root}>
       <View style={inventoryStyles.view}>
         <Text variant="headlineMedium" style={inventoryStyles.headline}>
           INVENTORY
@@ -65,22 +78,39 @@ const Inventory = ({navigation}: any) => {
               : 
               (
                 <FlatList
-                numColumns={2}
-                data={products}
-                renderItem={({item}) => 
-                  <Product
-                    _id={item._id}
-                    title={item.title}
-                    imgSrc={item.imgSrc}
-                    navigation={navigation}/> 
-                }
-                keyExtractor={item => item._id}
+                  numColumns={2}
+                  data={products}
+                  renderItem={({item}) => 
+                    <Product
+                      _id={item._id}
+                      title={item.title}
+                      imgSrc={item.imgSrc}
+                      navigation={navigation} /> 
+                  }
+                  keyExtractor={item => item._id}
+                  onEndReachedThreshold={0.8}
+                  onEndReached={() => 
+                    {
+                      console.log("END REACHED")
+                      fetchMore({
+                        variables: {
+                          offset: products.length
+                        },
+                        updateQuery(previousQueryResult, { fetchMoreResult }) {
+                          const newEntries = fetchMoreResult.getStoreById.store.products
+                          console.log("PREVIOUS: ", previousQueryResult)
+                          console.log("NEW: ", newEntries)
+                          setProducts(oldProducts => [...oldProducts, ...newEntries])
+                        },
+                      })
+                    }
+                  }
                 />
               )
           ) }
       </SafeAreaView>
-      <View style={{position:'absolute',bottom:0,alignSelf:'flex-end'}}>
-      <IconButton 
+      <View style={{position:'absolute', bottom: 0, alignSelf:'flex-end'}}>
+        <IconButton 
           onPress={() => {navigation.navigate('AddProduct');}}
           mode="contained"
           containerColor="black"
@@ -95,7 +125,7 @@ const Inventory = ({navigation}: any) => {
           icon="store-check"
           size={40}/>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
