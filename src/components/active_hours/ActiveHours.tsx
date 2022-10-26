@@ -7,6 +7,7 @@ import { ActivesHour } from "../../interfaces/StoreInterfaces";
 import { SubTitleStyles } from "../../Styles/SubTitleStyles";
 import { TitleSyles } from "../../Styles/TitleStyles";
 import { DISPONIBILITY_CLOSING_HOUR_KEY, DISPONIBILITY_OPEN_HOUR_KEY } from "../../translations/keys/DisponibilityTranslationKeys";
+import { EMPTY_KEY } from "../../translations/keys/EmptyTranslationKey";
 import { ActiveHoursStyles } from "./ActiveHoursStyles";
 
 
@@ -46,7 +47,7 @@ const ActiveHours = (props:DisponibilityProps) => {
                         error={activeHour.errorOpeningHour!==''}
                         />
                         <HelperText type="error" visible={activeHour.errorOpeningHour!==''}>
-                        {translation(activeHour.errorOpeningHour)}
+                        {translation(activeHour.errorOpeningHour !== '' ? activeHour.errorOpeningHour : EMPTY_KEY)}
                     </HelperText>
                     </View>
                         <Text style={{fontSize:40}}> - </Text>
@@ -63,7 +64,7 @@ const ActiveHours = (props:DisponibilityProps) => {
                         error={activeHour.errorEndingHour!==''}
                         />
                          <HelperText type="error" visible={activeHour.errorEndingHour!==''}>
-                        {translation(activeHour.errorEndingHour)}
+                        {translation(activeHour.errorEndingHour !== '' ? activeHour.errorEndingHour : EMPTY_KEY)}
                     </HelperText>
                     {props.activeHours.length > 1 && <IconButton iconColor="white" style={[ActiveHoursStyles.minusIcon, ActiveHoursStyles.iconSize]} icon="minus-thick" mode='contained' onPress={()=> props.removeActiveHour(index)}></IconButton>}
                     </View>

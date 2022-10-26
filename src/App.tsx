@@ -14,7 +14,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Navigation from './views/navigation/Navigation';
 import Inventory from './views/inventory/Inventory';
 import {VendorContext} from './context/Vendor';
-import AddProduct from './views/add_product/AddProduct';
 import OrderPage from './views/orders/OrderPage';
 import Settings from './views/settings/Settings';
 import Chat from './views/chat/Chat';
@@ -28,6 +27,9 @@ import Orders from './views/orders/Orders';
 import Store from './views/store/Store';
 import ChangeLanguage from './views/change_language/ChangeLanguage';
 import Analytics from './views/analytics/Analytics';
+import AddProduct from './views/Product/AddProduct';
+import UpdateProduct from './views/Product/UpdateProduct';
+import Stock from './views/stock/Stock';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,15 +60,48 @@ export default function App() {
     httpLink,
   );
 
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          products: {
+            keyArgs: false,
+            merge(existing = [], incoming) {
+              console.log("Existing: ", existing)
+              console.log("Incoming: ", incoming)
+              return [...existing, ...incoming];
+            },
+          }
+        }
+      }
+    }
+  })
+
   const client = new ApolloClient({
     link: splitLink,
-    cache: new InMemoryCache(),
+    cache: cache,
   });
 
   return (
     <VendorContext.Provider value={storeIdContext}>
       <ApolloProvider client={client}>
-        <NavigationStack />
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{headerShown: false}}
+            initialRouteName="Login">
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="Navigation" component={Navigation} />
+            <Stack.Screen name="AddProduct" component={AddProduct} />
+            <Stack.Screen name="Orders" component={Orders} />
+            <Stack.Screen name="OrderPage" component={OrderPage} />
+            <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="Inventory" component={Inventory} />
+            <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
+            <Stack.Screen name="Stock" component={Stock} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </ApolloProvider>
     </VendorContext.Provider>
   );
