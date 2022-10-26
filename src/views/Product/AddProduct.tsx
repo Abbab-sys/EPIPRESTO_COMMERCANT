@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, Image, Keyboard, ScrollView, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Keyboard, SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
 import { Button, HelperText, IconButton, Text } from "react-native-paper";
 import { addProductsStyles } from "./Styles/AddProductStyles";
 import Variant from "./Variant";
@@ -182,6 +182,7 @@ const AddProduct = ({ navigation }: any) => {
 
 
     return(
+      <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
         <ScrollView style={{ flex: 1 }}>
             <View style={addProductsStyles.headerFix}>
                 <TouchableOpacity
@@ -272,6 +273,7 @@ const AddProduct = ({ navigation }: any) => {
           </Button>
         
         </ScrollView>
+      </SafeAreaView>
     )
 
 

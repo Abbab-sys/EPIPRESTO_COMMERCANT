@@ -3,6 +3,7 @@ import {
   Alert,
   Image,
   Keyboard,
+  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   View,
@@ -291,6 +292,7 @@ const UpdateProduct = ({route, navigation}: any) => {
   };
 
   return (
+  <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
     <ScrollView style={{flex: 1}}>
       {loading ? (
         <View>
@@ -415,6 +417,7 @@ const UpdateProduct = ({route, navigation}: any) => {
         </View>
       )}
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
