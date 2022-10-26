@@ -141,7 +141,7 @@ const Stock = ({ navigation }: any) => {
     }
 
   return(
-    <View style={inventoryStyles.root}>
+    <SafeAreaView style={inventoryStyles.root}>
       <View style={inventoryStyles.view}>
         <Text variant="headlineMedium" style={inventoryStyles.headline}>
           STOCK
@@ -217,7 +217,7 @@ const Stock = ({ navigation }: any) => {
           ) }
 
       </SafeAreaView>
-    </View>
+    </SafeAreaView>
   )
 }
 
