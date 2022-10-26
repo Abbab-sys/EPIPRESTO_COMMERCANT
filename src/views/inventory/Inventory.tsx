@@ -84,7 +84,8 @@ const Inventory = ({navigation}: any) => {
                     <Product
                       _id={item._id}
                       title={item.title}
-                      imgSrc={item.imgSrc} /> 
+                      imgSrc={item.imgSrc}
+                      navigation={navigation} /> 
                   }
                   keyExtractor={item => item._id}
                   onEndReachedThreshold={0.8}
@@ -114,8 +115,15 @@ const Inventory = ({navigation}: any) => {
           mode="contained"
           containerColor="black"
           iconColor="#FFA500"
-          icon="plus"
-          size={30}/>
+          icon="tag-plus"
+          size={40}/>
+      <IconButton 
+          onPress={() => {navigation.navigate('Stock');}}
+          mode="contained"
+          containerColor="black"
+          iconColor="#FFA500"
+          icon="store-check"
+          size={40}/>
       </View>
     </SafeAreaView>
   )
