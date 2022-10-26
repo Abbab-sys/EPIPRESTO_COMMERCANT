@@ -31,4 +31,7 @@ export const ActiveHoursStyles = StyleSheet.create({
     textInputLabelView: {
         width: '100%',
     },
+    subTitlesMargin: {
+        marginLeft: 10,
+    }
 })

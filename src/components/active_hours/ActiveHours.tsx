@@ -26,7 +26,7 @@ const ActiveHours = (props:DisponibilityProps) => {
     return (
         <View>
             <View style={ActiveHoursStyles.flexDirectionRow}>
-                <Text style={SubTitleStyles.text}>{translation("disponibility.days." + props.day)}</Text>
+                <Text style={[SubTitleStyles.text, ActiveHoursStyles.subTitlesMargin]}>{translation("disponibility.days." + props.day)}</Text>
                 <IconButton style={[ActiveHoursStyles.iconSize, ActiveHoursStyles.plusIcon]} iconColor='white' icon="plus-thick" mode='contained' onPress={()=> props.addActiveHour()}></IconButton>
             </View>
             

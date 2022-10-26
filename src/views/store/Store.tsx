@@ -173,6 +173,7 @@ const Store = ({navigation}: any) => {
                   trackColor={{ false: "#767577", true: "#81b0ff" }}
                   thumbColor={storeInput.isOpen ? "#f5dd4b" : "#f4f3f4"}
                   ios_backgroundColor="#3e3e3e"
+                  style={{marginLeft: 10}}
                   onValueChange={() => dispatchCredentialsState({type: 'CHANGE_STATUS'})}
                   value={storeInput.isOpen}
                 />
