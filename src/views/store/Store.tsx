@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import React, { useContext, useReducer } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Switch, Text, View } from "react-native";
+import { ActivityIndicator, Image, Switch, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,11 +20,13 @@ import { initialStoreCredentialsState } from "./reducers/StoreCredentialsReducer
 import { StoreStyles } from "./StoreStyles";
 import { StoreTextFields } from "./StoreTextFields";
 import { useSnackbar } from "../../hooks/UiHooks/UiHooks";
+import { Icon } from "react-native-elements";
+import { EMPTY_KEY } from "../../translations/keys/EmptyTranslationKey";
 
 const weekdays = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 
 
-const Store = () => {
+const Store = ({navigation}: any) => {
 
     const {t: translation} = useTranslation('translation');
     const [{storeInput, storeErrorMessage}, dispatchCredentialsState]
@@ -65,7 +67,7 @@ const Store = () => {
 
     const {storeId, setStoreId} = useContext(VendorContext)
 
-    const { loading, error, data } = useQuery(GET_STORE_CREDENTIALS_BY_ID, {variables: {idStore: storeId}, onCompleted: handleStoreCredentials, fetchPolicy: "no-cache"})
+    const { loading, error, data } = useQuery(GET_STORE_CREDENTIALS_BY_ID, {variables: {idStore: "633cfb2bf7bdb731e893e28b"}, onCompleted: handleStoreCredentials, fetchPolicy: "no-cache"})
     const [storeChanges] = useMutation(MODIFY_STORE, {onCompleted: () => console.log("Store changes saved")});
     const [vendorChanges] = useMutation(MODIFY_VENDORS, {onCompleted: () => console.log("Vendor changes saved")});
 
@@ -125,7 +127,15 @@ const Store = () => {
 
     return (
        <SafeAreaView style={StoreStyles.root}>
-            <View style={TitleSyles.View}>
+            <View style={[TitleSyles.View, StoreStyles.titleView]}>
+                <TouchableOpacity
+                  style={StoreStyles.back_button}
+                  onPress={() => navigation.goBack()}>
+                  <Image
+                    style={StoreStyles.back_button_icon}
+                    source={require('../../assets/icons/back.png')}
+                  />
+                </TouchableOpacity>
                 <Text style={TitleSyles.Text}>{translation(SETTINGS_STORE_TITLE_KEY)}</Text>
             </View>
             {loading ? <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator> : 
@@ -142,15 +152,14 @@ const Store = () => {
                             (field.attribute +
                               'Error') as keyof StoreErrorMessage
                           ].size > 0
-                            ? translation(
+                            ? 
                               storeErrorMessage[
                                   (field.attribute +
                                     'Error') as keyof StoreErrorMessage
                                 ]
                                   .values()
-                                  .next().value,
-                              )
-                            : ''
+                                  .next().value
+                            : (EMPTY_KEY as string)
                         }
                         dispatch={dispatchCredentialsState}
                       />

@@ -65,5 +65,10 @@ export const inventoryStyles = StyleSheet.create({
     innerContainer: {
         justifyContent: 'center',
         flex: 1
+    },
+    loading: {
+        justifyContent: 'center',
+        flex: 1,
+        marginBottom: '2%'
     }
 })

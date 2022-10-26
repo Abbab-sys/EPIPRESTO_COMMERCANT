@@ -7,6 +7,7 @@ import { ButtonSections } from "./ButtonSections";
 import { SettingsStyles } from "./SettingsStyles";
 import { SETTINGS_TITLE_KEY } from "../../translations/keys/SettingsTranslationsKeys";
 import { TitleSyles } from "../../Styles/TitleStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -15,7 +16,7 @@ const Settings = ({navigation}: any) => {
     const {t: translation} = useTranslation('translation');
 
     return (
-        <View>
+        <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
             <View style={TitleSyles.View}>
                 <Text style={TitleSyles.Text}>{translation(SETTINGS_TITLE_KEY)}</Text>
             </View>
@@ -28,7 +29,7 @@ const Settings = ({navigation}: any) => {
                     </View>
                 ))}
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 

@@ -30,6 +30,7 @@ import {
 } from '../../graphql/queries';
 import {SIGN_UP} from '../../graphql/mutations';
 import {useTimeout} from '../../hooks/CredentialsHooks';
+import { EMPTY_KEY } from '../../translations/keys/EmptyTranslationKey';
 
 const SignUp = ({navigation}: any) => {
   const {t: translation} = useTranslation('translation');
@@ -243,15 +244,15 @@ const SignUp = ({navigation}: any) => {
                           (field.attribute +
                             'Error') as keyof SignUpErrorMessage
                         ].size > 0
-                          ? translation(
+                          ? 
                               signUpErrorMessage[
                                 (field.attribute +
                                   'Error') as keyof SignUpErrorMessage
                               ]
                                 .values()
-                                .next().value,
-                            )
-                          : ''
+                                .next().value
+                            
+                          : (EMPTY_KEY as string)
                       }
                       dispatch={dispatchCredentialsState}
                     />

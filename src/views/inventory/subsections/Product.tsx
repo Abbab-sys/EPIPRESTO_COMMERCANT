@@ -8,6 +8,7 @@ export interface ProductProps {
   _id: string;
   title: string;
   imgSrc: any;
+  navigation: any;
 }
 
 const Product = (props: ProductProps) => {
@@ -23,9 +24,10 @@ const Product = (props: ProductProps) => {
         <Text ellipsizeMode='tail' numberOfLines={2} variant="titleSmall" style={productStyles.productName}>
           {props.title}
         </Text>
-        <Button style={productStyles.buttonStyle}>
+        <Button style={productStyles.buttonStyle}
+        onPress={() => {props.navigation.navigate('UpdateProduct', {idProduct: props._id})}}>
           <Text style={productStyles.buttonText}>
-            VOIR PLUS
+            Modifier
           </Text>
         </Button>
       </Card>

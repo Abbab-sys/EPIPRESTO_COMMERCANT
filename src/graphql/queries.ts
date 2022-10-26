@@ -43,12 +43,12 @@ export const IS_VENDOR_EMAIL_USED = gql`
 `;
 
 export const GET_STORE_PRODUCTS_BY_ID = gql`
-  query GetStoreById($idStore: ID!, $offset: Int!, $first: Int) {
+  query GetStoreById($idStore: ID!, $offset: Int!, $first: Int, $searchText: String) {
     getStoreById(idStore: $idStore) {
       code
       message
       store {
-        products(offset: $offset, first: $first) {
+        products(offset: $offset, first: $first, searchText: $searchText) {
           _id
           title
           imgSrc
@@ -113,6 +113,26 @@ query getStoreCredentialsById($idStore: ID!) {
 }
 `
 
+export const GET_STORE_VARIANTS_BY_ID = gql`
+  query GetStoreById($idStore: ID!, $offset: Int!, $first: Int) {
+    getStoreById(idStore: $idStore) {
+      code
+      message
+      store {
+        products(offset: $offset, first: $first) {
+          title
+          imgSrc
+          variants {
+            _id
+            variantTitle
+            imgSrc
+            stock
+          }
+        }
+      }
+    }
+  }
+`
 // export const GET_PRODUCTS = gql`
 //   query GetStoreById($idStore: ID!) {
 //     getStoreById(idStore: $idStore) {
@@ -175,7 +195,38 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
       }
     }
   }
+
+`
+
+export const GET_PRODUCT_BY_ID = gql`
+  query GetProductById($idProduct: ID!) {
+    getProductById(idProduct: $idProduct) {
+      code
+      message
+      product {
+        _id
+        title
+        brand
+        published
+        tags
+        imgSrc
+        variants {
+          _id
+          variantTitle
+          availableForSale
+          price
+          sku
+          taxable
+          imgSrc
+          byWeight
+          stock
+        }
+      }
+    }
+  }
 `;
+
+
 export const GET_ORDER_BY_ID = gql`
   query GetOrderById($idOrder: ID!) {
     getOrderById(idOrder: $idOrder) {

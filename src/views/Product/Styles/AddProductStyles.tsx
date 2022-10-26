@@ -71,11 +71,11 @@ export const addProductsStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#EAEAEA',
     height: 50,
     width: '100%',
     padding: 10,
     marginBottom: 10,
+    position: "absolute"
   },
   back_button: {
       position: 'absolute',
