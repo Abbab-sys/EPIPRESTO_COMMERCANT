@@ -52,7 +52,7 @@ const Stock = ({ navigation }: any) => {
     }
   }
 
-  const {data, loading, error} = useQuery(GET_STORE_VARIANTS_BY_ID, {
+  const {data, loading, error, fetchMore} = useQuery(GET_STORE_VARIANTS_BY_ID, {
     variables: {
         idStore: storeId, "offset": 0, "first": 20
     },
@@ -211,6 +211,28 @@ const Stock = ({ navigation }: any) => {
                     /> 
                 }
                 keyExtractor={item => item._id}
+                onEndReachedThreshold={1}
+                  onEndReached={() => 
+                    {
+                      console.log("END REACHED")
+                      fetchMore({
+                        variables: {
+                          offset: variants.length
+                        },
+                        updateQuery(previousQueryResult, { fetchMoreResult }) {
+                          console.log("FETCH MORE RESULT", fetchMoreResult.getStoreById.store.products)
+                          const products = fetchMoreResult.getStoreById.store.products
+                          // get all variants of all products
+                          const newEntries = products.map((product: any) => {
+                              return product.variants
+                              })
+                          // flatten array of arrays
+                          const newEntriesFlattened = [].concat.apply([], newEntries)
+                          setVariants(oldProducts => [...oldProducts, ...newEntriesFlattened])
+                        },
+                      })
+                    }
+                  }
                 />
                 
               )
