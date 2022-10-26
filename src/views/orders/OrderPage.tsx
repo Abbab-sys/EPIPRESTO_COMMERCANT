@@ -211,15 +211,6 @@ const OrderPage = ({route, navigation}: any) => {
             <Text style={styles.details_title}>
               {translation(ORDERS_CUSTOMER_KEY)}
             </Text>
-            {/* <TouchableOpacity
-                            style={styles.chat_button}
-                            onPress={() => navigation.goBack()}
-                        >
-                            <Image
-                                style={styles.back_button_icon}
-                                source={require('../../assets/icons/chat.png')}
-                            />
-                        </TouchableOpacity> */}
           </View>
 
           <Text style={styles.product_name}>
