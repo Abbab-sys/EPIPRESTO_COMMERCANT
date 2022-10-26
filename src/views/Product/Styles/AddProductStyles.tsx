@@ -75,7 +75,7 @@ export const addProductsStyles = StyleSheet.create({
     width: '100%',
     padding: 10,
     marginBottom: 10,
-    position: "absolute"
+    // position: "absolute"
   },
   back_button: {
       position: 'absolute',

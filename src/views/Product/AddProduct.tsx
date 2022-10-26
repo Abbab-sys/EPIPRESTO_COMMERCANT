@@ -183,8 +183,7 @@ const AddProduct = ({ navigation }: any) => {
 
     return(
       <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
-        <ScrollView style={{ flex: 1 }}>
-            <View style={addProductsStyles.headerFix}>
+        <View style={addProductsStyles.headerFix}>
                 <TouchableOpacity
                     style={addProductsStyles.back_button}
                     onPress={() => {backToInventory()}}>
@@ -207,6 +206,8 @@ const AddProduct = ({ navigation }: any) => {
                     />                
             </View>
 
+        <ScrollView style={{ flex: 1 }}>
+            
 
             <Product
             title={product.title}

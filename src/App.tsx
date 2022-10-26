@@ -45,7 +45,7 @@ export default function App() {
   );
 
   const httpLink = new HttpLink({
-    uri: 'https://epipresto.pagekite.me/',
+    uri: 'http://localhost:4000/graphql',
   });
 
   const splitLink = split(

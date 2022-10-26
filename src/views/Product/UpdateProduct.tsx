@@ -293,20 +293,7 @@ const UpdateProduct = ({route, navigation}: any) => {
 
   return (
   <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
-    <ScrollView style={{flex: 1}}>
-      {loading ? (
-        <View>
-          <ActivityIndicator size="large" color="#FFA500" />
-        </View>
-      ) : error ? (
-        <View>
-          <Text style={{textAlign: 'center'}}>
-            OOPS UNE ERREUR EST SURVENUE
-          </Text>
-        </View>
-      ) : (
-        <View>
-          <View style={addProductsStyles.headerFix}>
+    <View style={addProductsStyles.headerFix}>
             <TouchableOpacity
               style={addProductsStyles.back_button}
               onPress={() => backToInventory()}>
@@ -328,6 +315,20 @@ const UpdateProduct = ({route, navigation}: any) => {
               iconColor="#FFA500"
             />
           </View>
+    <ScrollView style={{flex: 1}}>
+      {loading ? (
+        <View>
+          <ActivityIndicator size="large" color="#FFA500" />
+        </View>
+      ) : error ? (
+        <View>
+          <Text style={{textAlign: 'center'}}>
+            OOPS UNE ERREUR EST SURVENUE
+          </Text>
+        </View>
+      ) : (
+        <View>
+          
 
           {product && (
             <Product
