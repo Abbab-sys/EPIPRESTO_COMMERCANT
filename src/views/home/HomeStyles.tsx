@@ -1,16 +1,17 @@
 import { StyleSheet } from "react-native"
 
+const text_font_family = 'Lato';
+const text_font_style = 'normal';
+
 export const homeStyles = StyleSheet.create({
     root: {
         flex: 1,
-        margin: 20,
     },
     cardStyle: {
         elevation: 4,
         borderRadius: 30,
-        marginTop: 10,
-        marginBottom: 10,
-        padding: 10,
+        margin: '3%',
+        padding: '2%',
         justifyContent: "center",
         backgroundColor: "#FFA500",
         flexDirection: "column",
@@ -30,7 +31,13 @@ export const homeStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     headline: {
-        color: "#FFA500"
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        margin: 10,
+        color: '#FFA500',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     cardTitle: {
         color: "white",

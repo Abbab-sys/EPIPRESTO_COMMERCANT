@@ -10,6 +10,7 @@ import {ORDERS_TITLE_KEY} from '../../translations/keys/OrdersTranslationKeys';
 import Orders from '../orders/Orders';
 import Analytics from '../analytics/Analytics';
 import { ANALYTICS_TITLE_KEY } from '../../translations/keys/AnalyticsTranslationKeys';
+import { CHATS_TITLE_KEY } from '../../translations/keys/ChatTranslationKeys';
 
 export const NavigationTabScreens: TabScreenProps[] = [
   {
@@ -37,7 +38,7 @@ export const NavigationTabScreens: TabScreenProps[] = [
     iconName: 'bar-chart',
   },
   {
-    title: 'Chat',
+    title: CHATS_TITLE_KEY,
     navigationName: 'Chat',
     component: AllChats,
     iconName: 'comment',

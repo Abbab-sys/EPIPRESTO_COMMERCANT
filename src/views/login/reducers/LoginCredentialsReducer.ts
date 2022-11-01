@@ -1,5 +1,5 @@
 import {LoginCredentialsStateReducerAction} from './LoginCredentialsReducerActions';
-import {LoginCredentialsReducerState} from './LoginCredentialsReducerState';
+import {initialLoginCredentialsStateReducer, LoginCredentialsReducerState} from './LoginCredentialsReducerState';
 import {initialLoginErrorMessage} from '../../../interfaces/LoginInterfaces';
 import {
   LOGIN_EMAIL_ERROR_KEY,
@@ -63,6 +63,10 @@ export function loginCredentialsReducer(
           showSnackBar: action.showSnackBar,
         },
       };
+    case 'RESET_CREDENTIALS':
+      return {
+        ...initialLoginCredentialsStateReducer
+      }
     default:
       return state;
   }

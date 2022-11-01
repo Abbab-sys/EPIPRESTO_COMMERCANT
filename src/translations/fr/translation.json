@@ -97,10 +97,23 @@
     }
   },
   "home":{
-    "title": "Accueil"
+    "title": "Accueil",
+    "shop": "{{shopName}}",
+    "welcomeMessage": "Bonjour, voici les données de la journée !",
+    "recentOrders": "Commandes récentes",
+    "orders": "COMMANDES",
+    "income": "REVENU",
+    "ordersSection": {
+      "order": "Commande #{{orderNum}}",
+      "consult": "CONSULTER LA COMMANDE",
+      "noOrders": "Pas de commandes disponibles"
+    }
   },
   "inventory": {
-    "title":"Inventaire"
+    "title":"Inventaire",
+    "error": "Oops une erreur est survenue",
+    "noProducts": "Pas de produits disponibles",
+    "noResult": "Votre recherche ne correspond à aucun article"
   },
   "settings": {
     "title": "Paramètres",
@@ -114,6 +127,9 @@
         "open":"Ouvert",
         "closed":"Fermé"
       }
+    },
+    "logOut": {
+      "title": "Déconnexion"
     },
     "language":{
       "title":"Changement de langue"
@@ -165,66 +181,68 @@
     "unit": "Unité de mesure",
     "taxable": "Taxable product"
   },
-    "orders":{
-      "title":"Commandes",
-      "filtering":"Trier",
-      "customer":"Client",
-      "status":"Statut",
-      "view":"Détails"
+  "orders":{
+    "title":"Commandes",
+    "filtering":"Trier",
+    "customer":"Client",
+    "status":"Statut",
+    "view":"Détails",
+    "noOrders": "Pas de commandes disponibles"
+  },
+  "order":{
+    "status":{
+      "WAITING_CONFIRMATION":"En attente",
+      "CONFIRMED":"Confirmée",
+      "IN_DELIVERY":"En livraison",
+      "DELIVERED":"Livrée",
+      "CLOSED":"Fermée"
     },
-    "order":{
-      "status":{
-        "WAITING_CONFIRMATION":"En attente",
-        "CONFIRMED":"Confirmée",
-        "IN_DELIVERY":"En livraison",
-        "DELIVERED":"Livrée",
-        "CLOSED":"Fermée"
+    "details":{
+      "title":"Commande",
+      "payment":{
+        "title":"Paiement",
+        "subTotal":"Sous-Total",
+        "taxes":"Taxes",
+        "deliveryFees":"Frais de livraison",
+        "total":"Total",
+        "method":"Méthode de paiement"
       },
-      "details":{
-        "title":"Commande",
-        "payment":{
-          "title":"Paiement",
-          "subTotal":"Sous-Total",
-          "taxes":"Taxes",
-          "deliveryFees":"Frais de livraison",
-          "total":"Total",
-          "method":"Méthode de paiement"
-        },
-        "product":{
-          "title":"Produits"
-        },
-        "save":{
-          "button":"Enregistrer"
-        },
-        "update":{
-          "success":"Statut mis à jour avec succès",
-          "failed":"Une erreur est survenue lors de la mise à jour du statut"
-        }
-      }
-    },
-    "analytics":{
-      "title":"Statistiques",
-      "totalSales":{
-        "title":"Ventes totales",
-        "subtitle":"Ventes totales de la boutique durant cette période"
+      "product":{
+        "title":"Produits"
       },
-      "totalOrders":{
-        "title":"Nombre de commandes",
-        "subtitle":"Commandes totales de la boutique durant cette période",
-        "value":"Commandes"
+      "save":{
+        "button":"Enregistrer"
       },
-      "topProducts":{
-        "title":"Top 5 produits",
-        "subtitle":"Les 5 produits les plus vendus de la boutique durant cette période"
-      },
-      "selectPeriod":{
-        "title":"Choisir une intervalle de temps pour afficher les données",
-        "from":"Du",
-        "to":"Jusqu'au",
-        "submit":"Valider"
-
+      "update":{
+        "success":"Statut mis à jour avec succès",
+        "failed":"Une erreur est survenue lors de la mise à jour du statut"
       }
     }
-    
-  
+  },
+  "analytics":{
+    "title":"Statistiques",
+    "totalSales":{
+      "title":"Ventes totales",
+      "subtitle":"Ventes totales de la boutique durant cette période"
+    },
+    "totalOrders":{
+      "title":"Nombre de commandes",
+      "subtitle":"Commandes totales de la boutique durant cette période",
+      "value":"Commandes"
+    },
+    "topProducts":{
+      "title":"Top 5 produits",
+      "subtitle":"Les 5 produits les plus vendus de la boutique durant cette période"
+    },
+    "selectPeriod":{
+      "title":"Choisir une intervalle de temps pour afficher les données",
+      "from":"Du",
+      "to":"Jusqu'au",
+      "submit":"Valider"
+    }
+  },
+  "chat": {
+    "title": "Messagerie",
+    "noChats": "Pas de chats disponibles"
+  }
 }

@@ -1,6 +1,13 @@
-import {createContext} from 'react';
+import React, { createContext } from "react";
 
-export const VendorContext = createContext({
+type VendorAuth = {
+  storeId: string;
+  setStoreId: (storeId: string) => void;
+}
+const defaultContext: VendorAuth = {
   storeId: '',
-  setStoreId: (storeId: string) => {},
-});
+  setStoreId: (storeId) => {
+    console.log('Stub for setStoreId with : ', storeId);
+  },
+};
+export const VendorContext = createContext<VendorAuth>(defaultContext);

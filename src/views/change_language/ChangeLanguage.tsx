@@ -13,7 +13,7 @@ const ChangeLanguage = ({navigation}: any) => {
 
     return (
        <SafeAreaView>
-            <View style={[TitleSyles.View, ChangeLanguageStyles.titleView]}>
+            <View style={[TitleSyles.view, ChangeLanguageStyles.titleView]}>
             <TouchableOpacity
                   style={ChangeLanguageStyles.back_button}
                   onPress={() => navigation.goBack()}>
@@ -22,7 +22,7 @@ const ChangeLanguage = ({navigation}: any) => {
                     source={require('../../assets/icons/back.png')}
                   />
                 </TouchableOpacity>
-                <Text style={TitleSyles.Text}>{translation(SETTINGS_LANGUAGE_TITLE_KEY)}</Text>
+                <Text style={TitleSyles.headline}>{translation(SETTINGS_LANGUAGE_TITLE_KEY)}</Text>
             </View>
             <View>
                 {Languages.map((section, index) => (

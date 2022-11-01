@@ -26,7 +26,7 @@ const Navigation = () => {
               />
             ),
             tabBarLabel: ({focused}) => (
-              <Text style={{color: focused ? '#FFA500' : '#707070'}}>
+              <Text style={{color: focused ? '#FFA500' : '#707070', fontSize: 10}}>
                 {translation(screen.title)}
               </Text>
             ),

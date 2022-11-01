@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native"
 import { Button, Text } from 'react-native-paper'
 
@@ -8,6 +9,9 @@ interface OrderTemplateProps {
 }
 
 const OrderTemplate = (props: OrderTemplateProps) => {
+
+  const {t} = useTranslation('translation')
+
   return(
     <View style={orderStyles.container}>
       <Text variant="titleSmall">
@@ -21,7 +25,7 @@ const OrderTemplate = (props: OrderTemplateProps) => {
       </Text>
       <Button style={orderStyles.buttonStyle}>
         <Text style={orderStyles.buttonText}>
-          CONSULTER
+          {t('home.ordersSection.consult')}
         </Text>
       </Button>
     </View>
