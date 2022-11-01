@@ -15,6 +15,19 @@ export const LOGIN_BY_EMAIL = gql`
   }
 `;
 
+export type LoginVendorByEmailData = {
+  loginVendorByEmail: {
+      code: number;
+      message: string;
+      vendorAccount: {
+        _id: string;
+        store: {
+          _id: string;
+        }
+      }
+  }
+};
+
 export const LOGIN_BY_USERNAME = gql`
   query Query($username: String!, $password: String!) {
     loginVendorByUsername(username: $username, password: $password) {
@@ -29,6 +42,19 @@ export const LOGIN_BY_USERNAME = gql`
     }
   }
 `;
+
+export type LoginVendorByUsernameData = {
+  loginVendorByUsername: {
+      code: number;
+      message: string;
+      vendorAccount: {
+        _id: string;
+        store: {
+          _id: string;
+        }
+      }
+  }
+};
 
 export const IS_VENDOR_USERNAME_USED = gql`
   query Query($username: String!) {

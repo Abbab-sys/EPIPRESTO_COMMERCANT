@@ -1,5 +1,8 @@
 import { StyleSheet } from "react-native"
 
+const text_font_family = 'Lato';
+const text_font_style = 'normal';
+
 export const inventoryStyles = StyleSheet.create({
     root: {
       flex: 1,
@@ -48,7 +51,13 @@ export const inventoryStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     headline: {
-        color: "#FFA500"
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        margin: 10,
+        color: '#FFA500',
+        fontFamily: text_font_family,
+        fontStyle: text_font_style,
     },
     cardTitle: {
         color: "white"

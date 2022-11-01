@@ -97,10 +97,23 @@
     }
   },
   "home": {
-    "title": "Home"
+    "title": "Home",
+    "shop": "{{shopName}}",
+    "welcomeMessage": "Hello, here are the data of the day !",
+    "recentOrders": "Recent orders",
+    "orders": "ORDERS",
+    "income": "INCOME",
+    "ordersSection": {
+      "order": "Order #{{orderNum}}",
+      "consult": "SEE THE ORDER",
+      "noOrders": "No orders available"
+    }
   },
   "inventory":{
-    "title": "Inventory"
+    "title": "Inventory",
+    "error": "Oops an error has occured",
+    "noProducts": "No products available",
+    "noResult": "Your research does not match any item"
   },
   "settings": {
     "title": "Settings",
@@ -117,23 +130,26 @@
     },
     "language":{
       "title":"Change Language"
-    }
-  },
-  "disponibility": {
-    "title": "Disponibilities",
-    "day" : "Day",
-    "openHour": "Open",
-    "closeHour": "Closing",
-    "errorFormat": "Incorrect format (hh:mm)",
-    "errorOrder": "Wrong order of hours",
-    "days":{
-      "MONDAY": "Monday",
-      "TUESDAY": "Tuesday",
-      "WEDNESDAY": "Wednesday",
-      "THURSDAY": "Thursday",
-      "FRIDAY": "Friday",
-      "SATURDAY": "Saturday",
-      "SUNDAY": "Sunday"
+    },
+    "logOut": {
+      "title": "Log out"
+    },
+    "disponibility": {
+      "title": "Disponibilities",
+      "day" : "Day",
+      "openHour": "Open",
+      "closeHour": "Closing",
+      "errorFormat": "Incorrect format (hh:mm)",
+      "errorOrder": "Wrong order of hours",
+      "days":{
+        "MONDAY": "Monday",
+        "TUESDAY": "Tuesday",
+        "WEDNESDAY": "Wednesday",
+        "THURSDAY": "Thursday",
+        "FRIDAY": "Friday",
+        "SATURDAY": "Saturday",
+        "SUNDAY": "Sunday"
+      }
     }
   },
   "addProduct": {
@@ -170,7 +186,8 @@
     "filtering":"Sort",
     "customer":"Customer",
     "status":"Status",
-    "view":"Details"
+    "view":"Details",
+    "noOrders": "No orders available"
   },
   "order":{
     "status":{
@@ -224,5 +241,9 @@
       "submit":"Submit"
 
     }
+  },
+  "chat": {
+    "title": "Chats",
+    "noChats": "No chats available"
   }
 }

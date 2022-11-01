@@ -13,8 +13,6 @@ import { ANALYTICS_ORDERS_KEY, ANALYTICS_SELECT_PERIOD_FROM_KEY, ANALYTICS_SELEC
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
-
-
 const Analytics = () => {
     //Default dateFrom is a week ago
     const [dateFrom, setDateFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)))
@@ -205,12 +203,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     header_text: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        margin: 10,
+        color: '#FFA500',
         fontFamily: text_font_family,
         fontStyle: text_font_style,
-        fontSize: 24,
-        lineHeight: 29,
-        color: '#FFA500',
-
     },
     main_scrollView: {
         flex: 1,

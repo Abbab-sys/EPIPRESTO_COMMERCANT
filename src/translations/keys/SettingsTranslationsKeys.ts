@@ -7,3 +7,4 @@ export const SETTINGS_STORE_STATUS_CLOSED_KEY = 'settings.store.status.closed';
 export const SETTINGS_STORE_MODIFY_KEY = 'settings.store.modify';
 export const SETTINGS_STORE_ERROR_KEY = 'settings.store.modifyError';
 export const SETTINGS_STORE_SUCCESS_KEY = 'settings.store.modifySuccess';
+export const SETTINGS_LOG_OUT_KEY = 'settings.logOut.title'

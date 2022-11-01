@@ -28,6 +28,7 @@ const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
 const Orders = ({navigation}: any) => {
+  const {t} = useTranslation('translation')
   const {storeId} = useContext(VendorContext);
   const {t: translation} = useTranslation('translation');
 
@@ -192,7 +193,14 @@ const Orders = ({navigation}: any) => {
           {translation(ORDERS_FILTERING_KEY)}
         </Button>
       </View>
-      <FlatList data={orders} renderItem={renderOrderContainer} />
+      {orders.length === 0 ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>{t('orders.noOrders')}</Text>
+        </View> 
+        )
+        :
+        (<FlatList data={orders} renderItem={renderOrderContainer} />)
+        }
     </SafeAreaView>
   );
 };

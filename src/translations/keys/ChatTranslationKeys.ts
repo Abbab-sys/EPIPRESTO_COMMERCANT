@@ -1,0 +1,1 @@
+export const CHATS_TITLE_KEY = 'chat.title';

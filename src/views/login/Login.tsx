@@ -1,7 +1,7 @@
-import React, {useContext, useEffect, useReducer} from 'react';
-import {Text, Button, Snackbar} from 'react-native-paper';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
+import {Text, Button, Snackbar, ActivityIndicator} from 'react-native-paper';
 import {View, Image, KeyboardAvoidingView, Platform, Alert} from 'react-native';
-import {LOGIN_BY_EMAIL, LOGIN_BY_USERNAME} from '../../graphql/queries';
+import {LoginVendorByEmailData, LoginVendorByUsernameData, LOGIN_BY_EMAIL, LOGIN_BY_USERNAME} from '../../graphql/queries';
 import {useLazyQuery} from '@apollo/client/react';
 import {LoginStyles} from './LoginStyles';
 import {
@@ -23,6 +23,8 @@ import CredentialInput from '../../components/credential-input/CredentialInput';
 import LanguageSelector from '../../components/language-selection/LanguageSelector';
 import { ApolloError } from '@apollo/client';
 import { EMPTY_KEY } from '../../translations/keys/EmptyTranslationKey';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Login = ({navigation}: any) => {
   const [{credentials, errorMessage}, dispatchCredentialsState] = useReducer(
@@ -42,62 +44,38 @@ const Login = ({navigation}: any) => {
   }
 
   const {storeId, setStoreId} = useContext(VendorContext);
+
+  const [loadingLogin, setLoadingLogin] = useState(true)
+
+  //This checks if vendor already logged in when he opens the app
+  //If he is already logged in we don't request it 
+  AsyncStorage.getItem('@storeId').then((storeId) => {
+    if(!storeId) return
+    setStoreId(storeId)
+    setLoadingLogin(false)
+  })
+
   useEffect(() => {
+    setLoadingLogin(false)
     if (storeId.length > 0) {
-      console.log('store id is set ', storeId);
+      setLoadingLogin(true)
       navigation.navigate('Navigation');
     }
   }, [storeId]);
-  
-  const onLoginByEmailCompleted = (emailAuthData: any) => {
-    console.log(emailAuthData)
-    const serverResponse = emailAuthData.loginVendorByEmail
-    const loggedWithSuccess = serverResponse.code === 200
-    const vendorNotVerified = serverResponse.code === 401
-    const invalidCredentials = serverResponse.code === 404
-    if (loggedWithSuccess) {
-      setStoreId(serverResponse.vendorAccount.store._id)
-      return;
-    }
-    if (vendorNotVerified) {
-      alert("Please verify your account")
-      return;
-    }
-    if (invalidCredentials) {
-      alert("Your username or password is incorrect")
-      return;
-    }
-  }
-  const onLoginByUsernameCompleted = (usernameAuthData: any) => {
-    console.log(usernameAuthData)
-    const serverResponse = usernameAuthData.loginVendorByUsername
-    const loggedWithSuccess = serverResponse.code === 200
-    const vendorNotVerified = serverResponse.code === 401
-    const invalidCredentials = serverResponse.code === 404
-    if (loggedWithSuccess) {
-      setStoreId(serverResponse.vendorAccount.store._id)
-    }
-    if (vendorNotVerified) {
-      alert("Please verify your account")
-      return;
-    }
-    if (invalidCredentials) {
-      alert("Your username or password is incorrect")
-      return;
-    }
-  }
+
   const onLoginError = (error: ApolloError) => {
-    console.log(error)
     alert("Oops something went wrong")
   }
 
   const [loginByEmail, {
     loading: emailAuthLoading,
-  }] = useLazyQuery(LOGIN_BY_EMAIL, {onCompleted: onLoginByEmailCompleted, onError: onLoginError,fetchPolicy:'no-cache'});
+    data: emailAuthData
+  }] = useLazyQuery(LOGIN_BY_EMAIL, {onError: onLoginError, fetchPolicy:'network-only'});
 
   const [loginByUsername, {
     loading: usernameAuthLoading,
-  }] = useLazyQuery(LOGIN_BY_USERNAME, {onCompleted: onLoginByUsernameCompleted, onError: onLoginError,fetchPolicy:'no-cache'});
+    data: usernameAuthData
+  }] = useLazyQuery(LOGIN_BY_USERNAME, {onError: onLoginError, fetchPolicy:'network-only'});
 
   const areAllCredentialsFieldsValid = (
     credsState: LoginCredentialsReducerState,
@@ -108,7 +86,11 @@ const Login = ({navigation}: any) => {
     );
   };
 
-  const handleLogin = () => {
+  const unwrappedUsernameData: LoginVendorByUsernameData | undefined = usernameAuthData as LoginVendorByUsernameData;
+  const unwrappedEmailData: LoginVendorByEmailData | undefined = emailAuthData as LoginVendorByEmailData;
+
+
+  const handleLogin = async () => {
     dispatchCredentialsState({type: 'CHECK_LOGIN_CREDENTIALS'});
     const areCredentialsValid = areAllCredentialsFieldsValid({
       credentials,
@@ -120,13 +102,13 @@ const Login = ({navigation}: any) => {
         credentials.auth,
       );
       isAuthEmail
-        ? loginByEmail({
+        ? await loginByEmail({
             variables: {
               email: credentials.auth,
               password: credentials.password,
             },
           })
-        : loginByUsername({
+        : await loginByUsername({
             variables: {
               username: credentials.auth,
               password: credentials.password,
@@ -134,7 +116,60 @@ const Login = ({navigation}: any) => {
           });
     }
   };
-  return (
+
+  useEffect(() => {
+    if (!unwrappedEmailData) return;
+    const serverResponse = unwrappedEmailData.loginVendorByEmail
+    const loggedWithSuccess = serverResponse.code === 200
+    const vendorNotVerified = serverResponse.code === 401
+    const invalidCredentials = serverResponse.code === 404
+    if (loggedWithSuccess) {
+      setStoreId(serverResponse.vendorAccount.store._id)
+      AsyncStorage.setItem('@storeId', serverResponse.vendorAccount.store._id).then(r =>
+        console.log("store id saved", r)
+      );
+      return;
+    }
+    if (vendorNotVerified) {
+      alert("Please verify your account")
+      return;
+    }
+    if (invalidCredentials) {
+      alert("Your username or password is incorrect")
+      return;
+    }
+  }
+  , [unwrappedEmailData?.loginVendorByEmail.code]);
+
+  useEffect(() => {
+    if (!unwrappedUsernameData) return;
+    const serverResponse = unwrappedUsernameData.loginVendorByUsername
+    const loggedWithSuccess = serverResponse.code === 200
+    const vendorNotVerified = serverResponse.code === 401
+    const invalidCredentials = serverResponse.code === 404
+    if (loggedWithSuccess) {
+      setStoreId(serverResponse.vendorAccount.store._id)
+      AsyncStorage.setItem('@storeId', serverResponse.vendorAccount.store._id).then(r =>
+        console.log("store id saved", r)
+      );
+    }
+    if (vendorNotVerified) {
+      alert("Please verify your account")
+      return;
+    }
+    if (invalidCredentials) {
+      alert("Your username or password is incorrect")
+      return;
+    }
+  }
+  , [unwrappedUsernameData?.loginVendorByUsername.code]);
+
+  return loadingLogin ?
+  (
+    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <ActivityIndicator size="large" color="#FFA500"></ActivityIndicator>
+    </View>
+  ) : (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={LoginStyles.root}>

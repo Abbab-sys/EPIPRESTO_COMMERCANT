@@ -8,18 +8,22 @@ import { GET_STORE_PRODUCTS_BY_ID } from "../../graphql/queries";
 import { InMemoryCache, useLazyQuery, useQuery } from "@apollo/client";
 import { VendorContext } from "../../context/Vendor";
 import { useIsFocused } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const Inventory = ({navigation}: any) => {
+
+  const {storeId, setStoreId} = useContext(VendorContext)
+
+  const {t} = useTranslation('translation')
 
   const isFocused = useIsFocused()
 
   useEffect(() => {
     if(!isFocused) return
+    console.log("INVENTORY: ", storeId)
     getItems()
     console.log(data)
   }, [isFocused])
-
-  const {storeId, setStoreId} = useContext(VendorContext)
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -34,9 +38,9 @@ const Inventory = ({navigation}: any) => {
         first: 20,
         searchText: searchQuery
       },
-      onCompleted(data){
-        setProducts(data.getStoreById.store.products)
-      }
+      // onCompleted(data){
+      //   setProducts(data.getStoreById.store.products)
+      // }
     }
   )
 
@@ -57,7 +61,7 @@ const Inventory = ({navigation}: any) => {
     <SafeAreaView style={inventoryStyles.root}>
       <View style={inventoryStyles.view}>
         <Text variant="headlineMedium" style={inventoryStyles.headline}>
-          INVENTORY
+          {t('inventory.title')}
         </Text>
       </View>
       <View>
@@ -70,11 +74,15 @@ const Inventory = ({navigation}: any) => {
             </View>
           ) : error ? (
             <View style={inventoryStyles.innerContainer}>
-              <Text style={inventoryStyles.errorText}>OOPS UNE ERREUR EST SURVENUE</Text>
+              <Text style={inventoryStyles.errorText}>{t('inventory.error')}</Text>
             </View>)
           : (
             products.length === 0 ? 
-              (<Text>YOUR RESEARCH DOES NOT MATCH ANY ITEM</Text>)
+              (
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text>{t('inventory.noProducts')}</Text>
+                </View> 
+              )
               : 
               (
                 <FlatList

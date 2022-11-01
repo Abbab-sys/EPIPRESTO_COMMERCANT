@@ -1,11 +1,12 @@
 import React from "react"
+import { useTranslation } from "react-i18next";
 import { View } from "react-native"
 import { Card, Text } from "react-native-paper"
 import { dailyDataStyles } from "./DailyDataStyles";
 
 export enum DataType {
-  ORDERS = "COMMANDES",
-  INCOME = "REVENU"
+  ORDERS = "orders",
+  INCOME = "income"
 }
 
 export interface DailyDataProps {
@@ -15,10 +16,12 @@ export interface DailyDataProps {
 
 const DailyData = (props: DailyDataProps) => {
 
+  const {t} = useTranslation('translation')
+
   return (
     <View style={dailyDataStyles.root}>
       <Card style={dailyDataStyles.cardStyle}>
-        <Text variant="titleSmall" style={dailyDataStyles.innerCardTitle}>{props.dataType.toUpperCase()}</Text>
+        <Text variant="titleSmall" style={dailyDataStyles.innerCardTitle}>{t('home.' + props.dataType).toUpperCase()}</Text>
         <Text variant="titleSmall" style={dailyDataStyles.data}>
           {props.dataType === DataType.ORDERS ? props.dataAmount : `${props.dataAmount}$`}
         </Text>

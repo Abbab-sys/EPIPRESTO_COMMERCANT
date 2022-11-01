@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   ApolloClient,
   ApolloProvider,
@@ -13,7 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Navigation from './views/navigation/Navigation';
 import Inventory from './views/inventory/Inventory';
-import {VendorContext} from './context/Vendor';
+import { VendorContext } from './context/Vendor';
 import OrderPage from './views/orders/OrderPage';
 import Settings from './views/settings/Settings';
 import Chat from './views/chat/Chat';
@@ -30,6 +30,7 @@ import Analytics from './views/analytics/Analytics';
 import AddProduct from './views/Product/AddProduct';
 import UpdateProduct from './views/Product/UpdateProduct';
 import Stock from './views/stock/Stock';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,7 +46,7 @@ export default function App() {
   );
 
   const httpLink = new HttpLink({
-    uri: 'https://epipresto.pagekite.me/',
+    uri: 'http://epipresto.pagekite.me/',
   });
 
   const splitLink = split(
@@ -82,8 +83,13 @@ export default function App() {
     cache: cache,
   });
 
+  AsyncStorage.getItem('@storeId').then((value) => {
+      if (value) setStoreId(value);
+    }
+  );
+
   return (
-    <VendorContext.Provider value={storeIdContext}>
+    <VendorContext.Provider value={{storeId, setStoreId}}>
       <ApolloProvider client={client}>
         <NavigationStack />
       </ApolloProvider>
@@ -99,25 +105,29 @@ function NavigationStack() {
 
     <ChatContext.Provider value={chatContext}>
       <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{headerShown: false}}
-          initialRouteName="Login">
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="Navigation" component={Navigation} />
-          <Stack.Screen name="AddProduct" component={AddProduct} />
-          <Stack.Screen name="AllChats" component={AllChats} />
-          <Stack.Screen name="ChatPage" component={Chat} />
-          <Stack.Screen name="Settings" component={Settings} />
-          <Stack.Screen name="Orders" component={Orders} />
-          <Stack.Screen name="OrderPage" component={OrderPage} />
-          <Stack.Screen name="Inventory" component={Inventory} />
-          <Stack.Screen name="Stock" component={Stock} />
-          <Stack.Screen name="Store" component={Store} />
-          <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
-          <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
-          <Stack.Screen name="Analytics" component={Analytics} />
-        </Stack.Navigator>
+        <Stack.Navigator initialRouteName={"Login"} screenOptions={{headerShown: false}}>
+          {!storeId ? (
+            <>
+              <Stack.Screen name="Login" component={Login}/>
+              <Stack.Screen name="SignUp" component={SignUp} />
+            </>
+            ) : (
+            <>
+              <Stack.Screen name="Navigation" component={Navigation} />
+              <Stack.Screen name="AddProduct" component={AddProduct} />
+              <Stack.Screen name="AllChats" component={AllChats} />
+              <Stack.Screen name="ChatPage" component={Chat} />
+              <Stack.Screen name="Settings" component={Settings} />
+              <Stack.Screen name="Orders" component={Orders} />
+              <Stack.Screen name="OrderPage" component={OrderPage} />
+              <Stack.Screen name="Inventory" component={Inventory} />
+              <Stack.Screen name="Stock" component={Stock} />
+              <Stack.Screen name="Store" component={Store} />
+              <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
+            </>
+          )}
+      </Stack.Navigator>
+    
       </NavigationContainer>
     </ChatContext.Provider>
   );

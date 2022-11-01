@@ -1,15 +1,16 @@
 import { StyleSheet } from "react-native";
 
 export const TitleSyles = StyleSheet.create({
-    View:{
+    view:{
         padding: '5%',
         alignItems: 'center',
     },
-    Text:{
-        fontFamily: 'Lato',
+    headline: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
         color: '#FFA500',
+        fontFamily: 'Lato',
         fontStyle: 'normal',
-        fontWeight: '700',
-        fontSize: 24,
-    }
+    },
 });
