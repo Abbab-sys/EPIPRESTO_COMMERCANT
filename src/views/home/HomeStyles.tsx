@@ -48,5 +48,5 @@ export const homeStyles = StyleSheet.create({
     }, 
     data: {
         color: "#FFA500"
-    },
+    }
 })

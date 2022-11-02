@@ -182,6 +182,7 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
       code
       message
       store {
+        name
         orders {
           _id
           orderNumber
