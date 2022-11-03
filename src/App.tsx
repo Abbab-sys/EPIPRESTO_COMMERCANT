@@ -46,7 +46,7 @@ export default function App() {
   );
 
   const httpLink = new HttpLink({
-    uri: 'http://epipresto.pagekite.me/',
+    uri: 'https://b678-38-15-82-94.ngrok.io/',
   });
 
   const splitLink = split(
@@ -124,6 +124,10 @@ function NavigationStack() {
               <Stack.Screen name="Stock" component={Stock} />
               <Stack.Screen name="Store" component={Store} />
               <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
+              <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
+              <Stack.Screen name="Analytics" component={Analytics} />
+
+
             </>
           )}
       </Stack.Navigator>

@@ -29,6 +29,7 @@ const Inventory = ({navigation}: any) => {
 
   const [products, setProducts] = useState<ProductProps[]>([])
 
+  
   const [getItems, { loading, error, data, fetchMore }] = useLazyQuery(
     GET_STORE_PRODUCTS_BY_ID, 
     {
@@ -38,12 +39,11 @@ const Inventory = ({navigation}: any) => {
         first: 20,
         searchText: searchQuery
       },
-      // onCompleted(data){
-      //   setProducts(data.getStoreById.store.products)
-      // }
+    
     }
   )
 
+  
   const handleSearch = (text: React.SetStateAction<string>) => {
     setSearchQuery(text)
     getItems()
@@ -57,6 +57,13 @@ const Inventory = ({navigation}: any) => {
     }
   }, [data])
 
+  //getItems should also be called when focus is on this screen
+  
+
+
+
+
+  const searchPlaceholder = t('searchBarPlaceholder')
   return(
     <SafeAreaView style={inventoryStyles.root}>
       <View style={inventoryStyles.view}>
@@ -65,7 +72,7 @@ const Inventory = ({navigation}: any) => {
         </Text>
       </View>
       <View>
-        <Searchbar style={{marginVertical: 10}} placeholder="Search" onChangeText={handleSearch} value={searchQuery}/>
+        <Searchbar style={{marginVertical: 10}} placeholder={searchPlaceholder} onChangeText={handleSearch} value={searchQuery}/>
       </View>
       <SafeAreaView style={{flex: 1}}>
         {loading ? (
@@ -99,15 +106,12 @@ const Inventory = ({navigation}: any) => {
                   onEndReachedThreshold={0.8}
                   onEndReached={() => 
                     {
-                      console.log("END REACHED")
                       fetchMore({
                         variables: {
                           offset: products.length
                         },
                         updateQuery(previousQueryResult, { fetchMoreResult }) {
                           const newEntries = fetchMoreResult.getStoreById.store.products
-                          console.log("PREVIOUS: ", previousQueryResult)
-                          console.log("NEW: ", newEntries)
                           setProducts(oldProducts => [...oldProducts, ...newEntries])
                         },
                       })

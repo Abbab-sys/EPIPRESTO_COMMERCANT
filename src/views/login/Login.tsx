@@ -104,7 +104,7 @@ const Login = ({navigation}: any) => {
       isAuthEmail
         ? await loginByEmail({
             variables: {
-              email: credentials.auth,
+              email: credentials.auth.toLowerCase(),
               password: credentials.password,
             },
           })
@@ -113,6 +113,7 @@ const Login = ({navigation}: any) => {
               username: credentials.auth,
               password: credentials.password,
             },
+            
           });
     }
   };

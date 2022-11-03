@@ -27,18 +27,7 @@ const Home = ({navigation}: any) => {
     },
   });
 
-  const {t} = useTranslation('translation')
 
-  const {storeId} = useContext(VendorContext)
-
-  const { loading, error, data } = useQuery(
-    GET_STORE_CREDENTIALS_BY_ID, 
-    {
-      variables: {
-        idStore: storeId
-      },
-    }
-  )
 
   const dailyData: DailyDataProps[] = [
     {

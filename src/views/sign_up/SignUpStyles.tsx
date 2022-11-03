@@ -8,6 +8,7 @@ export const signUpStyles = StyleSheet.create({
   topSafeAreaView: {
     flex: 0,
     backgroundColor: '#FFA500',
+    
   },
   root: {
     backgroundColor: '#FFA500',
@@ -20,9 +21,17 @@ export const signUpStyles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   signUp: {
-    flex: 10,
+    flex: 5,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#FFA500',
+    height: 50,
+    width: '100%',
+    padding: 10,
+    marginBottom: 10,
   },
   signUpText: {
     fontFamily: 'Lato',
@@ -45,4 +54,22 @@ export const signUpStyles = StyleSheet.create({
     backgroundColor: '#FFA500',
     width: 'auto',
   },
+  back_button: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 50,
+    height: 50,
+    marginLeft: 10,
+
+},
+back_button_icon: {
+    width: 35,
+    height: 35,
+    tintColor: 'black',
+},
+ 
 });

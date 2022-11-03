@@ -245,5 +245,7 @@
   "chat": {
     "title": "Chats",
     "noChats": "No chats available"
-  }
+  },
+  "searchBarPlaceholder": "Search",
+  "updateProductPageTitle": "Update product"
 }

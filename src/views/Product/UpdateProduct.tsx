@@ -28,6 +28,7 @@ import {
   UPDATE_VARIANT,
   UPDATE_VARIANTS,
 } from '../../graphql/mutations';
+import { UPDATE_PRODUCT_PAGE_TITLE } from '../../translations/keys/GeneralTranslationKeys';
 
 interface ProductFields {
   title: string;
@@ -302,7 +303,7 @@ const UpdateProduct = ({route, navigation}: any) => {
                 source={require('../../assets/icons/back.png')}
               />
             </TouchableOpacity>
-            <Text style={addProductsStyles.header_text}>Update Product</Text>
+            <Text style={addProductsStyles.header_text}>{t(UPDATE_PRODUCT_PAGE_TITLE)}</Text>
 
             <IconButton
               style={addProductsStyles.save_button}

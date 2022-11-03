@@ -244,5 +244,7 @@
   "chat": {
     "title": "Messagerie",
     "noChats": "Pas de chats disponibles"
-  }
+  },
+  "searchBarPlaceholder": "Rechercher",
+  "updateProductPageTitle": "Modifier produit"
 }
