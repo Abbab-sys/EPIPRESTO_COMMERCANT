@@ -113,7 +113,8 @@
     "title":"Inventaire",
     "error": "Oops une erreur est survenue",
     "noProducts": "Pas de produits disponibles",
-    "noResult": "Votre recherche ne correspond à aucun article"
+    "noResult": "Votre recherche ne correspond à aucun article",
+    "modify":"Modifier"
   },
   "settings": {
     "title": "Paramètres",
@@ -247,5 +248,19 @@
     "viewOrder": "Voir la commande"
   },
   "searchBarPlaceholder": "Rechercher",
-  "updateProductPageTitle": "Modifier produit"
+  "updateProductPageTitle": "Modifier produit",
+  "somethingWrong": "Une erreur est survenue",
+  "verifyYourAccount": "Vérifiez votre courriel pour activer votre compte",
+  "invalidCredentials": "Votre identifiant ou mot de passe est incorrect, veuillez réessayer",
+  "productMessageBack": "Êtes-vous sûr de vouloir revenir à la page précédente ? Vous perdrez les modifications non enregistrées",
+  "quitButton": "Quitter",
+  "cancelButton": "Annuler",
+  "yesButton": "Oui",
+  "noButton": "Non",
+  "success": "Succés",
+  "error": "Erreur",
+  "successAddMessage": "Le produit a été ajouté avec succès, voulez-vous ajouter un autre produit ?",
+  "failedAddMessage": "Une erreur est survenue, veuillez réessayer",
+  "emptyFields": "Veuillez remplir tous les champs obligatoires"
+  
 }

@@ -46,7 +46,7 @@ export default function App() {
   );
 
   const httpLink = new HttpLink({
-    uri: 'https://b678-38-15-82-94.ngrok.io/',
+    uri: 'https://b0d5-38-15-82-94.ngrok.io/',
   });
 
   const splitLink = split(
