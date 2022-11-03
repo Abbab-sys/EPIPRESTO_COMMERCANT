@@ -244,7 +244,8 @@
   },
   "chat": {
     "title": "Chats",
-    "noChats": "No chats available"
+    "noChats": "No chats available",
+    "viewOrder": "View order"
   },
   "searchBarPlaceholder": "Search",
   "updateProductPageTitle": "Update product"

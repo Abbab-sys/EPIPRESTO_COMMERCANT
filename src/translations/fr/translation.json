@@ -243,7 +243,8 @@
   },
   "chat": {
     "title": "Messagerie",
-    "noChats": "Pas de chats disponibles"
+    "noChats": "Pas de chats disponibles",
+    "viewOrder": "Voir la commande"
   },
   "searchBarPlaceholder": "Rechercher",
   "updateProductPageTitle": "Modifier produit"
