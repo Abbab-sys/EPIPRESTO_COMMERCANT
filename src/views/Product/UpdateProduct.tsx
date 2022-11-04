@@ -191,7 +191,7 @@ const UpdateProduct = ({route, navigation}: any) => {
         })
         const variantsWithoutId = newVariantsToAdd.map((variant) => {
           const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
-          return {...rest, price: parseFloat(price), stock: parseInt(stock)};
+          return {...rest, price: parseFloat(parseFloat(price).toFixed(2)), stock: parseInt(stock)};
         })
         variantsToAdd = variantsWithoutId
 
@@ -211,7 +211,7 @@ const UpdateProduct = ({route, navigation}: any) => {
         // dont consider variantId, isHidden and isValid
         const {isHidden, isValid,price, stock, ...rest} = variant;
         // change price and stock to number
-        const fieldsToUpdate = {...rest, price: parseFloat(price), stock: parseInt(stock)};
+        const fieldsToUpdate = {...rest, price: parseFloat(parseFloat(price).toFixed(2)), stock: parseInt(stock)};
         varvariantsToUpdate.push(fieldsToUpdate)
       }
       )

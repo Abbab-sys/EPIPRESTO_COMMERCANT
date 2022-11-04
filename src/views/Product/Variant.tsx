@@ -50,7 +50,9 @@ interface VariantProps {
 const Variant = (props: VariantProps) => {
     const {t} = useTranslation()
     const [title, setTitle] = useState(props.variantTitle);
+    // when isWightable is true, price is for 1 lb
     const [price, setPrice] = useState(props.price);
+    const [priceKg, setPriceKg] = useState((parseFloat(props.price)/0.454).toString());
     const [sku, setSku] = useState(props.sku);
     const [stock, setStock] = useState(props.stock);
     const [isWeightable, setWeightable] = useState(props.byWeight);
@@ -226,10 +228,12 @@ const Variant = (props: VariantProps) => {
               style={addVariantStyles.input}
               label={t('addVariant.labels.price')}
               keyboardType= "numeric"
-              onChangeText={text => setPrice(parseFloat(text).toFixed(2))}
-              value={price}
+              onChangeText={(isWeightable && unit === 'Kg') ? text => {setPriceKg(text) ; setPrice((parseFloat(text)*0.454).toString())} :
+                                                              text => {setPrice(text) ; setPriceKg((parseFloat(text)/0.454).toString())}}
+              value={(isWeightable && unit === 'Kg') ? priceKg : price}
               />
-            <HelperText type='error'>
+            <HelperText type='info'>
+              Shown price: {price ? ((isWeightable && unit === 'Kg') ? parseFloat(priceKg).toFixed(2) : parseFloat(price).toFixed(2)) : "none"}
             </HelperText>
   
             <View style={addVariantStyles.checkboxContainer}>
