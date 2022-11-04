@@ -65,7 +65,7 @@ const Variant = (props: VariantProps) => {
     useEffect(() => {
       props.updateSelf({variantId: props.variantId, variantTitle: title, price: price, sku: sku, taxable: isTaxable,
            imgSrc: variantImage, byWeight: isWeightable, availableForSale: isAvailableForSale, stock: stock, isValid: isVariantValid(), isHidden: isHidden});
-        }, [title, price, sku, stock, isWeightable, isAvailableForSale, isTaxable, isHidden])
+        }, [title, price, sku, stock, variantImage, isWeightable, isAvailableForSale, isTaxable, isHidden])
     
     const isVariantValid = () => {
         // check if all required fields are filled
