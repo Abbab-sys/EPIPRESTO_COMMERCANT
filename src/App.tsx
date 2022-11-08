@@ -46,7 +46,7 @@ export default function App() {
   );
 
   const httpLink = new HttpLink({
-    uri: 'https://b0d5-38-15-82-94.ngrok.io/',
+    uri: 'http://localhost:4000/graphql',
   });
 
   const splitLink = split(
