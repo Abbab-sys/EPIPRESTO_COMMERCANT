@@ -133,23 +133,24 @@
     },
     "logOut": {
       "title": "Log out"
-    },
-    "disponibility": {
-      "title": "Disponibilities",
-      "day" : "Day",
-      "openHour": "Open",
-      "closeHour": "Closing",
-      "errorFormat": "Incorrect format (hh:mm)",
-      "errorOrder": "Wrong order of hours",
-      "days":{
-        "MONDAY": "Monday",
-        "TUESDAY": "Tuesday",
-        "WEDNESDAY": "Wednesday",
-        "THURSDAY": "Thursday",
-        "FRIDAY": "Friday",
-        "SATURDAY": "Saturday",
-        "SUNDAY": "Sunday"
-      }
+    }
+  
+  },
+  "disponibility": {
+    "title": "Disponibilities",
+    "day" : "Day",
+    "openHour": "Open",
+    "closeHour": "Closing",
+    "errorFormat": "Incorrect format (hh:mm)",
+    "errorOrder": "Wrong order of hours",
+    "days":{
+      "MONDAY": "Monday",
+      "TUESDAY": "Tuesday",
+      "WEDNESDAY": "Wednesday",
+      "THURSDAY": "Thursday",
+      "FRIDAY": "Friday",
+      "SATURDAY": "Saturday",
+      "SUNDAY": "Sunday"
     }
   },
   "addProduct": {
