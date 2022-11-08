@@ -77,7 +77,7 @@ const AddProduct = ({ navigation }: any) => {
         // change price and stock to number
         const variantsWithoutId = variants.map((variant) => {
           const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
-          return {...rest, price: parseFloat(price), stock: parseInt(stock)};
+          return {...rest, price: parseFloat(parseFloat(price).toFixed(2)), stock: parseInt(stock)};
         })
         // consider only tags that are not empty
         const filteredTags = product.tags.filter((tag) => tag.trim());
