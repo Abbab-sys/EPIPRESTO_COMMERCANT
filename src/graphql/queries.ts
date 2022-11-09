@@ -78,6 +78,7 @@ export const GET_STORE_PRODUCTS_BY_ID = gql`
           _id
           title
           imgSrc
+          
         }
       }
     }
@@ -237,6 +238,7 @@ export const GET_PRODUCT_BY_ID = gql`
         published
         tags
         imgSrc
+        description
         variants {
           _id
           variantTitle
