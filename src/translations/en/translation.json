@@ -113,7 +113,8 @@
     "title": "Inventory",
     "error": "Oops an error has occured",
     "noProducts": "No products available",
-    "noResult": "Your research does not match any item"
+    "noResult": "Your research does not match any item",
+    "modify":"Edit"
   },
   "settings": {
     "title": "Settings",
@@ -245,6 +246,22 @@
   },
   "chat": {
     "title": "Chats",
-    "noChats": "No chats available"
-  }
+    "noChats": "No chats available",
+    "viewOrder": "View order"
+  },
+  "searchBarPlaceholder": "Search",
+  "updateProductPageTitle": "Update product",
+  "somethingWrong": "Oops something went wrong",
+  "verifyYourAccount": "Please check your email to verify your account before logging in !",
+  "invalidCredentials": "Your username or password is incorrect. Please try again.",
+  "productMessageBack": "Are you sure you want to go back ? Your changes will not be saved.",
+  "quitButton": "Quit",
+  "cancelButton": "Cancel",
+  "yesButton": "Yes",
+  "noButton": "No",
+  "success": "Success",
+  "error": "Error",
+  "successAddMessage": "Your product has been successfully added ! Do you want to add another one? ",
+  "failedAddMessage": "Oops something went wrong, please try again",
+  "emptyFields": "Please fill in all required fields"
 }

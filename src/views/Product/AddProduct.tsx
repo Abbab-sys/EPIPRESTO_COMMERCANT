@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useMutation } from "@apollo/client/react";
 import { ADD_PRODUCT } from "../../graphql/mutations";
 import { VendorContext } from "../../context/Vendor";
+import { CANCEL_BUTTON, EMPTY_FIELDS, FAILED_ADD_MESSAGE, NO_BUTTON, PRODUCT_MESSAGE_BACK, QUIT_BUTTON, SUCCESS_ADD_MESSAGE, YES_BUTTON } from "../../translations/keys/GeneralTranslationKeys";
 
 
 interface ProductFields {
@@ -109,15 +110,15 @@ const AddProduct = ({ navigation }: any) => {
         setError("")
     }
 
-    const messageBack = "Voulez-vous vraiment quitter la page? Le produit n'a pas été ajouté."
+    const messageBack = t(PRODUCT_MESSAGE_BACK)
     const backToInventory = () => {
       Keyboard.dismiss()
       Alert.alert(
         "Alert",
         messageBack,
         [
-          { text: "Quitter", onPress: () => navigation.goBack() },
-          { text: "Annuler", onPress: () => {} }
+          { text: t(QUIT_BUTTON), onPress: () => navigation.goBack() },
+          { text: t(CANCEL_BUTTON), onPress: () => {} }
         ]
       );
     }
@@ -130,16 +131,16 @@ const AddProduct = ({ navigation }: any) => {
       }
     
       // TDOO: add message translation
-    const succesAddMessage = "Produit ajouté avec succès. Voulez-vous ajouter un autre produit ?"
-    const failAddMessage = "Une erreur est survenue lors de l'ajout du produit. Veuillez réessayer."
+    const succesAddMessage = t(SUCCESS_ADD_MESSAGE)
+    const failAddMessage =  t(FAILED_ADD_MESSAGE)
     
     const alertOnSave = (succes: boolean) =>
         Alert.alert(
         succes? "Succes" : "Erreur",
         succes? succesAddMessage: failAddMessage,
         succes? [
-            { text: "Oui", onPress: () =>  {}},
-            { text: "Non", onPress: () =>{navigation.goBack()}}
+            { text: t(YES_BUTTON), onPress: () =>  {}},
+            { text: t(NO_BUTTON), onPress: () =>{navigation.goBack()}}
         ] : [
             { text: "OK", onPress: () =>  {} }
         ]
@@ -175,7 +176,7 @@ const AddProduct = ({ navigation }: any) => {
       const addDefaultVariant = () => {
         // check if the product title is empty
         if (!product.title.trim()) {
-          setError("Veuillez remplir les champs obligatoires du produit");
+          setError(t(EMPTY_FIELDS));
         }
         setVariants([...variants, defaultVariant]);
       }      

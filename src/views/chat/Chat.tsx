@@ -4,8 +4,10 @@ import {ChatContext} from '../../context/ChatContext';
 import {VendorContext} from '../../context/Vendor';
 import {Message} from '../../hooks/ChatManagerHook';
 import {MessageStatus, Role} from '../../interfaces/ChatInterfaces';
-import {Image, SafeAreaView, TouchableOpacity, View} from 'react-native';
+import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {Button} from 'react-native-paper';
+import { CHAT_VIEW_ORDER_KEY } from '../../translations/keys/ChatTranslationKeys';
+import { useTranslation } from 'react-i18next';
 
 interface message {
   _id: string;
@@ -22,7 +24,7 @@ interface message {
 
 const Chat = ({navigation, route}: any) => {
   const {chatId} = route.params;
-
+  const {t} = useTranslation('translation')
   const {
     chatManager: [chats, {sendMessage, getChatById}],
   } = useContext(ChatContext);
@@ -106,6 +108,7 @@ const Chat = ({navigation, route}: any) => {
               source={require('../../assets/icons/back.png')}
             />
           </TouchableOpacity>
+         
           <Button
             style={{
               margin: 10,
@@ -115,7 +118,7 @@ const Chat = ({navigation, route}: any) => {
             buttonColor={'#FFFFFF'}
             textColor={'#000000'}
             onPress={navigateToOrder}>
-            View Order
+            {t(CHAT_VIEW_ORDER_KEY)} #{chat?.relatedOrderNumber}
           </Button>
         </View>
         <GiftedChat

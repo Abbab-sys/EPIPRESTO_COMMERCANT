@@ -185,14 +185,7 @@ const Orders = ({navigation}: any) => {
       <View>
         <Text style={styles.titleText}>{translation(ORDERS_TITLE_KEY)}</Text>
       </View>
-      <View style={styles.filtering}>
-        <Button
-          style={styles.filtering_button}
-          mode="contained"
-          onPress={() => console.log('Pressed')}>
-          {translation(ORDERS_FILTERING_KEY)}
-        </Button>
-      </View>
+     
       {orders.length === 0 ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Text>{t('orders.noOrders')}</Text>

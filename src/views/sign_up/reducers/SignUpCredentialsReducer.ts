@@ -56,7 +56,7 @@ export function signUpCredentialsReducer(
         ...state,
         accountInput: {
           ...state.accountInput,
-          email: action.newEmail,
+          email: action.newEmail.toLowerCase(),
         },
         signUpErrorMessage: {
           ...state.signUpErrorMessage,

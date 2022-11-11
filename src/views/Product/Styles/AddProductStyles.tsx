@@ -110,9 +110,10 @@ export const addProductsStyles = StyleSheet.create({
       bottom: 0,
       justifyContent: 'center',
       alignItems: 'center',
-      width: 50,
-      height: 50,
+      width: 40,
+      height: 40,
       marginRight: 10,
+
   },
   inputDescription: {
     margin: 10,

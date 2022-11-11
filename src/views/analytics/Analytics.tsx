@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Modal, ActivityIndicator, Image } from 'react-native';
 import { Button } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker'
@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useLazyQuery } from '@apollo/client';
 import { GET_ANALYTICS } from '../../graphql/queries';
 import { VendorContext } from '../../context/Vendor';
-import {AnalyticsInterface} from '../../interfaces/AnalyticsInterfaces';
+import { AnalyticsInterface } from '../../interfaces/AnalyticsInterfaces';
 import { useTranslation } from 'react-i18next';
 import { ANALYTICS_ORDERS_KEY, ANALYTICS_SELECT_PERIOD_FROM_KEY, ANALYTICS_SELECT_PERIOD_KEY, ANALYTICS_SELECT_PERIOD_SUBMIT_KEY, ANALYTICS_SELECT_PERIOD_TO_KEY, ANALYTICS_TITLE_KEY, ANALYTICS_TOP_PRODUCTS_KEY, ANALYTICS_TOP_PRODUCTS_SUBTITLE_KEY, ANALYTICS_TOTAL_ORDERS_KEY, ANALYTICS_TOTAL_ORDERS_SUBTITLE_KEY, ANALYTICS_TOTAL_SALES_KEY, ANALYTICS_TOTAL_SALES_SUBTITLE_KEY } from '../../translations/keys/AnalyticsTranslationKeys';
 
@@ -17,6 +17,12 @@ const Analytics = () => {
     //Default dateFrom is a week ago
     const [dateFrom, setDateFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)))
     const [dateTo, setDateTo] = useState(new Date())
+    const [openDateFrom, setOpenDateFrom] = useState(false)
+    const [openDateTo, setOpenDateTo] = useState(false)
+
+    const [selectedDateFrom, setSelectedDateFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)))
+    const [selectedDateTo, setSelectedDateTo] = useState(new Date())
+
     const [modalVisible, setModalVisible] = useState(false)
     const [analyticsObject, setAnalyticsObject] = useState<AnalyticsInterface>({
         totalOrders: 0,
@@ -24,29 +30,30 @@ const Analytics = () => {
         topProducts: null,
     })
     const { storeId } = useContext(VendorContext);
-    const {t: translation} = useTranslation('translation');
+    const { t: translation } = useTranslation('translation');
 
     const [getAnalytics, { data, loading, error }] = useLazyQuery(GET_ANALYTICS, {
         variables: {
             idStore: storeId,
             dateFrom: dateFrom.toUTCString(),
             dateTo: dateTo.toUTCString()
+
         },
         fetchPolicy: 'network-only',
         onCompleted(data) {
-           const result = data.getAnalytics
-           const object:AnalyticsInterface = {
+            console.log("on completed called")
+            const result = data.getAnalytics
+            const object: AnalyticsInterface = {
                 totalOrders: result.totalOrders,
                 totalSales: result.totalSales,
                 topProducts: result.topProducts
-           }
+            }
             setAnalyticsObject(object)
 
 
         }
     })
 
-    //call getAnalytics at the first render
     useEffect(() => {
         getAnalytics()
     }, [])
@@ -58,15 +65,15 @@ const Analytics = () => {
             </View>
         )
     }
-    if(error) {
+    if (error) {
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
-                <Text style={{textAlign: 'center'}}>Error:{error.message}</Text>
+                <Text style={{ textAlign: 'center' }}>Error:{error.message}</Text>
             </View>
         )
     }
 
-    
+
     const topProductsView = () => {
         return (
 
@@ -92,16 +99,25 @@ const Analytics = () => {
 
     const renderProductImage = (imgSrc: any) => {
         if (imgSrc !== '') {
-          return <Image source={{uri: imgSrc}} style={styles.product_image} />;
+            return <Image source={{ uri: imgSrc }} style={styles.product_image} />;
         } else {
-          return (
-            <Image
-              style={styles.product_image}
-              source={{uri: 'https://img.icons8.com/ios/452/no-image.png'}}
-            />
-          );
+            return (
+                <Image
+                    style={styles.product_image}
+                    source={{ uri: 'https://img.icons8.com/ios/452/no-image.png' }}
+                />
+            );
         }
-      };    
+    };
+
+    const setNewDateRange = () => {
+        setDateFrom(selectedDateFrom)
+        setDateTo(selectedDateTo)
+        setModalVisible(false)
+        getAnalytics()
+    }
+
+
     const dateRangeSelection = () => {
         return (
 
@@ -118,24 +134,44 @@ const Analytics = () => {
 
                         <View style={styles.modal_date_picker_container}>
                             <Text style={styles.modal_date_picker_title}>{translation(ANALYTICS_SELECT_PERIOD_FROM_KEY)}</Text>
+                            <Button  onPress={() => setOpenDateFrom(true)}> {selectedDateFrom.toLocaleDateString()} </Button>
                             <DatePicker
+                                modal
+                                open={openDateFrom}
                                 date={dateFrom}
-                                onDateChange={setDateFrom}
+                                onConfirm={(date) => {
+                                    setOpenDateFrom(false)
+                                    setSelectedDateFrom(date)
+                                }}
+                                onCancel={() => {
+                                    setOpenDateFrom(false)
+                                }}
                                 mode="date"
                             />
+                            
 
                         </View>
                         <View style={styles.modal_date_picker_container}>
                             <Text style={styles.modal_date_picker_title}>{translation(ANALYTICS_SELECT_PERIOD_TO_KEY)}</Text>
+                            <Button  onPress={() => setOpenDateTo(true)}> {selectedDateTo.toLocaleDateString()} </Button>
                             <DatePicker
+                                modal
+                                open={openDateTo}
                                 date={dateTo}
-                                onDateChange={setDateTo}
+                                onConfirm={(date) => {
+                                    setOpenDateTo(false)
+                                    setSelectedDateTo(date)
+                                }}
+                                onCancel={() => {
+                                    setOpenDateTo(false)
+                                }}
                                 mode="date"
                             />
+                           
 
                         </View>
-                        <Button style={styles.date_button} mode="contained" onPress={() => {getAnalytics();setModalVisible(false)}}>
-                        {translation(ANALYTICS_SELECT_PERIOD_SUBMIT_KEY)}
+                        <Button style={styles.date_button} mode="contained" onPress={() => { setNewDateRange() }}>
+                            {translation(ANALYTICS_SELECT_PERIOD_SUBMIT_KEY)}
                         </Button>
                     </View>
                 </Modal>
@@ -370,7 +406,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        margin:10
+        margin: 10
 
 
     },

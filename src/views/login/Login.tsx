@@ -25,6 +25,7 @@ import { ApolloError } from '@apollo/client';
 import { EMPTY_KEY } from '../../translations/keys/EmptyTranslationKey';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { INVALID_CREDENTIALS, SOMETHING_WRONG, VERIFY_YOUR_ACCOUNT } from '../../translations/keys/GeneralTranslationKeys';
 
 const Login = ({navigation}: any) => {
   const [{credentials, errorMessage}, dispatchCredentialsState] = useReducer(
@@ -64,7 +65,7 @@ const Login = ({navigation}: any) => {
   }, [storeId]);
 
   const onLoginError = (error: ApolloError) => {
-    alert("Oops something went wrong")
+    alert(translation(SOMETHING_WRONG))
   }
 
   const [loginByEmail, {
@@ -104,7 +105,7 @@ const Login = ({navigation}: any) => {
       isAuthEmail
         ? await loginByEmail({
             variables: {
-              email: credentials.auth,
+              email: credentials.auth.toLowerCase(),
               password: credentials.password,
             },
           })
@@ -113,6 +114,7 @@ const Login = ({navigation}: any) => {
               username: credentials.auth,
               password: credentials.password,
             },
+            
           });
     }
   };
@@ -131,11 +133,11 @@ const Login = ({navigation}: any) => {
       return;
     }
     if (vendorNotVerified) {
-      alert("Please verify your account")
+      alert(translation(VERIFY_YOUR_ACCOUNT))
       return;
     }
     if (invalidCredentials) {
-      alert("Your username or password is incorrect")
+      alert(translation(INVALID_CREDENTIALS))
       return;
     }
   }
@@ -154,11 +156,11 @@ const Login = ({navigation}: any) => {
       );
     }
     if (vendorNotVerified) {
-      alert("Please verify your account")
+      alert(translation(VERIFY_YOUR_ACCOUNT))
       return;
     }
     if (invalidCredentials) {
-      alert("Your username or password is incorrect")
+      alert(translation(INVALID_CREDENTIALS))
       return;
     }
   }

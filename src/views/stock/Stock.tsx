@@ -9,6 +9,7 @@ import { inventoryStyles } from "../inventory/InventoryStyles";
 import Variant, { VariantProps } from "./subsections/Variant";
 import { UPDATE_VARIANT } from "../../graphql/mutations";
 import { addProductsStyles } from "../Product/Styles/AddProductStyles";
+import { useTranslation } from "react-i18next";
 
 const Stock = ({ navigation }: any) => {
 
@@ -28,6 +29,7 @@ const Stock = ({ navigation }: any) => {
 
   const [updatedVariants, setUpdatedVariants] = useState<VariantProps[]>([])
 
+  const {t} = useTranslation('translation')
 
   const handleSearch = (text: React.SetStateAction<string>) => {
     setSearchQuery(text)
@@ -140,6 +142,9 @@ const Stock = ({ navigation }: any) => {
         }
     }
 
+    const searchPlaceholder = t('searchBarPlaceholder')
+
+
   return(
     <SafeAreaView style={inventoryStyles.root}>
       <View style={inventoryStyles.view}>
@@ -165,7 +170,7 @@ const Stock = ({ navigation }: any) => {
           iconColor="#FFA500"
           icon="content-save-edit"
           size={30}/>
-        <Searchbar style={{marginVertical: 10}} placeholder="Search" onChangeText={handleSearch} value={searchQuery}/>
+        <Searchbar style={{marginVertical: 10}} placeholder={searchPlaceholder} onChangeText={handleSearch} value={searchQuery}/>
       </View>
 
       <SafeAreaView style={{flex: 1}}>
