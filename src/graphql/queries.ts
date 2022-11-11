@@ -160,31 +160,16 @@ export const GET_STORE_VARIANTS_BY_ID = gql`
     }
   }
 `
-// export const GET_PRODUCTS = gql`
-//   query GetStoreById($idStore: ID!) {
-//     getStoreById(idStore: $idStore) {
-//       code
-//       message
-//       store {
-//         _id
-//         products(first:2) {
-//           _id
-//           title
-//           imgSrc
-//         }
-//       }
-//     }
-//   }
-// `
+
 
 export const GET_ALL_ORDERS_BY_STORE_ID = gql`
-  query GetStoreById($idStore: ID!) {
+  query GetStoreById($idStore: ID!,$idOrder: ID) {
     getStoreById(idStore: $idStore) {
       code
       message
       store {
         name
-        orders {
+        orders(idOrder: $idOrder){
           _id
           orderNumber
           productsVariantsOrdered {
@@ -256,50 +241,6 @@ export const GET_PRODUCT_BY_ID = gql`
 `;
 
 
-export const GET_ORDER_BY_ID = gql`
-  query GetOrderById($idOrder: ID!) {
-    getOrderById(idOrder: $idOrder) {
-      code
-      message
-      order {
-        _id
-        orderNumber
-        productsVariantsOrdered {
-          relatedProductVariant {
-            _id
-            displayName
-            price
-            imgSrc
-            relatedProduct {
-              relatedStore {
-                name
-              }
-            }
-          }
-          quantity
-        }
-        relatedVendors {
-          name
-        }
-        relatedClient {
-          lastName
-          firstName
-          email
-          address
-          phone
-        }
-        logs {
-          status
-          time
-        }
-        subTotal
-        deliveryFee
-        taxs
-        paymentMethod
-      }
-    }
-  }
-`;
 
 export const GET_ANALYTICS = gql`
   query Query($idStore: ID!, $dateFrom: Date!, $dateTo: Date!) {

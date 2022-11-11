@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -35,7 +35,8 @@ import {
   UPDATE_ALERT_FAILED,
   UPDATE_ALERT_SUCESS,
 } from '../../translations/keys/OrdersTranslationKeys';
-import {GET_ORDER_BY_ID} from '../../graphql/queries';
+import {GET_ALL_ORDERS_BY_STORE_ID} from '../../graphql/queries';
+import { VendorContext } from '../../context/Vendor';
 
 const styles = OrderPageStyles;
 
@@ -48,6 +49,9 @@ const OrderPage = ({route, navigation}: any) => {
     }
   };
 
+  const {storeId} = useContext(VendorContext);
+
+
   const [changeOrderStatus] = useMutation(CHANGE_ORDER_STATUS, {
     onCompleted: receivedUpdateStatus,
   });
@@ -58,13 +62,14 @@ const OrderPage = ({route, navigation}: any) => {
     'WAITING_CONFIRMATION',
   );
 
-  const {data, loading, error} = useQuery(GET_ORDER_BY_ID, {
+  const {data, loading, error} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
     variables: {
+      idStore:storeId,
       idOrder: idOrder,
     },
     fetchPolicy: 'network-only',
     onCompleted(data) {
-      const object = data.getOrderById.order.logs;
+      const object = data.getStoreById.store.orders[0].logs;
       set_current_order_status(object[object.length - 1].status); //Set the default value of the dropdown to the last status of the order
     },
   });
@@ -95,7 +100,7 @@ const OrderPage = ({route, navigation}: any) => {
   }
 
   //Mapping the order from the query
-  const orderObject = data.getOrderById.order;
+  const orderObject = data.getStoreById.store.orders[0];
 
   const products: Product[] = orderObject.productsVariantsOrdered.map(
     ({relatedProductVariant, quantity}: any) => {
