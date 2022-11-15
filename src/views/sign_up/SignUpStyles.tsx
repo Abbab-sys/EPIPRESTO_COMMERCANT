@@ -40,7 +40,9 @@ export const signUpStyles = StyleSheet.create({
     fontSize: 20,
   },
   fieldsView: {
-    margin: '5%',
+    marginTop: '5%',
+    marginLeft: '5%',
+    marginRight: '5%',
     height: 'auto',
   },
   fieldView: {
@@ -49,6 +51,7 @@ export const signUpStyles = StyleSheet.create({
   buttonView: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: '5%'
   },
   button: {
     backgroundColor: '#FFA500',

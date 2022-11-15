@@ -19,6 +19,7 @@ import {
       phone: '',
       username: '',
       password: '',
+      shopCategory: ''
     },
     signUpErrorMessage: {
       ...initialSignUpErrorMessage,
