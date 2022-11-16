@@ -28,6 +28,19 @@ export const SIGN_UP_EMAIL_ERROR_FORMAT_ERROR_KEY =
   'sign_up.email.errors.formatError';
 export const SIGN_UP_EMAIL_ERROR_USED_KEY = 'sign_up.email.errors.used';
 
+export const SIGN_UP_CATEGORY_PLACEHOLDER_KEY = 'sign_up.category.placeholder'
+export const SIGN_UP_CATEGORY_TITLE_KEY = 'sign_up.category.title'
+export const SIGN_UP_CATEGORY_ERROR_EMPTY_KEY = 'sign_up.category.errorMessage'
+export const SIGN_UP_CATEGORY_FRUITS_KEY = 'sign_up.category.categories.FRUITS_AND_VEGETABLES'
+export const SIGN_UP_CATEGORY_FISH_KEY = 'sign_up.category.categories.FISH_AND_SEAFOOD'
+export const SIGN_UP_CATEGORY_HEALTHY_KEY = 'sign_up.category.categories.HEALTHY'
+export const SIGN_UP_CATEGORY_KETO_KEY = 'sign_up.category.categories.KETO'
+export const SIGN_UP_CATEGORY_BAKERY_KEY = 'sign_up.category.categories.BAKERY'
+export const SIGN_UP_CATEGORY_WORLD_KEY = 'sign_up.category.categories.WORLD_PRODUCTS'
+export const SIGN_UP_CATEGORY_BUTCHER_KEY = 'sign_up.category.categories.BUTCHER'
+export const SIGN_UP_CATEGORY_OTHER_KEY = 'sign_up.category.categories.OTHER'
+export const SIGN_UP_CATEGORY_NOT_FOUND_KEY = 'sign_up.category.notFound'
+
 export const SIGN_UP_PHONE_PLACEHOLDER_KEY = 'sign_up.phone.placeholder';
 export const SIGN_UP_PHONE_TITLE_KEY = 'sign_up.phone.title';
 export const SIGN_UP_PHONE_ERROR_MESSAGE_KEY = 'sign_up.phone.errorMessage';

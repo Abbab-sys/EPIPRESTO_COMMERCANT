@@ -5,6 +5,7 @@ export interface AccountInput {
   phone: string;
   username: string;
   password: string;
+  shopCategory: string;
 }
 
 export interface SignUpErrorMessage {
@@ -15,6 +16,7 @@ export interface SignUpErrorMessage {
   usernameError: Set<string>;
   passwordError: Set<string>;
   verifyPasswordError: Set<string>;
+  shopCategoryError: Set<string>;
 }
 
 export const initialSignUpErrorMessage: SignUpErrorMessage = {
@@ -25,4 +27,5 @@ export const initialSignUpErrorMessage: SignUpErrorMessage = {
   usernameError: new Set(),
   passwordError: new Set(),
   verifyPasswordError: new Set(),
+  shopCategoryError: new Set(),
 };

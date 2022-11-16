@@ -3,6 +3,7 @@ import {SignUpCredentialsReducerActions} from './SignUpCredentialsReducerActions
 import {initialSignUpErrorMessage} from '../../../interfaces/SignUpInterfaces';
 import {
   SIGN_UP_ADRESS_ERROR_MESSAGE_KEY,
+  SIGN_UP_CATEGORY_ERROR_EMPTY_KEY,
   SIGN_UP_CONFIRM_PASSWORD_ERROR_MESSAGE_KEY,
   SIGN_UP_EMAIL_ERROR_EMPTY_KEY,
   SIGN_UP_EMAIL_ERROR_FORMAT_ERROR_KEY,
@@ -166,6 +167,25 @@ export function signUpCredentialsReducer(
         },
       };
     }
+    case 'CHANGE_CATEGORY': {
+      const errorMessage = {...initialSignUpErrorMessage};
+      manageError(
+        errorMessage.shopCategoryError,
+        SIGN_UP_CATEGORY_ERROR_EMPTY_KEY,
+        action.newCategory === '',
+      );
+      return {
+        ...state,
+        accountInput: {
+          ...state.accountInput,
+          shopCategory: action.newCategory,
+        },
+        signUpErrorMessage: {
+          ...state.signUpErrorMessage,
+          shopCategoryError: errorMessage.shopCategoryError,
+        },
+      };
+    }
     case 'CHECK_SIGN_UP_CREDENTIALS': {
       const errorMessage = {...initialSignUpErrorMessage};
       const emailFormatIsInvalid =
@@ -216,6 +236,11 @@ export function signUpCredentialsReducer(
         errorMessage.phoneError,
         SIGN_UP_PHONE_ERROR_MESSAGE_KEY,
         state.accountInput.phone === '',
+      );
+      manageError(
+        errorMessage.shopCategoryError,
+        SIGN_UP_CATEGORY_ERROR_EMPTY_KEY,
+        state.accountInput.shopCategory === '',
       );
       return {
         ...state,
@@ -338,6 +363,21 @@ export function signUpCredentialsReducer(
         signUpErrorMessage: {
           ...state.signUpErrorMessage,
           verifyPasswordError: errorMessage.verifyPasswordError,
+        },
+      };
+    }
+    case 'CHECK_CATEGORY': {
+      const errorMessage = {...initialSignUpErrorMessage};
+      manageError(
+        errorMessage.shopCategoryError,
+        SIGN_UP_CATEGORY_ERROR_EMPTY_KEY,
+        state.accountInput.shopCategory === '',
+      );
+      return {
+        ...state,
+        signUpErrorMessage: {
+          ...state.signUpErrorMessage,
+          shopCategoryError: errorMessage.shopCategoryError,
         },
       };
     }

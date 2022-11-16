@@ -33,6 +33,7 @@ import {
 import { SIGN_UP } from '../../graphql/mutations';
 import { useTimeout } from '../../hooks/CredentialsHooks';
 import { EMPTY_KEY } from '../../translations/keys/EmptyTranslationKey';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 const SignUp = ({ navigation }: any) => {
   const { t: translation } = useTranslation('translation');
@@ -126,7 +127,8 @@ const SignUp = ({ navigation }: any) => {
       currErrorMessages.verifyPasswordError.size === 0 &&
       currErrorMessages.shopNameError.size === 0 &&
       currErrorMessages.addressError.size === 0 &&
-      currErrorMessages.phoneError.size === 0
+      currErrorMessages.phoneError.size === 0 &&
+      currErrorMessages.shopCategoryError.size === 0
     );
   };
   const areAllCredentialsFieldsAreFilled = (): boolean => {
@@ -137,7 +139,8 @@ const SignUp = ({ navigation }: any) => {
       accountInput.password !== '' &&
       verifyPassword !== '' &&
       accountInput.address !== '' &&
-      accountInput.phone !== ''
+      accountInput.phone !== '' &&
+      accountInput.shopCategory !== '' 
     );
   };
 
@@ -190,6 +193,7 @@ const SignUp = ({ navigation }: any) => {
                   return (
                     <CredentialInput
                       key={field.attribute}
+                      isCategory={field.attribute === 'shopCategory'}
                       field={field}
                       credential={
                         field.attribute === 'confirmPassword'

@@ -55,6 +55,22 @@
         "used": "This email is already used"
       }
     },
+    "category": {
+      "placeholder": "Enter your shop's category",
+      "title": "Category",
+      "errorMessage": "The category field can not be empty",
+      "categories": {
+        "FRUITS_AND_VEGETABLES": "Fruits and vegetables",
+        "FISH_AND_SEAFOOD": "Fish and seafood",
+        "HEALTHY": "Healthy food",
+        "KETO": "Keto",
+        "BAKERY": "Bakery",
+        "WORLD_PRODUCTS": "Products of the world",
+        "BUTCHER": "Butcher shop",
+        "OTHER": "Autre"
+      },
+      "notFound": "No category found"
+    },
     "phone": {
       "placeholder": "Enter your shop's phone number",
       "title": "Shop's phone number",

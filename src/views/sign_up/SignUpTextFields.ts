@@ -2,6 +2,8 @@ import {TextField} from '../../interfaces/textFieldInterface';
 import {
   SIGN_UP_ADRESS_PLACEHOLDER_KEY,
   SIGN_UP_ADRESS_TITLE_KEY,
+  SIGN_UP_CATEGORY_PLACEHOLDER_KEY,
+  SIGN_UP_CATEGORY_TITLE_KEY,
   SIGN_UP_CONFIRM_PASSWORD_PLACEHOLDER_KEY,
   SIGN_UP_CONFIRM_PASSWORD_TITLE_KEY,
   SIGN_UP_EMAIL_PLACEHOLDER_KEY,
@@ -53,6 +55,19 @@ export const SignUpTextFields: TextField[] = [
       return {
         type: 'CHANGE_EMAIL',
         newEmail: text,
+      };
+    },
+  },
+  {
+    label: SIGN_UP_CATEGORY_PLACEHOLDER_KEY,
+    title: SIGN_UP_CATEGORY_TITLE_KEY,
+    attribute: 'shopCategory',
+    keyboardType: 'default',
+    secure: false,
+    onChange: (text: string) => {
+      return {
+        type: 'CHANGE_CATEGORY',
+        newCategory: text,
       };
     },
   },
