@@ -140,8 +140,29 @@ query getStoreCredentialsById($idStore: ID!) {
 }
 `
 
+// export const GET_STORE_VARIANTS_BY_ID = gql`
+//   query GetStoreById($idStore: ID!, $offset: Int!, $first: Int, $searchText: String) {
+//     getStoreById(idStore: $idStore) {
+//       code
+//       message
+//       store {
+//         products(offset: $offset, first: $first, searchText: $searchText) {
+//           title
+//           imgSrc
+//           variants {
+//             _id
+//             variantTitle
+//             imgSrc
+//             stock
+//           }
+//         }
+//       }
+//     }
+//   }
+// `
+
 export const GET_STORE_VARIANTS_BY_ID = gql`
-  query GetStoreById($idStore: ID!, $offset: Int!, $first: Int) {
+  query Query($idStore: ID!, $offset: Int!, $first: Int, $variantsOffset2: Int!, $variantsSearchText2: String, $variantsFirst2: Int) {
     getStoreById(idStore: $idStore) {
       code
       message
@@ -149,11 +170,11 @@ export const GET_STORE_VARIANTS_BY_ID = gql`
         products(offset: $offset, first: $first) {
           title
           imgSrc
-          variants {
-            _id
-            variantTitle
-            imgSrc
-            stock
+          variants(offset: $variantsOffset2, searchText: $variantsSearchText2, first: $variantsFirst2) {
+              _id
+              variantTitle
+              imgSrc
+              stock
           }
         }
       }
