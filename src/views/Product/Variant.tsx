@@ -89,7 +89,7 @@ const Variant = (props: VariantProps) => {
           includeBase64: true
           // ts-ignore is used because data is a property of image but still showing error
           // @ts-ignore
-        }).then(image => setVariantImage("data:image/png;base64,"+image.data));
+        }).then(image => setVariantImage("data:image/png;base64,"+image.data)).catch((error) => console.log(error));
       }
     
       const handleTakePhotoFromGallery = () => {
@@ -101,7 +101,7 @@ const Variant = (props: VariantProps) => {
           includeBase64: true,
           // ts-ignore is used because data is a property of image but still showing error
           // @ts-ignore
-        }).then(image => setVariantImage("data:image/png;base64,"+image.data));
+        }).then(image => setVariantImage("data:image/png;base64,"+image.data)).catch((error) => console.log(error));
       }
 
     
@@ -185,8 +185,6 @@ const Variant = (props: VariantProps) => {
               value={title}
               onChangeText={text => setTitle(text)}
               />
-            <HelperText type='error'>
-            </HelperText>
   
             <View style={addVariantStyles.checkboxContainer}>
               <Text style={addVariantStyles.label}>{t('addVariant.boughtByWeight')}</Text>
@@ -232,7 +230,7 @@ const Variant = (props: VariantProps) => {
               value={(isWeightable && unit === 'Kg') ? priceKg : price}
               />
             <HelperText type='info'>
-              Shown price: {price ? ((isWeightable && unit === 'Kg') ? parseFloat(priceKg).toFixed(2) : parseFloat(price).toFixed(2)) : "none"}
+              {t('addVariant.labels.shownPrice')}: {price ? ((isWeightable && unit === 'Kg') ? parseFloat(priceKg).toFixed(2) : parseFloat(price).toFixed(2)) : "none"}$
             </HelperText>
   
             <View style={addVariantStyles.checkboxContainer}>

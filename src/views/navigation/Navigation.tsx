@@ -31,6 +31,7 @@ const Navigation = () => {
                 {translation(screen.title)}
               </Text>
             ),
+            tabBarLabelPosition: 'below-icon',
           }}
         />
       ))}

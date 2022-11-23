@@ -29,7 +29,7 @@
     "successAccountCreation": "Votre compte a été créé aves succès!",
     "errorAccountCreation": "Oops une erreur est survenues",
     "shopName": {
-      "placeholder": "Entrez l'adresse de votre boutique",
+      "placeholder": "Entrez le nom de votre boutique",
       "title": "Nom de la boutique",
       "errorMessage": "Le champ du nom de la boutique ne peut pas être vide"
     },
@@ -42,7 +42,7 @@
       }
     },
     "address": {
-      "placeholder": "Entrez l'adresse de votre boutique",
+      "placeholder": "Ex: 123 avenue Lacombe, Montréal, QC H2T2M4",
       "title": "Adresse de la boutique",
       "errorMessage": "Le champ d'adresse ne peut pas être vide"
     },
@@ -192,7 +192,8 @@
       "price": "Prix*",
       "sku": "Sku",
       "stock": "Stock*",
-      "forSale": "Produit disponible a la vente"
+      "forSale": "Produit disponible a la vente",
+      "shownPrice": "Prix affiché au client"
     },
     "boughtByWeight": "Produit vendu au poids",
     "unit": "Unité de mesure",
