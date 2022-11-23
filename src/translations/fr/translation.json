@@ -136,13 +136,13 @@
     "title": "Paramètres",
     "store":{
       "title":"Ma boutique",
-      "modify":"Modifier",
-      "modifyError": "Erreur : Certains champs renseignés sont incorrects",
-      "modifySuccess": "Votre boutique a été modifiée avec succès!",
+      "save":"Enregistrer",
+      "saveError": "Erreur : Certains champs renseignés sont incorrects",
+      "saveSuccess": "Votre boutique a été modifiée avec succès!",
       "status": {
         "title": "État de ma boutique",
         "open":"Ouvert",
-        "closed":"Fermé"
+        "paused":"Fermé"
       }
     },
     "logOut": {

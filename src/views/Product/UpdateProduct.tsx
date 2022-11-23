@@ -88,6 +88,7 @@ const UpdateProduct = ({route, navigation}: any) => {
   const {data, loading, error} = useQuery(GET_PRODUCT_BY_ID, {
     variables: {
       idProduct: route.params.idProduct,
+      offset: 0
     },
     fetchPolicy: 'network-only',
     onCompleted(data) {

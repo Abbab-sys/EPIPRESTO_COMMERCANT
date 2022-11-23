@@ -94,7 +94,7 @@ const Orders = ({navigation}: any) => {
       paymentMethod: order.paymentMethod,
     };
     return newOrder;
-  });
+  }).reverse();
 
   //This is to chagne the color of the status field for each order based on the status
   const status_bar_color = (status: string) => {

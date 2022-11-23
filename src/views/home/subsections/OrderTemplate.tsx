@@ -50,19 +50,19 @@ export const orderStyles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#F2F4F8',
     elevation: 4,
-    margin: '2%'
+    margin: 10
   },
   buttonStyle: {
     borderRadius: 30,
     color: "white",
     backgroundColor: "#FFA500",
-    margin: '2%'
+    margin: 10
   },
   buttonText: {
     color: 'white'
   },
   text: {
-    margin: '2%'
+    margin: 10
   }
 });
 

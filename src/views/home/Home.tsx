@@ -2,18 +2,17 @@ import React, { useContext, useState } from "react"
 import { FlatList, SafeAreaView, View } from "react-native"
 import { Text, Card, ActivityIndicator } from 'react-native-paper'
 import { homeStyles } from "./HomeStyles";
-import Swiper from "react-native-swiper";
-import Login from "../login/Login";
-import SignUp from "../sign_up/SignUp";
 import DailyData, { DailyDataProps, DataType } from "./subsections/DailyData";
 import OrderTemplate from "./subsections/OrderTemplate";
 import { Trans, useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_ORDERS_BY_STORE_ID } from "../../graphql/queries";
+import { GET_ALL_ORDERS_BY_STORE_ID, GET_ANALYTICS } from "../../graphql/queries";
 import { VendorContext } from "../../context/Vendor";
-import { Client, Order, Product } from "../../interfaces/OrderInterface";
 import { NO_ORDER_KEY } from "../../translations/keys/HomeTranslationKeys";
 import { ScrollView } from "react-native-gesture-handler";
+import { DashboardAnalyticsInterface } from "../../interfaces/DashboardAnalyticsInterface";
+
+
 
 const Home = ({navigation}: any) => {
 
@@ -21,24 +20,47 @@ const Home = ({navigation}: any) => {
 
   const {storeId} = useContext(VendorContext)
 
+  const [analytics, setAnalytics] = useState<DashboardAnalyticsInterface>({
+    totalOrders: 0,
+    totalSales: 0,
+  })
+
   const {data, loading, error} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
     variables: {
       idStore: storeId,
     },
   });
 
-
+  const { data: analyticsData, loading: analyticsLoading, error: analyticsError } = useQuery(GET_ANALYTICS, {
+    variables: {
+        idStore: storeId,
+        dateFrom: (new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate())).toUTCString(),
+        dateTo: (new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1)).toUTCString()
+    },
+    fetchPolicy: 'network-only',
+    onCompleted(data) {
+        const result = data.getAnalytics
+        const object: DashboardAnalyticsInterface = {
+            totalOrders: result.totalOrders,
+            totalSales: result.totalSales,
+        }
+        setAnalytics(object)
+    }
+}) 
 
   const dailyData: DailyDataProps[] = [
     {
       dataType: DataType.ORDERS,
-      dataAmount: 10
+      dataAmount: analytics.totalOrders
     },
     {
       dataType: DataType.INCOME,
-      dataAmount: 100
+      dataAmount: analytics.totalSales
     }
   ]
+
+  console.log("DATA: ", analyticsData)
+  console.log("ERROR: ", analyticsError)
 
   return(
     <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
@@ -65,19 +87,25 @@ const Home = ({navigation}: any) => {
             {t('home.welcomeMessage')}
           </Text>
           <SafeAreaView>
-            <FlatList
-              numColumns={2}
-              data={dailyData}
-              renderItem={({item}) => 
-                <DailyData
-                  dataType={item.dataType}
-                  dataAmount={item.dataAmount} /> 
-              }
-              keyExtractor={item => item.dataType}
-            />
+            {
+              analyticsLoading ? (
+                <ActivityIndicator color="#FFA500" />
+              ) : (
+                <FlatList
+                  numColumns={2}
+                  data={dailyData}
+                  renderItem={({item}) => 
+                    <DailyData
+                      dataType={item.dataType}
+                      dataAmount={item.dataAmount} /> 
+                  }
+                  keyExtractor={item => item.dataType}
+                />
+              )
+            }
           </SafeAreaView>
         </Card>
-        <View style={{flex: 1, marginTop: '10%'}}>
+        <View style={{flex: 1 , marginTop: '10%'}}>
           <Text style={{justifyContent: 'center', alignSelf: 'center', color: '#FFA500'}} variant="titleMedium">
             {t('home.recentOrders')}
           </Text>
@@ -93,15 +121,14 @@ const Home = ({navigation}: any) => {
                 </View> 
               ) :
                (
-                <ScrollView style={{flex: 1, alignContent: 'stretch'}} >
+                <ScrollView horizontal>
                   {data.getStoreById.store.orders.slice(-5).reverse().map((order: any, index: number) => (
-                    <View style={{flex: 1, alignSelf: 'center'}} key={index}>
-                      <OrderTemplate 
-                        clientName={order.relatedClient.firstName + ' ' + order.relatedClient.lastName}
-                        orderNum={order.orderNumber}
-                        navigation={() => navigation.navigate('OrderPage', {idOrder: order._id})}
-                        />
-                    </View>
+                    <OrderTemplate
+                      key={index}
+                      clientName={order.relatedClient.firstName + ' ' + order.relatedClient.lastName}
+                      orderNum={order.orderNumber}
+                      navigation={() => navigation.navigate('OrderPage', {idOrder: order._id})}
+                      />
                   ))}
                 </ScrollView>
               )

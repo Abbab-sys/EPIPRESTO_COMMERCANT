@@ -136,13 +136,13 @@
     "title": "Settings",
     "store":{
       "title":"My store",
-      "modify":"Modify",
-      "modifyError":"Error : Some fields are incorrect",
-      "modifySuccess":"Your store has been successfully modified",
+      "save":"Save",
+      "saveError":"Error : Some fields are incorrect",
+      "saveSuccess":"Your store has been successfully modified",
       "status": {
         "title":"Status of my store",
         "open":"Open",
-        "closed":"Closed"
+        "paused":"Paused"
         }
     },
     "language":{

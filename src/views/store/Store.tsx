@@ -99,7 +99,7 @@ const Store = ({navigation}: any) => {
         name: storeInput.shopName,
         address: storeInput.address,
         disponibilities: disponibilitiesObject,
-        isOpen : storeInput.isOpen,
+        isPaused : storeInput.isPaused,
       }
     }
       
@@ -168,14 +168,14 @@ const Store = ({navigation}: any) => {
             </View>
             <Text style={SubTitleStyles.text}>{translation(SETTINGS_STORE_STATUS_TITLE_KEY)}</Text>
               <View style={StoreStyles.statusView}>
-                <Text style={StoreStyles.text}> {translation(storeInput.isOpen ? SETTINGS_STORE_STATUS_OPEN_KEY : SETTINGS_STORE_STATUS_CLOSED_KEY)}</Text>
+                <Text style={StoreStyles.text}> {translation(storeInput.isPaused ? SETTINGS_STORE_STATUS_OPEN_KEY : SETTINGS_STORE_STATUS_CLOSED_KEY)}</Text>
                 <Switch
                   trackColor={{ false: "#767577", true: "#81b0ff" }}
-                  thumbColor={storeInput.isOpen ? "#f5dd4b" : "#f4f3f4"}
+                  thumbColor={storeInput.isPaused ? "#f5dd4b" : "#f4f3f4"}
                   ios_backgroundColor="#3e3e3e"
                   style={{marginLeft: 10}}
                   onValueChange={() => dispatchCredentialsState({type: 'CHANGE_STATUS'})}
-                  value={storeInput.isOpen}
+                  value={storeInput.isPaused}
                 />
               </View>
               <View>

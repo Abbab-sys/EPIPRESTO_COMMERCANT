@@ -3,7 +3,7 @@ export interface StoreInput {
     shopName: string;
     address: string;
     phone: string;
-    isOpen: boolean;
+    isPaused: boolean;
     disponibilities: Map<string, Array<ActivesHour>>;
   }
   
