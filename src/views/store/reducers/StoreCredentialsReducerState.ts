@@ -11,7 +11,7 @@ export const initialStoreCredentialsState: StoreCredentialsReducerState = {
     shopName: '',
     address: '',
     phone: '',
-    isOpen: false,
+    isPaused: false,
     disponibilities: new Map<string, Array<ActivesHour>>(
       [["MONDAY", [{openingHour: "00:00", endingHour: "00:00", errorOpeningHour: '', errorEndingHour: ''}]]
       ,["TUESDAY", [{openingHour: "00:00", endingHour: "00:00", errorOpeningHour: '', errorEndingHour: ''}]]

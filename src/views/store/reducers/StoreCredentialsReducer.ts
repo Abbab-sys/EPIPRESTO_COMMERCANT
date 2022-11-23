@@ -61,7 +61,7 @@ export function storeCredentialsReducer(state: StoreCredentialsReducerState, act
         ...state,
         storeInput: {
           ...state.storeInput,
-          isOpen: !previousState.storeInput.isOpen
+          isPaused: !previousState.storeInput.isPaused
         }
       }
     }
@@ -129,7 +129,7 @@ export function storeCredentialsReducer(state: StoreCredentialsReducerState, act
           shopName: action.data.name,
           address: action.data.address,
           phone: action.data.relatedVendor.phone,
-          isOpen: action.data.isOpen,
+          isPaused: action.data.isPaused,
           disponibilities: newDisponibility,
           idVendor: action.data.relatedVendor._id,
         },

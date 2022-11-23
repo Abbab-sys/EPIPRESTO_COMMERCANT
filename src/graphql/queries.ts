@@ -122,7 +122,7 @@ query getStoreCredentialsById($idStore: ID!) {
     store {
       name
       address
-      isOpen
+      isPaused
       disponibilities {
         day
         activesHours {
@@ -233,11 +233,11 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
 `
 
 export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($idProduct: ID!) {
+  query GetProductById($idProduct: ID!,$offset: Int!) {
     getProductById(idProduct: $idProduct) {
       code
       message
-      product {
+      product{
         _id
         title
         brand
@@ -245,7 +245,7 @@ export const GET_PRODUCT_BY_ID = gql`
         tags
         imgSrc
         description
-        variants {
+        variants (offset: $offset) {
           _id
           variantTitle
           availableForSale
