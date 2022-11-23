@@ -1,6 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import {Text} from 'react-native';
 import {NavigationTabScreens} from './NavigationTabScreens';
 import {useTranslation} from 'react-i18next';

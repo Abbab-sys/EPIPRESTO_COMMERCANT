@@ -1,7 +1,8 @@
 
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ButtonSections } from "./ButtonSections";
 import { SettingsStyles } from "./SettingsStyles";
 import { SETTINGS_TITLE_KEY } from "../../translations/keys/SettingsTranslationsKeys";
@@ -43,7 +44,7 @@ const Settings = ({navigation}: any) => {
                     <View style={SettingsStyles.buttonView} key={index}>
                         <Icon.Button 
                             name={section.iconName}
-                            color='#000000'
+                            color='#FFA500'
                             onPress={section.navigationName === "Login" ? 
                                 () => handleLogout()
                                 : 

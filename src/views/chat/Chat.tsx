@@ -72,10 +72,7 @@ const Chat = ({navigation, route}: any) => {
       user: {
         _id: message.role === Role.CLIENT ? chat.relatedClientId : storeId,
         name: message.role === Role.CLIENT ? chat.relatedClientUsername : 'Me',
-        avatar:
-          message.role === Role.CLIENT
-            ? 'https://placeimg.com/140/140/any'
-            : 'https://cdn.shopify.com/s/files/1/0560/5500/5243/products/Huile-pour-cheveux-stimulante.jpg?v=1641949859',
+        avatar:"",
       },
     };
   });

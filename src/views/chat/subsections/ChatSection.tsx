@@ -1,7 +1,7 @@
 import React from "react"
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { Divider } from "react-native-paper";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export interface ChatSectionProps {
   id: string;
@@ -18,10 +18,7 @@ const ChatSection = (props: ChatSectionProps) => {
     <SafeAreaView style={ChatSectionStyles.root}>
       <TouchableOpacity onPress={() => props.navigation()}>
         <View style={ChatSectionStyles.view}>
-          {props.imageSrc ? 
-            (<Image style={ChatSectionStyles.image} source={{uri: props.imageSrc}}/>)
-            : 
-            (<Icon style={ChatSectionStyles.icon} name="user" size={30}></Icon>)}
+            <Icon style={ChatSectionStyles.icon} name="person-outline" size={30}></Icon>
           <View style={ChatSectionStyles.innerView}>
             <Text style={ChatSectionStyles.contactNameText}>{props.orderNum}</Text>
             <View style={ChatSectionStyles.bottomTextContainer}>
@@ -82,7 +79,8 @@ const ChatSectionStyles = StyleSheet.create({
   },
   icon: {
     marginLeft: "2%",
-    alignSelf: "center"
+    alignSelf: "center",
+    color:"#FFA500"
   },
   divider: {
     backgroundColor: "#FFA500",
