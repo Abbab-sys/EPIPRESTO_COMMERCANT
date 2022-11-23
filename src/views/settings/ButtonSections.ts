@@ -18,7 +18,7 @@ export const ButtonSections: ButtonSection[] = [
     {
         disabled: false,
         title: SETTINGS_LOG_OUT_KEY,
-        iconName: "heart",
+        iconName: "logout",
         navigationName: "Login"
     }
 ];

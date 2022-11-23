@@ -23,7 +23,7 @@ export const NavigationTabScreens: TabScreenProps[] = [
     title: INVENTORY_TITLE_KEY,
     navigationName: 'Inventory',
     component: Inventory,
-    iconName: 'database',
+    iconName: 'inventory',
   },
   {
     title: ORDERS_TITLE_KEY,
@@ -47,7 +47,7 @@ export const NavigationTabScreens: TabScreenProps[] = [
     title: SETTINGS_TITLE_KEY,
     navigationName: 'Settings',
     component: Settings,
-    iconName: 'cog',
+    iconName: 'settings',
   },
   
   
