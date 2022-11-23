@@ -42,7 +42,7 @@
       }
     },
     "address": {
-      "placeholder": "Enter the shop's address",
+      "placeholder": "E: 123 avenue Lacombe, Montreal, QC H2T2M4",
       "title": "Shop's address",
       "errorMessage": "The address field can not be empty"
     },
@@ -193,7 +193,8 @@
       "price": "Price*",
       "sku": "Sku",
       "stock": "Stock*",
-      "forSale": "Product available for sale"
+      "forSale": "Product available for sale",
+      "shownPrice": "Price shown to the customer"
     },
     "boughtByWeight": "Product sold by weight",
     "unit": "Unit of measure",

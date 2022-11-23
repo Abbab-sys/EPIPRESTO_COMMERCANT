@@ -185,8 +185,6 @@ const Variant = (props: VariantProps) => {
               value={title}
               onChangeText={text => setTitle(text)}
               />
-            <HelperText type='error'>
-            </HelperText>
   
             <View style={addVariantStyles.checkboxContainer}>
               <Text style={addVariantStyles.label}>{t('addVariant.boughtByWeight')}</Text>
@@ -232,7 +230,7 @@ const Variant = (props: VariantProps) => {
               value={(isWeightable && unit === 'Kg') ? priceKg : price}
               />
             <HelperText type='info'>
-              Shown price: {price ? ((isWeightable && unit === 'Kg') ? parseFloat(priceKg).toFixed(2) : parseFloat(price).toFixed(2)) : "none"}
+              {t('addVariant.labels.shownPrice')}: {price ? ((isWeightable && unit === 'Kg') ? parseFloat(priceKg).toFixed(2) : parseFloat(price).toFixed(2)) : "none"}$
             </HelperText>
   
             <View style={addVariantStyles.checkboxContainer}>
