@@ -172,7 +172,7 @@ export const GET_STORE_VARIANTS_BY_ID = gql`
           imgSrc
           variants(offset: $variantsOffset2, searchText: $variantsSearchText2, first: $variantsFirst2) {
               _id
-              variantTitle
+              displayName
               imgSrc
               stock
           }

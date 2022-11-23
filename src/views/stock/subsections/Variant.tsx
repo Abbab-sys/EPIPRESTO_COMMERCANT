@@ -5,7 +5,7 @@ import { productStyles } from "../../inventory/subsections/ProductStyles";
 
 export interface VariantProps {
   _id: string;
-  variantTitle: string;
+  displayName: string;
   imgSrc: any;
   stock: number;
   updateSelf : (stock: number) => void;
@@ -16,7 +16,6 @@ const Variant = (props: VariantProps) => {
   const [stock, setStock] = React.useState((props.stock).toString());
 
   useEffect(() => {
-    console.log(props._id)
     props.updateSelf(parseInt(stock))
   }, [stock])
 
@@ -33,7 +32,7 @@ const Variant = (props: VariantProps) => {
         <Image style={productStyles.image} source={{uri: props.imgSrc}}/>
         <Divider bold style={{backgroundColor: "#FFA500", marginTop: '4%'}}></Divider>
         <Text ellipsizeMode='tail' numberOfLines={2} variant="titleSmall" style={productStyles.productName}>
-          {props.variantTitle}
+          {props.displayName}
         </Text>
         
         <View 
