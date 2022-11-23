@@ -89,7 +89,7 @@ const Variant = (props: VariantProps) => {
           includeBase64: true
           // ts-ignore is used because data is a property of image but still showing error
           // @ts-ignore
-        }).then(image => setVariantImage("data:image/png;base64,"+image.data));
+        }).then(image => setVariantImage("data:image/png;base64,"+image.data)).catch((error) => console.log(error));
       }
     
       const handleTakePhotoFromGallery = () => {
@@ -101,7 +101,7 @@ const Variant = (props: VariantProps) => {
           includeBase64: true,
           // ts-ignore is used because data is a property of image but still showing error
           // @ts-ignore
-        }).then(image => setVariantImage("data:image/png;base64,"+image.data));
+        }).then(image => setVariantImage("data:image/png;base64,"+image.data)).catch((error) => console.log(error));
       }
 
     
