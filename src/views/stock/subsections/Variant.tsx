@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Image, View } from "react-native";
-import { Button, Card, Divider, Text, TextInput } from 'react-native-paper';
+import { Button, Card, Divider, IconButton, Text, TextInput } from 'react-native-paper';
 import { productStyles } from "../../inventory/subsections/ProductStyles";
 
 export interface VariantProps {
@@ -37,11 +37,17 @@ const Variant = (props: VariantProps) => {
         
         <View 
         // put buttons and stock in a row
-        style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: '4%'}}
+        style={{flexDirection: 'row', justifyContent: 'center', marginTop: '4%'}}
         >
-            <Button style={productStyles.buttonStyle} mode="contained" onPress={() => handleStock((parseFloat(stock)-1).toString())}>
-                <Text style={productStyles.buttonText}>-</Text>
-            </Button>
+            <IconButton 
+                onPress={() => {handleStock((parseFloat(stock)-1).toString())}}
+                mode="contained"
+                icon="minus"
+                iconColor="white"
+                style={{backgroundColor: '#FFA500'}}
+
+                />
+
             <TextInput
               underlineColor="#FFA500"
               activeUnderlineColor="transparent"
@@ -50,9 +56,15 @@ const Variant = (props: VariantProps) => {
               value = {stock}
               onChangeText={text => handleStock(text)}
               />
-            <Button style={productStyles.buttonStyle} mode="contained" onPress={() => handleStock((parseFloat(stock)+1).toString())}>
-                <Text style={productStyles.buttonText}>+</Text>
-            </Button>
+
+            <IconButton 
+                onPress={() => {handleStock((parseFloat(stock)+1).toString())}}
+                mode="contained"
+                icon="plus"
+                iconColor="white"
+                style={{backgroundColor: '#FFA500'}}
+
+                />
         </View>
       </Card>
     </View>
