@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Button, FlatList, Image, Keyboard, SafeAreaView, TouchableOpacity, View } from "react-native";
 import { IconButton, Searchbar, Text } from 'react-native-paper';
 import { GET_STORE_PRODUCTS_BY_ID, GET_STORE_VARIANTS_BY_ID } from "../../graphql/queries";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { VendorContext } from "../../context/Vendor";
 import Product, { ProductProps } from "../inventory/subsections/Product";
 import { inventoryStyles } from "../inventory/InventoryStyles";
@@ -10,6 +10,7 @@ import Variant, { VariantProps } from "./subsections/Variant";
 import { UPDATE_VARIANT } from "../../graphql/mutations";
 import { addProductsStyles } from "../Product/Styles/AddProductStyles";
 import { useTranslation } from "react-i18next";
+import { useIsFocused } from "@react-navigation/native";
 
 const Stock = ({ navigation }: any) => {
 
@@ -33,62 +34,48 @@ const Stock = ({ navigation }: any) => {
 
   const handleSearch = (text: React.SetStateAction<string>) => {
     setSearchQuery(text)
-    if(text.toString() === "") {
-      setVariants([])
-      if(data) {
-        const products = data.getStoreById.store.products
-        // get all variants of all products
-        const variants = products.map((product: any) => {
-            return product.variants
-            })
-        // flatten array of arrays
-        const flattened = [].concat.apply([], variants)
-        setVariants(flattened)
-      }
-    }
-    else {
-      const data = variants.filter(variant => {
-        return variant.variantTitle.toLowerCase().includes(text.toString().toLowerCase())
-      })
-      setVariants(data)
-    }
+    getItems()
   }
 
-  const {data, loading, error, fetchMore} = useQuery(GET_STORE_VARIANTS_BY_ID, {
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if(!isFocused) return
+    getItems()
+  }, [isFocused])
+
+  const [getItems, { loading, error, data, fetchMore }] = useLazyQuery(GET_STORE_VARIANTS_BY_ID, {
     variables: {
-        idStore: storeId, "offset": 0, "first": 20
-    },
-    fetchPolicy: 'network-only',
-    onCompleted(data) {
-        console.log("DATA",data)
-        const products = data.getStoreById.store.products
-        // get all variants of all products
-        const variants = products.map((product: any) => {
-            return product.variants
-            })
-        // flatten array of arrays
-        const flattened = [].concat.apply([], variants)
-        setVariants(flattened)
+        idStore: storeId, offset: 0, first: 20,
+        variantsOffset2: 0, variantsFirst2: 20, variantsSearchText2: searchQuery
     },
   });
+
+  useEffect(() => {
+    if(data && data.getStoreById) {
+      const products = data.getStoreById.store.products
+      // get all variants of all products
+      const variants = products.map((product: any) => {
+          return product.variants
+          })
+      // flatten array of arrays
+      const flattened = [].concat.apply([], variants)
+      setVariants(flattened)
+    }
+  }, [data])
 
 
   const handleUpdate = () => {
     // for each id in updatedVariants console log id
-    console.log("click")
     updatedVariants.forEach((variant) => {
-        console.log(variant._id)
-        console.log(variant.stock)
         updateVariant({variables: {variantId: variant._id, fieldsToUpdate: {stock: variant.stock}}})
     })
   }
 
   useEffect(() => {
-    console.log("useEffect", updateVariantLoading, updateVariantError, updateVariantData)
       if (updateVariantLoading || updateVariantError || !updateVariantData) {
         return
       }
-      console.log("UpdateData", updateVariantData)
       if (updateVariantData && updateVariantData.updateProductVariant.code === 200) {
         // if product is added successfully, show an alert
         alertOnSave(true)
@@ -133,7 +120,6 @@ const Stock = ({ navigation }: any) => {
 
 
     const submitButtonShouldBeDisabled = () => {
-        console.log("updateCount: " + updateCount)
         if (updateCount === 1) {
           return true
         }
@@ -188,7 +174,6 @@ const Stock = ({ navigation }: any) => {
               (<Text>YOUR RESEARCH DOES NOT MATCH ANY ITEM</Text>)
               : 
               (
-                console.log("variants", variants),
                 <FlatList
                 numColumns={2}
                 data={variants}
@@ -196,7 +181,7 @@ const Stock = ({ navigation }: any) => {
                 renderItem={({item}) => 
                   <Variant
                     _id={item._id}
-                    variantTitle={item.variantTitle}
+                    displayName={item.displayName}
                     // if no image, use default image
                     imgSrc={item.imgSrc ? item.imgSrc : "https://img.icons8.com/ios/452/no-image.png"}
                     stock={item.stock}
@@ -219,21 +204,19 @@ const Stock = ({ navigation }: any) => {
                 onEndReachedThreshold={1}
                   onEndReached={() => 
                     {
-                      console.log("END REACHED")
                       fetchMore({
                         variables: {
                           offset: variants.length
                         },
-                        updateQuery(previousQueryResult, { fetchMoreResult }) {
-                          console.log("FETCH MORE RESULT", fetchMoreResult.getStoreById.store.products)
+                        updateQuery(previousQueryResult, {fetchMoreResult}) {
                           const products = fetchMoreResult.getStoreById.store.products
                           // get all variants of all products
                           const newEntries = products.map((product: any) => {
-                              return product.variants
-                              })
+                            return product.variants
+                          })
                           // flatten array of arrays
                           const newEntriesFlattened = [].concat.apply([], newEntries)
-                          setVariants(oldProducts => [...oldProducts, ...newEntriesFlattened])
+                          setVariants(oldVariants => [...oldVariants, ...newEntriesFlattened])
                         },
                       })
                     }

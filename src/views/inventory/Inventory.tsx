@@ -20,9 +20,7 @@ const Inventory = ({navigation}: any) => {
 
   useEffect(() => {
     if(!isFocused) return
-    console.log("INVENTORY: ", storeId)
     getItems()
-    console.log(data)
   }, [isFocused])
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,10 +48,8 @@ const Inventory = ({navigation}: any) => {
   }
 
   useEffect(() => {
-    console.log("DATA: ", data)
     if(data && data.getStoreById) {
       setProducts(data.getStoreById.store.products)
-      console.log("PRODUCTS: ", products)
     }
   }, [data])
 

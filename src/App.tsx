@@ -41,12 +41,12 @@ export default function App() {
 
   const wsLink = new GraphQLWsLink(
     createClient({
-      url: 'wss://epipresto.pagekite.me/graphql',
+      url: 'ws://52.90.77.253:4000/graphql',
     }),
   );
 
   const httpLink = new HttpLink({
-    uri: 'http://localhost:4000/graphql',
+    uri: 'http://52.90.77.253:4000/graphql',
   });
 
   const splitLink = split(
