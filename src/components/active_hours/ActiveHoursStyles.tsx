@@ -33,5 +33,8 @@ export const ActiveHoursStyles = StyleSheet.create({
     },
     subTitlesMargin: {
         marginLeft: 10,
+    },
+    closedText: {
+        paddingLeft:'2%'
     }
 })

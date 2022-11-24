@@ -167,7 +167,8 @@
       "FRIDAY": "Vendredi",
       "SATURDAY": "Samedi",
       "SUNDAY": "Dimanche"
-    }
+    },
+    "closed": "FÉRMÉ"
   },
   "addProduct": {
     "title": "Ajout de produit à la boutique",

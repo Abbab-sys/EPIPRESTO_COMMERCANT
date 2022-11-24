@@ -168,7 +168,8 @@
       "FRIDAY": "Friday",
       "SATURDAY": "Saturday",
       "SUNDAY": "Sunday"
-    }
+    },
+    "closed": "CLOSED"
   },
   "addProduct": {
     "title": "Add product to the shop",

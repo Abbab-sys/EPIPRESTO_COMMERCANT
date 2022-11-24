@@ -29,6 +29,9 @@ const ActiveHours = (props:DisponibilityProps) => {
                 <Text style={[SubTitleStyles.text, ActiveHoursStyles.subTitlesMargin]}>{translation("disponibility.days." + props.day)}</Text>
                 <IconButton style={[ActiveHoursStyles.iconSize, ActiveHoursStyles.plusIcon]} iconColor='white' icon="plus-thick" mode='contained' onPress={()=> props.addActiveHour()}></IconButton>
             </View>
+            <View style={ActiveHoursStyles.closedText}>
+                {props.activeHours.length === 0 && <Text>{translation("disponibility.closed")}</Text>}
+            </View>
             
             <ScrollView horizontal >
             {props.activeHours.map((activeHour, index) => {
@@ -66,7 +69,7 @@ const ActiveHours = (props:DisponibilityProps) => {
                          <HelperText type="error" visible={activeHour.errorEndingHour!==''}>
                         {translation(activeHour.errorEndingHour !== '' ? activeHour.errorEndingHour : EMPTY_KEY)}
                     </HelperText>
-                    {props.activeHours.length > 1 && <IconButton iconColor="white" style={[ActiveHoursStyles.minusIcon, ActiveHoursStyles.iconSize]} icon="minus-thick" mode='contained' onPress={()=> props.removeActiveHour(index)}></IconButton>}
+                    {props.activeHours.length >= 0 && <IconButton iconColor="white" style={[ActiveHoursStyles.minusIcon, ActiveHoursStyles.iconSize]} icon="minus-thick" mode='contained' onPress={()=> props.removeActiveHour(index)}></IconButton>}
                     </View>
                 </View>
                     )}
