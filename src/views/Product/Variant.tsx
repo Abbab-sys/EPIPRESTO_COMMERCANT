@@ -1,13 +1,14 @@
-import CheckBox from "@react-native-community/checkbox";
+import CheckBox from "expo-checkbox";
 import React, { useEffect, useState } from "react";
 import { Image, Keyboard, ScrollView, StyleSheet, Text, View  } from "react-native";
 import { Button, Divider, HelperText, IconButton, RadioButton, TextInput } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
-import ImagePicker from 'react-native-image-crop-picker';
+import * as ImagePicker from 'expo-image-picker'
 import Icon from "react-native-vector-icons/FontAwesome";
 import { addVariantStyles } from "./Styles/AddVariantStyles";
 import { commonStyles } from "./Styles/CommonStyles";
+import { MediaTypeOptions } from "expo-image-picker";
 
 const activeUnderlineColor = "#FFA500";
 const underlineColor = "transparent";
@@ -81,28 +82,28 @@ const Variant = (props: VariantProps) => {
     }  
 
     const handleTakePhotoFromCamera = () => {
-        // open camera to take photo
-        ImagePicker.openCamera({
-          width: 300,
-          height: 400,
-          cropping: true,
-          includeBase64: true
-          // ts-ignore is used because data is a property of image but still showing error
-          // @ts-ignore
-        }).then(image => setVariantImage("data:image/png;base64,"+image.data)).catch((error) => console.log(error));
-      }
+      ImagePicker.launchCameraAsync({
+        mediaTypes: MediaTypeOptions.Images,
+        // width: 300,
+        // height: 400,
+        // cropping: true,
+        base64: true
+        // ts-ignore is used because data is a property of image but still showing error
+        // @ts-ignore
+      }).then(image => setProductImage("data:image/png;base64,"+image.assets[0].uri)).catch((error) => console.log(error));
+    }
     
-      const handleTakePhotoFromGallery = () => {
-        // open gallery to select photo
-        ImagePicker.openPicker({
-          width: 300,
-          height: 400,
-          cropping: true,
-          includeBase64: true,
-          // ts-ignore is used because data is a property of image but still showing error
-          // @ts-ignore
-        }).then(image => setVariantImage("data:image/png;base64,"+image.data)).catch((error) => console.log(error));
-      }
+    const handleTakePhotoFromGallery = () => {
+      ImagePicker.launchImageLibraryAsync({
+        mediaTypes: MediaTypeOptions.Images,
+        // width: 300,
+        // height: 400,
+        // cropping: true,
+        base64: true
+        // ts-ignore is used because data is a property of image but still showing error
+        // @ts-ignore
+      }).then(image => setProductImage(image.assets[0].uri)).catch((error) => console.log(error));
+    }
 
     
       if(isHidden) return (

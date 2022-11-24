@@ -1,12 +1,13 @@
-import CheckBox from "@react-native-community/checkbox";
+import CheckBox from "expo-checkbox";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View, Image, SafeAreaView} from "react-native";
 import { Button, Chip, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { useTranslation } from "react-i18next";
-import ImagePicker from 'react-native-image-crop-picker'
+import * as ImagePicker from 'expo-image-picker'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { addProductsStyles } from "./Styles/AddProductStyles";
 import { commonStyles } from "./Styles/CommonStyles";
+import { MediaTypeOptions } from "expo-image-picker";
 
 
 interface Product {
@@ -33,6 +34,7 @@ interface ProductProps {
   }  
 
 const Product = (props: ProductProps) => {
+  // let ImagePicker = require('expo-image-picker');
   const {t} = useTranslation('translation')
   const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
@@ -69,26 +71,30 @@ useEffect(() => {
 
   
   const handleTakePhotoFromCamera = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true
+    ImagePicker.launchCameraAsync({
+      mediaTypes: MediaTypeOptions.Images,
+      // width: 300,
+      // height: 400,
+      // cropping: true,
+      base64: true
       // ts-ignore is used because data is a property of image but still showing error
       // @ts-ignore
-    }).then(image => setProductImage("data:image/png;base64,"+image.data)).catch((error) => console.log(error));
+    }).then(image => setProductImage("data:image/png;base64,"+image.assets[0].uri)).catch((error) => console.log(error));
   }
 
   const handleTakePhotoFromGallery = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: MediaTypeOptions.Images,
+      // width: 300,
+      // height: 400,
+      // cropping: true,
+      base64: true
       // ts-ignore is used because data is a property of image but still showing error
       // @ts-ignore
-    }).then(image => setProductImage("data:image/png;base64,"+image.data)).catch((error) => console.log(error));
+    }).then(image => setProductImage(image.assets[0].uri)).catch((error) => console.log(error));
   }
+
+  console.log("IMAGE: ", productImage)
 
   return (
     <SafeAreaView style={{ flex: 1}}>

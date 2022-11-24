@@ -11,6 +11,6 @@ import {
     registerTranslation,
   } from 'react-native-paper-dates'
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent('main', () => App);
 registerTranslation('fr', fr)
 registerTranslation('en', en)

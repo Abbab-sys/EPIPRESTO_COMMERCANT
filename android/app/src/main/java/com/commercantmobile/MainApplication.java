@@ -12,6 +12,7 @@ import com.facebook.soloader.SoLoader;
 import com.commercantmobile.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
