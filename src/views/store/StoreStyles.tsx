@@ -14,7 +14,7 @@ export const StoreStyles = StyleSheet.create({
       justifyContent: 'center',
     },
     text: {
-      fontFamily: 'Poppins',
+      fontFamily: 'Lato',
       fontWeight: '500',
       fontSize: 19,
       fontStyle: 'normal',

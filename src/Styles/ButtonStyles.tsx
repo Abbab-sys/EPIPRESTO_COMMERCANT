@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const ButtonStyles = StyleSheet.create({
     button: {
-        fontFamily: 'Poppins',
+        fontFamily: 'Lato',
         fontStyle: 'normal',
         fontWeight: '500',
         backgroundColor: '#FF9933',

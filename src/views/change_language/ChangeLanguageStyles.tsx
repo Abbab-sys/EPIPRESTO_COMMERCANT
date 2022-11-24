@@ -16,7 +16,7 @@ export const ChangeLanguageStyles = StyleSheet.create({
       resizeMode: 'contain',
     },
     buttonTextStyle: {
-      fontFamily: 'Poppins',
+      fontFamily: 'Lato',
       fontStyle: 'normal',
       color: '#000000',
       textAlign: 'center',

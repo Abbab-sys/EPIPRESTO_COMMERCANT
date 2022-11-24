@@ -57,7 +57,7 @@ export const LoginStyles = StyleSheet.create({
   },
   button: {
     paddingHorizontal: '10%',
-    fontFamily: 'Poppins',
+    fontFamily: 'Lato',
     fontStyle: 'normal',
     fontWeight: '500',
     backgroundColor: '#FF9933',
@@ -65,13 +65,13 @@ export const LoginStyles = StyleSheet.create({
     borderRadius: 13,
   },
   newTo: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Lato',
     fontStyle: 'normal',
     fontWeight: '500',
     color: 'black',
   },
   signUp: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Lato',
     fontStyle: 'normal',
     fontWeight: '500',
     color: '#FFA500',

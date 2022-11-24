@@ -15,7 +15,7 @@ export const SettingsStyles = StyleSheet.create({
     },
     buttonText:{
       flex: 1,
-      fontFamily: 'Poppins',
+      fontFamily: 'Lato',
       fontStyle: 'normal',
       color: '#000000',
       textAlign: 'center',
