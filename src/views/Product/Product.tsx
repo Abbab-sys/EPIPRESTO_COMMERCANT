@@ -86,7 +86,7 @@ useEffect(() => {
         base64: true
         // ts-ignore is used because data is a property of image but still showing error
         // @ts-ignore
-      }).then(image => setProductImage(image.assets[0].uri)).catch((error) => console.log(error));
+      }).then(image => setProductImage(image.assets[0].base64)).catch((error) => console.log(error));
     }
   }
 
@@ -99,7 +99,7 @@ useEffect(() => {
       base64: true
       // ts-ignore is used because data is a property of image but still showing error
       // @ts-ignore
-    }).then(image => setProductImage(image.assets[0].uri)).catch((error) => console.log(error));
+    }).then(image => setProductImage(image.assets[0].base64)).catch((error) => console.log(error));
   }
 
   console.log("IMAGE: ", productImage)
