@@ -9,6 +9,7 @@ export const LOGIN_BY_EMAIL = gql`
         _id
         store {
           _id
+          isAdmin
         }
       }
     }
@@ -23,6 +24,7 @@ export type LoginVendorByEmailData = {
         _id: string;
         store: {
           _id: string;
+          isAdmin: boolean;
         }
       }
   }
@@ -37,6 +39,7 @@ export const LOGIN_BY_USERNAME = gql`
         _id
         store {
           _id
+          isAdmin
         }
       }
     }
@@ -51,6 +54,7 @@ export type LoginVendorByUsernameData = {
         _id: string;
         store: {
           _id: string;
+          isAdmin: boolean;
         }
       }
   }
@@ -225,6 +229,14 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
           taxs
           deliveryFee
           paymentMethod
+          subOrdersStatus {
+            relatedStore{
+              _id
+              name
+            }
+            status
+            time
+          }
         }
       }
     }
@@ -275,6 +287,59 @@ export const GET_ANALYTICS = gql`
         displayName
         variantTitle
         imgSrc
+      }
+    }
+  }
+`
+
+export const GET_ORDER_BY_ID= gql `
+  query GetOrderById($idOrder: ID!) {
+    getOrderById(idOrder: $idOrder) {
+      code
+      message
+      order {
+        _id
+        orderNumber
+        productsVariantsOrdered {
+          quantity
+          relatedProductVariant {
+            displayName
+            price
+            imgSrc
+            _id
+            relatedProduct {
+              relatedStore {
+                name
+              }
+            }
+          }
+        }
+        relatedVendors {
+          name
+        }
+        relatedClient {
+          lastName
+          firstName
+          email
+          phone
+          address
+        }
+        logs {
+          time
+          status
+        }
+        subTotal
+        taxs
+        deliveryFee
+        paymentMethod
+        subOrdersStatus {
+          relatedStore {
+            _id
+            name
+          }
+          status
+          time
+        }
       }
     }
   }

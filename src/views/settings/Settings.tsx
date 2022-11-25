@@ -16,7 +16,7 @@ const Settings = ({navigation}: any) => {
 
     const {t: translation} = useTranslation('translation');
 
-    const {storeId, setStoreId} = useContext(VendorContext)
+    const {storeId, setStoreId,isAdmin,setIsAdmin} = useContext(VendorContext)
 
     useEffect(() => {
         if(!storeId){
@@ -28,9 +28,14 @@ const Settings = ({navigation}: any) => {
     const handleLogout = () => {
         console.log("LOG OUT")
         setStoreId('');
+        setIsAdmin(false);
         AsyncStorage.setItem('@storeId', '').then(r =>
             console.log("store id cleared", r)
         );
+        AsyncStorage.setItem('@isAdmin', '').then(r =>
+            console.log("admin cleared", r)
+        );
+
         // navigation.replace("Login")
     }
 

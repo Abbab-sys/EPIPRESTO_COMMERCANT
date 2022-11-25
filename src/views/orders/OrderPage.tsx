@@ -34,6 +34,7 @@ import {
   ORDERS_CUSTOMER_KEY,
   UPDATE_ALERT_FAILED,
   UPDATE_ALERT_SUCESS,
+  SUBORDERS_STATUS_TITLE,
 } from '../../translations/keys/OrdersTranslationKeys';
 import {GET_ALL_ORDERS_BY_STORE_ID} from '../../graphql/queries';
 import { VendorContext } from '../../context/Vendor';
@@ -49,8 +50,7 @@ const OrderPage = ({route, navigation}: any) => {
     }
   };
 
-  const {storeId} = useContext(VendorContext);
-
+  const {storeId,isAdmin} = useContext(VendorContext);
 
   const [changeOrderStatus] = useMutation(CHANGE_ORDER_STATUS, {
     onCompleted: receivedUpdateStatus,
@@ -62,30 +62,58 @@ const OrderPage = ({route, navigation}: any) => {
     'WAITING_CONFIRMATION',
   );
 
-  const {data, loading, error} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
+  const {data, loading, error,refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
     variables: {
       idStore:storeId,
       idOrder: idOrder,
     },
     fetchPolicy: 'network-only',
     onCompleted(data) {
-      const object = data.getStoreById.store.orders[0].logs;
-      set_current_order_status(object[object.length - 1].status); //Set the default value of the dropdown to the last status of the order
+      if(isAdmin){
+        set_current_order_status(data.getStoreById.store.orders[0].logs[data.getStoreById.store.orders[0].logs.length-1].status);
+      }
+      else{
+      const object = data.getStoreById.store.orders[0].subOrdersStatus;
+      const orderStatus = object.find(
+        (order: any) => order.relatedStore._id === storeId,
+      );
+      set_current_order_status(orderStatus.status); //Set the default value of the dropdown to the last status of the order
+      }
     },
   });
   const [open, setOpen] = React.useState(false);
 
   const {t: translation} = useTranslation('translation');
-  const orderStatus = [
+
+  //call the query every time the page is focused
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refetch();
+      console.log('refreshed');
+    });
+    return unsubscribe;
+  }, [navigation]);
+  //call the 
+
+  const orderStatusAdmin = [
+    {
+      label: translation(ORDER_STATUS_WAITING_KEY),
+      value: 'WAITING_CONFIRMATION',
+    },
+    {label: translation(ORDER_STATUS_IN_DELIVERY_KEY), value: 'IN_DELIVERY'},
+    {label: translation(ORDER_STATUS_DELIVERED_KEY), value: 'DELIVERED'},
+    {label: translation(ORDER_STATUS_CLOSED_KEY), value: 'CLOSED'},
+  ];
+
+
+
+  const orderStatusShop=[
     {
       label: translation(ORDER_STATUS_WAITING_KEY),
       value: 'WAITING_CONFIRMATION',
     },
     {label: translation(ORDER_STATUS_CONFIRMED_KEY), value: 'CONFIRMED'},
-    {label: translation(ORDER_STATUS_IN_DELIVERY_KEY), value: 'IN_DELIVERY'},
-    {label: translation(ORDER_STATUS_DELIVERED_KEY), value: 'DELIVERED'},
-    {label: translation(ORDER_STATUS_CLOSED_KEY), value: 'CLOSED'},
-  ];
+  ]
 
   if (loading) {
     return (
@@ -99,8 +127,11 @@ const OrderPage = ({route, navigation}: any) => {
     return <Text>Error while loading order</Text>;
   }
 
-  //Mapping the order from the query
+
+  
   const orderObject = data.getStoreById.store.orders[0];
+  
+
 
   const products: Product[] = orderObject.productsVariantsOrdered.map(
     ({relatedProductVariant, quantity}: any) => {
@@ -124,6 +155,19 @@ const OrderPage = ({route, navigation}: any) => {
     phone: orderObject.relatedClient.phone,
     address: orderObject.relatedClient.address,
   };
+
+  let status=[];
+    
+
+  if(isAdmin){
+    status=orderObject.subOrdersStatus
+  }
+  else{
+     status = orderObject.subOrdersStatus.find(
+      (orderStatus: any) => orderStatus.relatedStore._id === storeId,
+    );
+  }
+  
   const order: Order = {
     _id: orderObject._id,
     number: orderObject.orderNumber,
@@ -137,7 +181,9 @@ const OrderPage = ({route, navigation}: any) => {
     ).toFixed(2),
     subTotal: orderObject.subTotal.toFixed(2),
     taxs: orderObject.taxs.toFixed(2),
+    subOrdersStatus: status,
     deliveryFee: orderObject.deliveryFee.toFixed(2),
+
     paymentMethod: orderObject.paymentMethod,
   };
 
@@ -148,7 +194,7 @@ const OrderPage = ({route, navigation}: any) => {
   //Save button that will be showed only if the status is changing
   const showSaveButton = () => {
     if (
-      current_order_status !== order.logs[order.logs.length - 1].status &&
+      current_order_status !== order.subOrdersStatus.status &&
       current_order_status !== ''
     ) {
       return (
@@ -166,7 +212,7 @@ const OrderPage = ({route, navigation}: any) => {
 
   //call the mutation to update the status
   const sendStatusUpdate = (status: any) => {
-    changeOrderStatus({variables: {orderId: order._id, newStatus: status}});
+    changeOrderStatus({variables: {storeId:storeId,orderId: order._id, newStatus: status}});
   };
 
   //If the image of a product is not available, show a default image
@@ -182,6 +228,33 @@ const OrderPage = ({route, navigation}: any) => {
       );
     }
   };
+
+  const showSubOrdersStatus = () => {
+    return(
+      <View style={styles.details_container}>
+      <Text style={styles.details_title}>
+       {translation(SUBORDERS_STATUS_TITLE)}
+      </Text>
+
+      <View style={styles.product_details_body}>
+        <ScrollView>
+          
+          {orderObject.subOrdersStatus.map((subOrderStatus: any) => {
+            return (
+              <View style={styles.product_container} key={subOrderStatus.relatedStore._id}>
+
+              <Text style={styles.product_information}>{
+                subOrderStatus.relatedStore.name + ' : ' + subOrderStatus.status
+                }</Text>
+                </View>
+            );
+          })}
+        </ScrollView>
+       
+      </View>
+    </View>
+    )
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
@@ -200,17 +273,26 @@ const OrderPage = ({route, navigation}: any) => {
         </Text>
       </View>
       <View style={styles.subHeader}>
+        
         <DropDownPicker
           open={open}
           value={current_order_status}
-          items={orderStatus}
+          items={isAdmin?orderStatusAdmin:orderStatusShop}
           setOpen={setOpen}
           setValue={set_current_order_status}
           onChangeValue={showSaveButton}
         />
       </View>
 
+
       <ScrollView style={styles.container}>
+       {
+        isAdmin?
+        showSubOrdersStatus()
+        :
+        null
+       }
+
         <View style={styles.details_container}>
           <View style={styles.client_header}>
             <Text style={styles.details_title}>

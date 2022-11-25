@@ -24,3 +24,5 @@ export const ORDER_DETAILS_SAVE_BUTTON = 'order.details.save.button';
 export const ORDER_DETAILS_TITLE= 'order.details.title';
 export const UPDATE_ALERT_SUCESS= 'order.details.update.success';
 export const UPDATE_ALERT_FAILED= 'order.details.update.failed';
+
+export const SUBORDERS_STATUS_TITLE= 'order.subOrders.title';

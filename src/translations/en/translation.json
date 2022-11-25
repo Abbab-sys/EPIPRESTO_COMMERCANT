@@ -237,7 +237,12 @@
         "success":"Status updated successfully",
         "failed":"Oops something went wrong"
       }
+
+    },
+    "subOrders":{
+      "title":"Status of each shop"
     }
+    
   },
   "analytics":{
     "title":"Analytics",
