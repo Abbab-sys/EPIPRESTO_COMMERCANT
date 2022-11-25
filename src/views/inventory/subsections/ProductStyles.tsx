@@ -31,7 +31,7 @@ export const productStyles = StyleSheet.create({
   image: {
     resizeMode:'contain',
     height: 100,
-    width: '100%',
+    width: 100,
   },
   buttonText: {
     color: 'white'

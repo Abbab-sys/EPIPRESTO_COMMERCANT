@@ -66,10 +66,21 @@ const Variant = (props: VariantProps) => {
     const [unit, setUnit] = useState('Lb');
 
     useEffect(() => {
-      props.updateSelf({variantId: props.variantId, variantTitle: title, price: price, sku: sku, taxable: isTaxable,
-           imgSrc: variantImage, byWeight: isWeightable, availableForSale: isAvailableForSale, stock: stock, isValid: isVariantValid(), isHidden: isHidden});
-        }, [title, price, sku, stock, variantImage, isWeightable, isAvailableForSale, isTaxable, isHidden])
-    
+      props.updateSelf({
+        variantId: props.variantId,
+        variantTitle: title,
+        price: price,
+        sku: sku,
+        taxable: isTaxable,
+        imgSrc: variantImage,
+        byWeight: isWeightable,
+        availableForSale: isAvailableForSale,
+        stock: stock,
+        isValid: isVariantValid(),
+        isHidden: isHidden
+      });
+    }, [title, price, sku, stock, variantImage, isWeightable, isAvailableForSale, isTaxable, isHidden])
+    //"data:image/png;base64,"
     const isVariantValid = () => {
         // check if all required fields are filled
         if (title && title.trim() && parseFloat(price) > 0 && stock && stock.trim() ) {
@@ -90,7 +101,7 @@ const Variant = (props: VariantProps) => {
         base64: true
         // ts-ignore is used because data is a property of image but still showing error
         // @ts-ignore
-      }).then(image => setProductImage("data:image/png;base64,"+image.assets[0].uri)).catch((error) => console.log(error));
+      }).then(image => setVariantImage(image.assets[0].uri)).catch((error) => console.log(error));
     }
     
     const handleTakePhotoFromGallery = () => {
@@ -102,7 +113,7 @@ const Variant = (props: VariantProps) => {
         base64: true
         // ts-ignore is used because data is a property of image but still showing error
         // @ts-ignore
-      }).then(image => setProductImage(image.assets[0].uri)).catch((error) => console.log(error));
+      }).then(image => setVariantImage(image.assets[0].uri)).catch((error) => console.log(error));
     }
 
     

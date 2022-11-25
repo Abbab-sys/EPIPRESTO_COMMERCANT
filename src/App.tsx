@@ -31,11 +31,19 @@ import AddProduct from './views/Product/AddProduct';
 import UpdateProduct from './views/Product/UpdateProduct';
 import Stock from './views/stock/Stock';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFonts } from 'expo-font';
+import { registerRootComponent } from 'expo';
 
 const Stack = createNativeStackNavigator();
 
 
-export default function App() {
+const App: () => JSX.Element = () => {
+
+  let [fontsLoaded] = useFonts({
+    'Lato': require('./assets/fonts/Lato-Black.ttf'),
+    'MaterialCommunityIcons': require('./assets/fonts/MaterialCommunityIcons.ttf')
+  })
+
   const [storeId, setStoreId] = React.useState<string>('');
   const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
   const storeIdContext = {storeId, setStoreId,isAdmin, setIsAdmin};
@@ -97,6 +105,9 @@ export default function App() {
     }
   );
 
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <VendorContext.Provider value={{storeId, setStoreId,isAdmin,setIsAdmin}}>
@@ -106,6 +117,9 @@ export default function App() {
     </VendorContext.Provider>
   );
 }
+
+registerRootComponent(App)
+export default App;
 
 function NavigationStack() {
   const {storeId,isAdmin} = useContext(VendorContext);
@@ -136,8 +150,6 @@ function NavigationStack() {
               <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
               <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
               <Stack.Screen name="Analytics" component={Analytics} />
-
-
             </>
           )}
       </Stack.Navigator>

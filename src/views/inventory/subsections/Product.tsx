@@ -16,6 +16,9 @@ export interface ProductProps {
 const Product = (props: ProductProps) => {
 
   const {t}=useTranslation('translation')
+  console.log("IMAGE PRODUCT: ", props.imgSrc)
+  const words = props.imgSrc.split("data:image/png;base64,")[1]
+  console.log("WORDS: ", words)
   return(
     <View style={productStyles.root}>
       <Card style={productStyles.cardStyle}>

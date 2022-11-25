@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { addProductsStyles } from "./Styles/AddProductStyles";
 import { commonStyles } from "./Styles/CommonStyles";
 import { MediaTypeOptions } from "expo-image-picker";
-
+import * as Permissions from 'expo-permissions';
 
 interface Product {
   title: string,
@@ -52,9 +52,9 @@ const Product = (props: ProductProps) => {
       brand: brand,
       published: isPublished,
       tags: tags,
-      imgSrc: productImage
+      imgSrc: "data:image/png;base64," + productImage
     });
-}, [title, description, brand,tags, isPublished, productImage]);
+  }, [title, description, brand,tags, isPublished, productImage]);
 
 useEffect(() => {
   // reset all fields after saving product
@@ -70,16 +70,24 @@ useEffect(() => {
 }, [props.refreshed])
 
   
-  const handleTakePhotoFromCamera = () => {
-    ImagePicker.launchCameraAsync({
-      mediaTypes: MediaTypeOptions.Images,
-      // width: 300,
-      // height: 400,
-      // cropping: true,
-      base64: true
-      // ts-ignore is used because data is a property of image but still showing error
-      // @ts-ignore
-    }).then(image => setProductImage("data:image/png;base64,"+image.assets[0].uri)).catch((error) => console.log(error));
+  const handleTakePhotoFromCamera = async () => {
+    const permission = await Permissions.getAsync(Permissions.CAMERA);
+    if (permission.status !== 'granted') {
+        const newPermission = await Permissions.askAsync(Permissions.CAMERA);
+        if (newPermission.status === 'granted') {
+          //its granted.
+        }
+    } else {
+      ImagePicker.launchCameraAsync({
+        mediaTypes: MediaTypeOptions.Images,
+        // width: 300,
+        // height: 400,
+        // cropping: true,
+        base64: true
+        // ts-ignore is used because data is a property of image but still showing error
+        // @ts-ignore
+      }).then(image => setProductImage(image.assets[0].uri)).catch((error) => console.log(error));
+    }
   }
 
   const handleTakePhotoFromGallery = () => {
