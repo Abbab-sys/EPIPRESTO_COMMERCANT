@@ -96,10 +96,9 @@ mutation UpdateVendorAccount($fieldsToUpdate: UpdateVendorAccount!, $vendorId: I
 }
 
 `;
-//todo: add the rest of the mutations
 export const CHANGE_ORDER_STATUS = gql`
-  mutation Mutation($orderId: ID!, $newStatus: OrderStatus!) {
-    updateOrderStatus(orderId: $orderId, newStatus: $newStatus) {
+  mutation Mutation($storeId: ID!,$orderId: ID!, $newStatus: OrderStatus!) {
+    updateOrderStatus(storeId: $storeId,orderId: $orderId, newStatus: $newStatus) {
       code
       message
     }

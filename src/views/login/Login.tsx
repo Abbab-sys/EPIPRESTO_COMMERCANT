@@ -44,7 +44,7 @@ const Login = ({navigation}: any) => {
     );
   }
 
-  const {storeId, setStoreId} = useContext(VendorContext);
+  const {storeId, setStoreId,isAdmin,setIsAdmin} = useContext(VendorContext);
 
   const [loadingLogin, setLoadingLogin] = useState(true)
 
@@ -55,6 +55,15 @@ const Login = ({navigation}: any) => {
     setStoreId(storeId)
     setLoadingLogin(false)
   })
+
+  AsyncStorage.getItem('@isAdmin').then((isAdmin) => {
+    if(!isAdmin) return
+    if(isAdmin === 'true') setIsAdmin(true)
+    else setIsAdmin(false)
+    setLoadingLogin(false)
+  })
+
+
 
   useEffect(() => {
     setLoadingLogin(false)
@@ -127,8 +136,12 @@ const Login = ({navigation}: any) => {
     const invalidCredentials = serverResponse.code === 404
     if (loggedWithSuccess) {
       setStoreId(serverResponse.vendorAccount.store._id)
+      setIsAdmin(serverResponse.vendorAccount.store.isAdmin)
       AsyncStorage.setItem('@storeId', serverResponse.vendorAccount.store._id).then(r =>
         console.log("store id saved", r)
+      );
+      AsyncStorage.setItem('@isAdmin', serverResponse.vendorAccount.store.isAdmin.toString()).then(r =>
+        console.log("isAdmin saved", r)
       );
       return;
     }
@@ -151,8 +164,14 @@ const Login = ({navigation}: any) => {
     const invalidCredentials = serverResponse.code === 404
     if (loggedWithSuccess) {
       setStoreId(serverResponse.vendorAccount.store._id)
+      setIsAdmin(serverResponse.vendorAccount.store.isAdmin)
+       
       AsyncStorage.setItem('@storeId', serverResponse.vendorAccount.store._id).then(r =>
         console.log("store id saved", r)
+      );
+      console.log("isAdmin", serverResponse.vendorAccount.store)
+      AsyncStorage.setItem('@isAdmin', serverResponse.vendorAccount.store.isAdmin.toString()).then(r =>
+        console.log("isAdmin saved", r)
       );
     }
     if (vendorNotVerified) {

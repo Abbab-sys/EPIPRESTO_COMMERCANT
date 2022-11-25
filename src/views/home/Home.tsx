@@ -97,7 +97,7 @@ const Home = ({navigation}: any) => {
                   renderItem={({item}) => 
                     <DailyData
                       dataType={item.dataType}
-                      dataAmount={item.dataAmount.toFixed(2)} /> 
+                      dataAmount={Number(item.dataAmount.toFixed(2))} /> 
                   }
                   keyExtractor={item => item.dataType}
                 />

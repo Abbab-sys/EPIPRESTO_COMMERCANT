@@ -1,6 +1,6 @@
 //create a simple react native component
-import {useQuery} from '@apollo/client';
-import React, {useContext, useEffect} from 'react';
+import { useQuery } from '@apollo/client';
+import React, { useContext, useEffect } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -10,11 +10,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Button} from 'react-native-paper';
-import {GET_ALL_ORDERS_BY_STORE_ID} from '../../graphql/queries';
-import {Client, Order, Product} from '../../interfaces/OrderInterface';
-import {VendorContext} from '../../context/Vendor';
-import {useTranslation} from 'react-i18next';
+import { Button } from 'react-native-paper';
+import { GET_ALL_ORDERS_BY_STORE_ID } from '../../graphql/queries';
+import { Client, Order, Product } from '../../interfaces/OrderInterface';
+import { VendorContext } from '../../context/Vendor';
+import { useTranslation } from 'react-i18next';
 import {
   ORDER_DETAILS_PAYMENT_TOTAL,
   ORDERS_CUSTOMER_KEY,
@@ -27,16 +27,21 @@ import {
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
-const Orders = ({navigation}: any) => {
-  const {t} = useTranslation('translation')
-  const {storeId} = useContext(VendorContext);
-  const {t: translation} = useTranslation('translation');
+const Orders = ({ navigation }: any) => {
+  const { t } = useTranslation('translation')
+  const { storeId,isAdmin } = useContext(VendorContext);
+  const { t: translation } = useTranslation('translation');
 
-  const {data, loading, error, refetch} = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
+  //use lazy query to fetch data
+
+  const { data, loading, error, refetch } = useQuery(GET_ALL_ORDERS_BY_STORE_ID, {
     variables: {
       idStore: storeId,
     },
+    fetchPolicy: 'network-only',
   });
+
+  //TODO : ADD CONTEXT FOR ADMIN , he should see all orders
 
   // Update status in the UI when navigating back to orders page
   useEffect(() => {
@@ -47,7 +52,7 @@ const Orders = ({navigation}: any) => {
 
   if (loading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center'}}>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         <ActivityIndicator size="large" color="#FFA500" />
       </View>
     );
@@ -60,7 +65,7 @@ const Orders = ({navigation}: any) => {
   //Get Orders from server and map them
   const orders: Order[] = data.getStoreById.store.orders.map((order: any) => {
     const products: Product[] = order.productsVariantsOrdered.map(
-      ({relatedProductVariant, quantity}: any) => {
+      ({ relatedProductVariant, quantity }: any) => {
         const newProduct: Product = {
           _id: relatedProductVariant._id,
           title: relatedProductVariant.displayName,
@@ -81,6 +86,21 @@ const Orders = ({navigation}: any) => {
       phone: order.relatedClient.phone,
       address: order.relatedClient.address,
     };
+
+  
+
+    let status=[];
+    
+
+    if(isAdmin){
+      status=order.subOrdersStatus
+    }
+    else{
+       status = order.subOrdersStatus.find(
+        (orderStatus: any) => orderStatus.relatedStore._id === storeId,
+      );
+    }
+    
     const newOrder: Order = {
       _id: order._id,
       number: order.orderNumber,
@@ -90,14 +110,20 @@ const Orders = ({navigation}: any) => {
       total: (order.subTotal + order.taxs + order.deliveryFee).toFixed(2),
       subTotal: order.subTotal.toFixed(2),
       taxs: order.taxs.toFixed(2),
+      subOrdersStatus: status,
       deliveryFee: order.deliveryFee.toFixed(2),
       paymentMethod: order.paymentMethod,
     };
+
     return newOrder;
   }).reverse();
 
   //This is to chagne the color of the status field for each order based on the status
-  const status_bar_color = (status: string) => {
+  const status_bar_color = (status: string,globalStatus:string) => {
+    let switchCondition = status;
+    if(isAdmin){
+      switchCondition=globalStatus
+    }
     let style = StyleSheet.create({
       status_bar: {
         width: 100,
@@ -108,7 +134,9 @@ const Orders = ({navigation}: any) => {
         alignItems: 'center',
       },
     });
-    switch (status) {
+
+    
+    switch (switchCondition) {
       case 'WAITING_CONFIRMATION':
         style.status_bar.backgroundColor = 'gold';
         return style.status_bar;
@@ -130,12 +158,17 @@ const Orders = ({navigation}: any) => {
   };
 
   //Status text based on language
-  const status_bar_text = (status: string) => {
-    return translation('order.status.' + status);
+  const status_bar_text = (status: string,globalStatus:string) => {
+    let orderStatusText = status;
+  
+    if(isAdmin){
+      orderStatusText=globalStatus
+    }
+    return translation('order.status.' + orderStatusText);
   };
 
   //This is to render each order in the list
-  const renderOrderContainer = ({item}: any) => {
+  const renderOrderContainer = ({ item }: any) => {
     const order_date = new Date(item.logs[0].time);
     return (
       <View style={styles.order_container}>
@@ -162,16 +195,16 @@ const Orders = ({navigation}: any) => {
             <Text style={styles.order_details_right_text}>{item.total} $</Text>
 
             <View
-              style={status_bar_color(item.logs[item.logs.length - 1].status)}>
+              style={status_bar_color(item.subOrdersStatus.status,item.logs[item.logs.length-1].status)}>
               <Text style={styles.order_status_text}>
-                {status_bar_text(item.logs[item.logs.length - 1].status)}
+                {status_bar_text(item.subOrdersStatus.status,item.logs[item.logs.length-1].status)}
               </Text>
             </View>
           </View>
         </View>
         <TouchableOpacity
           style={styles.order_button_text}
-          onPress={() => navigation.navigate('OrderPage', {idOrder: item._id})}>
+          onPress={() => navigation.navigate('OrderPage', { idOrder: item._id })}>
           <Text style={styles.view_order_button_text}>
             {translation(ORDERS_DETAILS_BUTTON_KEY)}
           </Text>
@@ -181,19 +214,19 @@ const Orders = ({navigation}: any) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#EAEAEA' }}>
       <View>
         <Text style={styles.titleText}>{translation(ORDERS_TITLE_KEY)}</Text>
       </View>
-     
+
       {orders.length === 0 ? (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>{t('orders.noOrders')}</Text>
-        </View> 
-        )
+        </View>
+      )
         :
         (<FlatList data={orders} renderItem={renderOrderContainer} />)
-        }
+      }
     </SafeAreaView>
   );
 };

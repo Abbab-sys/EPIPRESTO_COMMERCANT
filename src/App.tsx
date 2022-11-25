@@ -37,7 +37,8 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [storeId, setStoreId] = React.useState<string>('');
-  const storeIdContext = {storeId, setStoreId};
+  const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
+  const storeIdContext = {storeId, setStoreId,isAdmin, setIsAdmin};
 
   const wsLink = new GraphQLWsLink(
     createClient({
@@ -88,8 +89,17 @@ export default function App() {
     }
   );
 
+  AsyncStorage.getItem('@isAdmin').then((value:any) => {
+      if (value){
+        if(value === 'true') setIsAdmin(true)
+        else setIsAdmin(false)
+      };
+    }
+  );
+
+
   return (
-    <VendorContext.Provider value={{storeId, setStoreId}}>
+    <VendorContext.Provider value={{storeId, setStoreId,isAdmin,setIsAdmin}}>
       <ApolloProvider client={client}>
         <NavigationStack />
       </ApolloProvider>
@@ -98,7 +108,7 @@ export default function App() {
 }
 
 function NavigationStack() {
-  const {storeId} = useContext(VendorContext);
+  const {storeId,isAdmin} = useContext(VendorContext);
   const chatManager = useChatManager(storeId);
   const chatContext = {chatManager};
   return (

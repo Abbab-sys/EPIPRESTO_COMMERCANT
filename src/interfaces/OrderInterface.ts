@@ -8,6 +8,7 @@ export interface Order{
     subTotal: number;
     taxs: number;
     deliveryFee: number;
+    subOrdersStatus:any;
     paymentMethod: string;
 }
 
