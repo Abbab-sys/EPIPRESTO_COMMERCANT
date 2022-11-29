@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { FlatList, SafeAreaView, View } from "react-native"
+import { FlatList, RefreshControl, SafeAreaView, View } from "react-native"
 import { Text, Card, ActivityIndicator } from 'react-native-paper'
 import { homeStyles } from "./HomeStyles";
 import DailyData, { DailyDataProps, DataType } from "./subsections/DailyData";
@@ -31,7 +31,7 @@ const Home = ({navigation}: any) => {
     },
   });
 
-  const { data: analyticsData, loading: analyticsLoading, error: analyticsError } = useQuery(GET_ANALYTICS, {
+  const { data: analyticsData, loading: analyticsLoading, error: analyticsError,refetch } = useQuery(GET_ANALYTICS, {
     variables: {
         idStore: storeId,
         dateFrom: (new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate())).toUTCString(),
@@ -121,7 +121,16 @@ const Home = ({navigation}: any) => {
                 </View> 
               ) :
                (
-                <ScrollView horizontal>
+                <ScrollView horizontal 
+                refreshControl={
+                  <RefreshControl
+                    refreshing={loading}
+                    onRefresh={() => {
+                      refetch({idStore: storeId, dateFrom: (new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate())).toUTCString(),dateTo:(new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate() + 1)).toUTCString()});
+                    }}
+                  />
+                }
+                >
                   {data.getStoreById.store.orders.slice(-5).reverse().map((order: any, index: number) => (
                     <OrderTemplate
                       key={index}

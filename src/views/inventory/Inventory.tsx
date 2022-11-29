@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, Button, FlatList, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, Button, FlatList, RefreshControl, SafeAreaView, View } from "react-native";
 import { IconButton, Searchbar, Text } from 'react-native-paper';
 import { inventoryStyles } from "./InventoryStyles";
 import Product, { ProductProps } from "./subsections/Product";
@@ -113,6 +113,15 @@ const Inventory = ({navigation}: any) => {
                       })
                     }
                   }
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={loading}
+                      onRefresh={() => {
+                        getItems();
+                      }}
+                    />
+                  }
+  
                 />
               )
           ) }
