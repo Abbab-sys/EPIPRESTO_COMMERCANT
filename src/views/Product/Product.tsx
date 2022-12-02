@@ -183,8 +183,8 @@ useEffect(() => {
             activeUnderlineColor={activeUnderlineColor}
             style={addProductsStyles.input}
             label={t('addProduct.labels.tags')}
-            onChangeText={text => setTags(text.split(" "))}
-            value={tags.join(" ")}
+            onChangeText={text => setTags(text.split(","))}
+            value={tags.join(",")}
           />
           <ScrollView horizontal style = {{paddingTop:5}}>
             {tags.map((tag , index) => (
