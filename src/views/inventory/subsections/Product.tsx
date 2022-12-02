@@ -2,7 +2,7 @@ import React from "react";
 import { Image, View } from "react-native";
 import { Button, Card, Divider, Text } from 'react-native-paper';
 import { productStyles } from "./ProductStyles";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from "react-i18next";
 import { INVENTORY_MODIFY_KEY } from "../../../translations/keys/InventoryTranslationKeys";
 

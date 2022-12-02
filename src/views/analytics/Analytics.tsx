@@ -45,7 +45,7 @@ const Analytics = () => {
             const result = data.getAnalytics
             const object: AnalyticsInterface = {
                 totalOrders: result.totalOrders,
-                totalSales: result.totalSales,
+                totalSales: result.totalSales.toFixed(2),
                 topProducts: result.topProducts
             }
             setAnalyticsObject(object)
