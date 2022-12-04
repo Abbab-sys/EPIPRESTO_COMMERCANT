@@ -92,6 +92,7 @@ const SignUp = ({ navigation }: any) => {
 
   const [errorOpen, setErrorOpen] = useState(false);
 
+
   useTimeout({
     callback: isEmailUsed,
     time: 500,
@@ -106,7 +107,6 @@ const SignUp = ({ navigation }: any) => {
     callbackVars: { variables: { username: accountInput.username } },
     dependencies: [accountInput.username],
   });
-
 
   const handleSnackbarClosing = (
     event?: React.SyntheticEvent | Event,
@@ -162,9 +162,6 @@ const SignUp = ({ navigation }: any) => {
       dispatchCredentialsState({ type: 'CHECK_SIGN_UP_CREDENTIALS' });
     }
   };
-
-
-
 
   return (
     <Fragment>
