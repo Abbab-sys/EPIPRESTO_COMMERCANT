@@ -4,7 +4,7 @@ import { ScrollView, Text, View, Image, SafeAreaView} from "react-native";
 import { Button, Chip, Divider, HelperText, IconButton, TextInput } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import ImagePicker from 'react-native-image-crop-picker'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { addProductsStyles } from "./Styles/AddProductStyles";
 import { commonStyles } from "./Styles/CommonStyles";
 
@@ -183,8 +183,8 @@ useEffect(() => {
             activeUnderlineColor={activeUnderlineColor}
             style={addProductsStyles.input}
             label={t('addProduct.labels.tags')}
-            onChangeText={text => setTags(text.split(" "))}
-            value={tags.join(" ")}
+            onChangeText={text => setTags(text.split(","))}
+            value={tags.join(",")}
           />
           <ScrollView horizontal style = {{paddingTop:5}}>
             {tags.map((tag , index) => (

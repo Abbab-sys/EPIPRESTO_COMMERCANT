@@ -4,6 +4,7 @@ import React, { useContext, useEffect } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -225,7 +226,16 @@ const Orders = ({ navigation }: any) => {
         </View>
       )
         :
-        (<FlatList data={orders} renderItem={renderOrderContainer} />)
+        (<FlatList data={orders} renderItem={renderOrderContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={() => {
+                refetch();
+              }}
+            />
+          }
+          />)
       }
     </SafeAreaView>
   );

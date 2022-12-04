@@ -5,7 +5,7 @@ import { Button, Divider, HelperText, IconButton, RadioButton, TextInput } from 
 import { useTranslation } from "react-i18next";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import ImagePicker from 'react-native-image-crop-picker';
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { addVariantStyles } from "./Styles/AddVariantStyles";
 import { commonStyles } from "./Styles/CommonStyles";
 

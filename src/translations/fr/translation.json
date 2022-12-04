@@ -180,7 +180,7 @@
       "name": "Titre du produit*",
       "description": "Description",
       "brand": "Marque",
-      "tags": "Tags (séparez vos tags avec un espace)"
+      "tags": "Tags (séparez vos tags avec une virgule)"
     },
     "addVariant": "Ajouter un variant",
     "publishProduct": "Publier le produit",

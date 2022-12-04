@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Modal, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Modal, ActivityIndicator, Image, RefreshControl } from 'react-native';
 import { Button } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -45,7 +45,7 @@ const Analytics = () => {
             const result = data.getAnalytics
             const object: AnalyticsInterface = {
                 totalOrders: result.totalOrders,
-                totalSales: result.totalSales,
+                totalSales: result.totalSales.toFixed(2),
                 topProducts: result.topProducts
             }
             setAnalyticsObject(object)
@@ -193,7 +193,9 @@ const Analytics = () => {
                 {dateRangeSelection()}
 
             </View>
-            <ScrollView style={styles.main_scrollView}>
+            <ScrollView style={styles.main_scrollView} refreshControl={
+                <RefreshControl refreshing={loading} onRefresh={() => getAnalytics()} />
+            }>
                 <View style={styles.analytics_container}>
                     <View style={styles.analytics_header}>
                         <Text style={styles.analytics_title}>{translation(ANALYTICS_TOTAL_SALES_KEY)}</Text>

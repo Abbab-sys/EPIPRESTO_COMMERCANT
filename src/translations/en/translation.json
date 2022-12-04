@@ -181,7 +181,7 @@
       "name": "Product name*",
       "description": "Description",
       "brand": "Brand",
-      "tags": "Tags (separate your tags with a space)"
+      "tags": "Tags (separate your tags with a comma)"
     },
     "addVariant": "Add a variant",
     "publishProduct": "Publish product",
