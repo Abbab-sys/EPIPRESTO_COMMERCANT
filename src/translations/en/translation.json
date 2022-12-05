@@ -42,9 +42,10 @@
       }
     },
     "address": {
-      "placeholder": "E: 123 avenue Lacombe, Montreal, QC H2T2M4",
+      "placeholder": "E: 123 avenue Lacombe, Montreal, QC, H2T2M4",
       "title": "Shop's address",
-      "errorMessage": "The address field can not be empty"
+      "errorMessage": "The address field can not be empty",
+      "errorFormat": "The address format is incorrect (E: 123 avenue Lacombe, Montreal, QC, H2T2M4)"
     },
     "email": {
       "placeholder": "Enter your email",

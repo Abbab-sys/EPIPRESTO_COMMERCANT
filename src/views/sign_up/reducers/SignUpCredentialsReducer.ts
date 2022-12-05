@@ -2,6 +2,7 @@ import {SignUpCredentialsReducerState} from './SignUpCredentialsReducerState';
 import {SignUpCredentialsReducerActions} from './SignUpCredentialsReducerActions';
 import {initialSignUpErrorMessage} from '../../../interfaces/SignUpInterfaces';
 import {
+  SIGN_UP_ADRESS_ERROR_FORMAT_KEY,
   SIGN_UP_ADRESS_ERROR_MESSAGE_KEY,
   SIGN_UP_CATEGORY_ERROR_EMPTY_KEY,
   SIGN_UP_CONFIRM_PASSWORD_ERROR_MESSAGE_KEY,
@@ -74,11 +75,22 @@ export function signUpCredentialsReducer(
     // Change address
     case 'CHANGE_ADDRESS': {
       const errorMessage = {...initialSignUpErrorMessage};
+      
+      const adressFormatIsInvalid =
+        !/[0-9]+\s*[A-Z][a-z]+\s*[A-Z][a-z]+,\s*[A-Z][a-z]+,\s*[A-Z]{2},\s*[A-Z][1-9][A-Z]\s[1-9][A-Z][1-9]/i.test(action.newAddress);
+
+        manageError(
+          errorMessage.addressError,
+          SIGN_UP_ADRESS_ERROR_FORMAT_KEY,
+          adressFormatIsInvalid,
+        );
+      
       manageError(
         errorMessage.addressError,
         SIGN_UP_ADRESS_ERROR_MESSAGE_KEY,
         action.newAddress === '',
       );
+      
       return {
         ...state,
         accountInput: {

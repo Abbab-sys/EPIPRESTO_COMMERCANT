@@ -113,6 +113,17 @@ const SignUp = ({navigation}: any) => {
     callbackVars: {variables: {username: accountInput.username}},
     dependencies: [accountInput.username],
   });
+
+  const handleSnackbarClosing = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorOpen(false);
+  };
+
   // Check if the credentials input are valid
   const areAllCredentialsFieldsValid = (): boolean => {
     const currErrorMessages = signUpErrorMessage;

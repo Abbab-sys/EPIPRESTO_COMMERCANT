@@ -5,6 +5,7 @@ import {
   initialStoreErrorMessage,
 } from '../../../interfaces/StoreInterfaces';
 import {
+  SIGN_UP_ADRESS_ERROR_FORMAT_KEY,
   SIGN_UP_ADRESS_ERROR_MESSAGE_KEY,
   SIGN_UP_PHONE_ERROR_MESSAGE_KEY,
   SIGN_UP_SHOP_NAME_ERROR_MESSAGE_KEY,
@@ -48,6 +49,16 @@ export function storeCredentialsReducer(
     // Change the address
     case 'CHANGE_ADDRESS': {
       const errorMessage = {...initialStoreErrorMessage};
+
+      const adressFormatIsInvalid =
+        !/[0-9]+\s*[A-Z][a-z]+\s*[A-Z][a-z]+,\s*[A-Z][a-z]+,\s*[A-Z]{2},\s*[A-Z][1-9][A-Z]\s[1-9][A-Z][1-9]/i.test(action.newAddress);
+
+        manageError(
+          errorMessage.addressError,
+          SIGN_UP_ADRESS_ERROR_FORMAT_KEY,
+          adressFormatIsInvalid,
+        );
+
       manageError(
         errorMessage.addressError,
         SIGN_UP_ADRESS_ERROR_MESSAGE_KEY,
@@ -122,11 +133,22 @@ export function storeCredentialsReducer(
     // Check if the address is valid
     case 'CHECK_ADDRESS': {
       const errorMessage = {...initialStoreErrorMessage};
+
+      const adressFormatIsInvalid =
+        !/[0-9]+\s*[A-Z][a-z]+\s*[A-Z][a-z]+,\s*[A-Z][a-z]+,\s*[A-Z]{2},\s*[A-Z][1-9][A-Z]\s[1-9][A-Z][1-9]/i.test(state.storeInput.address);
+
+        manageError(
+          errorMessage.addressError,
+          SIGN_UP_ADRESS_ERROR_FORMAT_KEY,
+          adressFormatIsInvalid,
+        );
+
       manageError(
         errorMessage.addressError,
         SIGN_UP_ADRESS_ERROR_MESSAGE_KEY,
         state.storeInput.address === '',
       );
+
       return {
         ...state,
         storeErrorMessage: {
