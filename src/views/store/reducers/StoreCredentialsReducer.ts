@@ -5,8 +5,8 @@ import {
   initialStoreErrorMessage,
 } from '../../../interfaces/StoreInterfaces';
 import {
-  SIGN_UP_ADRESS_ERROR_FORMAT_KEY,
   SIGN_UP_ADRESS_ERROR_MESSAGE_KEY,
+  SIGN_UP_ADRESS_ERROR_FORMAT_KEY,
   SIGN_UP_PHONE_ERROR_MESSAGE_KEY,
   SIGN_UP_SHOP_NAME_ERROR_MESSAGE_KEY,
 } from '../../../translations/keys/SignUpTranslationKeys';
