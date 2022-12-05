@@ -1,5 +1,11 @@
 import {gql} from '@apollo/client';
 
+/*
+ * Name: GraphQL Query
+ * Description: This file contains all the GraphQL queries used in the application.
+ * Author: Adam Naoui-Busson, Alessandro van Reusel, Khalil Zriba, Ryma Messedaa, Zouhair Derouich
+ */
+
 export const LOGIN_BY_EMAIL = gql`
   query Query($email: String!, $password: String!) {
     loginVendorByEmail(email: $email, password: $password) {
@@ -18,16 +24,16 @@ export const LOGIN_BY_EMAIL = gql`
 
 export type LoginVendorByEmailData = {
   loginVendorByEmail: {
-      code: number;
-      message: string;
-      vendorAccount: {
+    code: number;
+    message: string;
+    vendorAccount: {
+      _id: string;
+      store: {
         _id: string;
-        store: {
-          _id: string;
-          isAdmin: boolean;
-        }
-      }
-  }
+        isAdmin: boolean;
+      };
+    };
+  };
 };
 
 export const LOGIN_BY_USERNAME = gql`
@@ -48,16 +54,16 @@ export const LOGIN_BY_USERNAME = gql`
 
 export type LoginVendorByUsernameData = {
   loginVendorByUsername: {
-      code: number;
-      message: string;
-      vendorAccount: {
+    code: number;
+    message: string;
+    vendorAccount: {
+      _id: string;
+      store: {
         _id: string;
-        store: {
-          _id: string;
-          isAdmin: boolean;
-        }
-      }
-  }
+        isAdmin: boolean;
+      };
+    };
+  };
 };
 
 export const IS_VENDOR_USERNAME_USED = gql`
@@ -73,7 +79,12 @@ export const IS_VENDOR_EMAIL_USED = gql`
 `;
 
 export const GET_STORE_PRODUCTS_BY_ID = gql`
-  query GetStoreById($idStore: ID!, $offset: Int!, $first: Int, $searchText: String) {
+  query GetStoreById(
+    $idStore: ID!
+    $offset: Int!
+    $first: Int!
+    $searchText: String
+  ) {
     getStoreById(idStore: $idStore) {
       code
       message
@@ -82,7 +93,6 @@ export const GET_STORE_PRODUCTS_BY_ID = gql`
           _id
           title
           imgSrc
-          
         }
       }
     }
@@ -119,54 +129,39 @@ export const GET_INITIAL_CHATS = gql`
 `;
 
 export const GET_STORE_CREDENTIALS_BY_ID = gql`
-query getStoreCredentialsById($idStore: ID!) {
-  getStoreById(idStore: $idStore) {
-    code
-    message
-    store {
-      name
-      address
-      isPaused
-      disponibilities {
-        day
-        activesHours {
-          openingHour
-          endingHour
+  query getStoreCredentialsById($idStore: ID!) {
+    getStoreById(idStore: $idStore) {
+      code
+      message
+      store {
+        name
+        address
+        isPaused
+        disponibilities {
+          day
+          activesHours {
+            openingHour
+            endingHour
+          }
+        }
+        relatedVendor {
+          phone
+          _id
         }
       }
-      relatedVendor {
-        phone
-        _id
-      }
-      
     }
   }
-}
-`
-
-// export const GET_STORE_VARIANTS_BY_ID = gql`
-//   query GetStoreById($idStore: ID!, $offset: Int!, $first: Int, $searchText: String) {
-//     getStoreById(idStore: $idStore) {
-//       code
-//       message
-//       store {
-//         products(offset: $offset, first: $first, searchText: $searchText) {
-//           title
-//           imgSrc
-//           variants {
-//             _id
-//             variantTitle
-//             imgSrc
-//             stock
-//           }
-//         }
-//       }
-//     }
-//   }
-// `
+`;
 
 export const GET_STORE_VARIANTS_BY_ID = gql`
-  query Query($idStore: ID!, $offset: Int!, $first: Int, $variantsOffset2: Int!, $variantsSearchText2: String, $variantsFirst2: Int) {
+  query Query(
+    $idStore: ID!
+    $offset: Int!
+    $first: Int
+    $variantsOffset2: Int!
+    $variantsSearchText2: String
+    $variantsFirst2: Int
+  ) {
     getStoreById(idStore: $idStore) {
       code
       message
@@ -174,27 +169,30 @@ export const GET_STORE_VARIANTS_BY_ID = gql`
         products(offset: $offset, first: $first) {
           title
           imgSrc
-          variants(offset: $variantsOffset2, searchText: $variantsSearchText2, first: $variantsFirst2) {
-              _id
-              displayName
-              imgSrc
-              stock
+          variants(
+            offset: $variantsOffset2
+            searchText: $variantsSearchText2
+            first: $variantsFirst2
+          ) {
+            _id
+            displayName
+            imgSrc
+            stock
           }
         }
       }
     }
   }
-`
-
+`;
 
 export const GET_ALL_ORDERS_BY_STORE_ID = gql`
-  query GetStoreById($idStore: ID!,$idOrder: ID) {
+  query GetStoreById($idStore: ID!, $idOrder: ID) {
     getStoreById(idStore: $idStore) {
       code
       message
       store {
         name
-        orders(idOrder: $idOrder){
+        orders(idOrder: $idOrder) {
           _id
           orderNumber
           productsVariantsOrdered {
@@ -230,7 +228,7 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
           deliveryFee
           paymentMethod
           subOrdersStatus {
-            relatedStore{
+            relatedStore {
               _id
               name
             }
@@ -241,15 +239,14 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
       }
     }
   }
-
-`
+`;
 
 export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($idProduct: ID!,$offset: Int!) {
+  query GetProductById($idProduct: ID!, $offset: Int!) {
     getProductById(idProduct: $idProduct) {
       code
       message
-      product{
+      product {
         _id
         title
         brand
@@ -257,7 +254,7 @@ export const GET_PRODUCT_BY_ID = gql`
         tags
         imgSrc
         description
-        variants (offset: $offset) {
+        variants(offset: $offset) {
           _id
           variantTitle
           availableForSale
@@ -272,8 +269,6 @@ export const GET_PRODUCT_BY_ID = gql`
     }
   }
 `;
-
-
 
 export const GET_ANALYTICS = gql`
   query Query($idStore: ID!, $dateFrom: Date!, $dateTo: Date!) {
@@ -290,9 +285,9 @@ export const GET_ANALYTICS = gql`
       }
     }
   }
-`
+`;
 
-export const GET_ORDER_BY_ID= gql `
+export const GET_ORDER_BY_ID = gql`
   query GetOrderById($idOrder: ID!) {
     getOrderById(idOrder: $idOrder) {
       code
@@ -343,4 +338,4 @@ export const GET_ORDER_BY_ID= gql `
       }
     }
   }
-`
+`;

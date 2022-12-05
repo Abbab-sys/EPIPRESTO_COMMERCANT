@@ -1,26 +1,31 @@
-import React from "react"
-import { Trans, useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native"
-import { Button, Text } from 'react-native-paper'
-import { SafeAreaView } from "react-native-safe-area-context";
+import React from 'react';
+import {Trans, useTranslation} from 'react-i18next';
+import {StyleSheet, View} from 'react-native';
+import {Button, Text} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
+/*
+ * Name: Order Template
+ * Description: This component is used to display an order in the home page.
+ * Author: Zouhair Derouich
+ */
 
 interface OrderTemplateProps {
   orderNum: number;
   clientName: string;
-  navigation: () => {}
+  navigation: () => {};
 }
 
 const OrderTemplate = (props: OrderTemplateProps) => {
+  const {t} = useTranslation('translation');
 
-  const {t} = useTranslation('translation')
-
-  return(
+  return (
     <SafeAreaView style={orderStyles.container}>
       <Text variant="titleSmall" style={orderStyles.text}>
         <Trans
           i18nKey={'home.ordersSection.order'}
           values={{
-            orderNum: props.orderNum
+            orderNum: props.orderNum,
           }}
         />
       </Text>
@@ -30,40 +35,40 @@ const OrderTemplate = (props: OrderTemplateProps) => {
       <Text variant="titleSmall" style={orderStyles.text}>
         {props.clientName}
       </Text>
-      <Button style={orderStyles.buttonStyle} 
-        onPress={() => props.navigation()}
-        >
+      <Button
+        style={orderStyles.buttonStyle}
+        onPress={() => props.navigation()}>
         <Text style={orderStyles.buttonText}>
           {t('home.ordersSection.consult')}
         </Text>
       </Button>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 export const orderStyles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
     backgroundColor: '#F2F4F8',
     elevation: 4,
-    margin: 10
+    margin: 10,
   },
   buttonStyle: {
     borderRadius: 30,
-    color: "white",
-    backgroundColor: "#FFA500",
-    margin: 10
+    color: 'white',
+    backgroundColor: '#FFA500',
+    margin: 10,
   },
   buttonText: {
-    color: 'white'
+    color: 'white',
   },
   text: {
-    margin: 10
-  }
+    margin: 10,
+  },
 });
 
-export default OrderTemplate
+export default OrderTemplate;

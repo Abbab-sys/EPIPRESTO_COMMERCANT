@@ -1,4 +1,10 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
+
+/*
+ * Name: Login Styles
+ * Description: This file contains the styles for the login screen.
+ * Author: Adam Naoui-Busson, Zouhair Derouich
+ */
 
 export const LoginStyles = StyleSheet.create({
   root: {
@@ -32,7 +38,6 @@ export const LoginStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'blue',
     flex: 5,
   },
 
@@ -43,7 +48,6 @@ export const LoginStyles = StyleSheet.create({
   },
 
   loginButtonWrapper: {
-    // backgroundColor: 'red',
     flex: 10,
     alignItems: 'center',
     justifyContent: 'center',

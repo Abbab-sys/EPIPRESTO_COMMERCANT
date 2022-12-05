@@ -9,8 +9,14 @@ import Settings from '../settings/Settings';
 import {ORDERS_TITLE_KEY} from '../../translations/keys/OrdersTranslationKeys';
 import Orders from '../orders/Orders';
 import Analytics from '../analytics/Analytics';
-import { ANALYTICS_TITLE_KEY } from '../../translations/keys/AnalyticsTranslationKeys';
-import { CHATS_TITLE_KEY } from '../../translations/keys/ChatTranslationKeys';
+import {ANALYTICS_TITLE_KEY} from '../../translations/keys/AnalyticsTranslationKeys';
+import {CHATS_TITLE_KEY} from '../../translations/keys/ChatTranslationKeys';
+
+/*
+ * Name : Navigation Tab Screens
+ * Description : This file contains all the sections that are used in the tab navigation
+ * Author : Khalil Zriba, Adam Naoui-Busson, Zouhair Derouich, Alessandro van Reusel
+ */
 
 export const NavigationTabScreens: TabScreenProps[] = [
   {
@@ -49,6 +55,4 @@ export const NavigationTabScreens: TabScreenProps[] = [
     component: Settings,
     iconName: 'settings',
   },
-  
-  
 ];

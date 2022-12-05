@@ -1,15 +1,16 @@
 import {TextField} from '../../interfaces/textFieldInterface';
-import { EMPTY_KEY } from '../../translations/keys/EmptyTranslationKey';
+import {EMPTY_KEY} from '../../translations/keys/EmptyTranslationKey';
 import {
-  SIGN_UP_ADRESS_PLACEHOLDER_KEY,
   SIGN_UP_ADRESS_TITLE_KEY,
-  SIGN_UP_PHONE_PLACEHOLDER_KEY,
   SIGN_UP_PHONE_TITLE_KEY,
-  SIGN_UP_SHOP_NAME_PLACEHOLDER_KEY,
   SIGN_UP_SHOP_NAME_TITLE_KEY,
-  SIGN_UP_USERNAME_PLACEHOLDER_KEY,
-  SIGN_UP_USERNAME_TITLE_KEY,
 } from '../../translations/keys/SignUpTranslationKeys';
+
+/*
+ * Name : Store Text Fields
+ * Description: This file is used to initialize the text fields used in the store page.
+ * Author : Alessandro van Reusel
+ */
 
 export const StoreTextFields: TextField[] = [
   {
@@ -50,5 +51,5 @@ export const StoreTextFields: TextField[] = [
         newPhone: text,
       };
     },
-  }
+  },
 ];

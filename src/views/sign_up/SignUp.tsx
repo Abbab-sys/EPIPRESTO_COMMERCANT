@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, {Fragment, useState} from 'react';
 import {
   Alert,
   Image,
@@ -9,65 +9,71 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Button, Snackbar, Text } from 'react-native-paper';
-import { signUpStyles } from './SignUpStyles';
-import { SignUpTextFields } from './SignUpTextFields';
-import { initialSignUpCredentialsState } from './reducers/SignUpCredentialsReducerState';
-import { signUpCredentialsReducer } from './reducers/SignUpCredentialsReducer';
+import {Button, Snackbar, Text} from 'react-native-paper';
+import {signUpStyles} from './SignUpStyles';
+import {SignUpTextFields} from './SignUpTextFields';
+import {initialSignUpCredentialsState} from './reducers/SignUpCredentialsReducerState';
+import {signUpCredentialsReducer} from './reducers/SignUpCredentialsReducer';
 import {
   AccountInput,
   SignUpErrorMessage,
 } from '../../interfaces/SignUpInterfaces';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {
   SIGN_UP_CREATE_ACCOUNT_KEY,
   SIGN_UP_ERROR_ACCOUNT_CREATION_KEY,
   SIGN_UP_TITLE_KEY,
 } from '../../translations/keys/SignUpTranslationKeys';
 import CredentialInput from '../../components/credential-input/CredentialInput';
-import { useLazyQuery, useMutation } from '@apollo/client/react';
+import {useLazyQuery, useMutation} from '@apollo/client/react';
 import {
   IS_VENDOR_EMAIL_USED,
   IS_VENDOR_USERNAME_USED,
 } from '../../graphql/queries';
-import { SIGN_UP } from '../../graphql/mutations';
-import { useTimeout } from '../../hooks/CredentialsHooks';
-import { EMPTY_KEY } from '../../translations/keys/EmptyTranslationKey';
-import { SelectList } from 'react-native-dropdown-select-list'
+import {SIGN_UP} from '../../graphql/mutations';
+import {useTimeout} from '../../hooks/CredentialsHooks';
+import {EMPTY_KEY} from '../../translations/keys/EmptyTranslationKey';
 
-const SignUp = ({ navigation }: any) => {
-  const { t: translation } = useTranslation('translation');
+/*
+ * Name: SignUp
+ * Description: Sign up a new vendor.
+ * Author: Zouhair Derouich, Adam Naoui-Busson, Khalil Zriba
+ */
+
+const SignUp = ({navigation}: any) => {
+  const {t: translation} = useTranslation('translation');
   const [
-    { verifyPassword, accountInput, signUpErrorMessage },
+    {verifyPassword, accountInput, signUpErrorMessage},
     dispatchCredentialsState,
   ] = React.useReducer(signUpCredentialsReducer, initialSignUpCredentialsState);
-  // const {storeId, setStoreId} = useContext(VendorContext);
 
+  // Alert the user if the account creation failed
   const alert = (message: string) => {
     Alert.alert('Alert', message, [
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
+      {text: 'OK', onPress: () => {}},
     ]);
   };
 
-
+  // Handle if the email is already used
   const handleEmailUsed = (emailUsedData: any) => {
     if (!emailUsedData) {
       return;
     }
     emailUsedData.isVendorEmailUsed
-      ? dispatchCredentialsState({ type: 'SET_EMAIL_AS_ALREADY_USED' })
-      : dispatchCredentialsState({ type: 'SET_EMAIL_AS_UNUSED' });
+      ? dispatchCredentialsState({type: 'SET_EMAIL_AS_ALREADY_USED'})
+      : dispatchCredentialsState({type: 'SET_EMAIL_AS_UNUSED'});
   };
+  // Handle if the username is already used
   const handleUsernameUsed = (usernameUsedData: any) => {
     if (!usernameUsedData) {
       return;
     }
     usernameUsedData.isVendorUsernameUsed
-      ? dispatchCredentialsState({ type: 'SET_USERNAME_AS_ALREADY_USED' })
-      : dispatchCredentialsState({ type: 'SET_USERNAME_AS_UNUSED' });
+      ? dispatchCredentialsState({type: 'SET_USERNAME_AS_ALREADY_USED'})
+      : dispatchCredentialsState({type: 'SET_USERNAME_AS_UNUSED'});
   };
+  // Handle the sign up mutation
   const signUpResponse = (signUpData: any) => {
-    console.log(signUpData);
     if (!signUpData) {
       return;
     }
@@ -79,32 +85,32 @@ const SignUp = ({ navigation }: any) => {
       navigation.navigate('Login');
     }, 1000);
   };
-
-  const [isEmailUsed, { loading: emailUsedLoading }] = useLazyQuery(
+  // Query to check if the email is already used
+  const [isEmailUsed, {loading: emailUsedLoading}] = useLazyQuery(
     IS_VENDOR_EMAIL_USED,
-    { onCompleted: handleEmailUsed },
+    {onCompleted: handleEmailUsed},
   );
-  const [isUsernameUsed, { loading: usernameUsedLoading }] = useLazyQuery(
+  // Query to check if the username is already used
+  const [isUsernameUsed, {loading: usernameUsedLoading}] = useLazyQuery(
     IS_VENDOR_USERNAME_USED,
-    { onCompleted: handleUsernameUsed },
+    {onCompleted: handleUsernameUsed},
   );
-  const [signUp] = useMutation(SIGN_UP, { onCompleted: signUpResponse });
+  // Mutation to sign up a new vendor
+  const [signUp] = useMutation(SIGN_UP, {onCompleted: signUpResponse});
 
   const [errorOpen, setErrorOpen] = useState(false);
-
-
+  // useTimeout to show the message that the email is already used after 500 ms
   useTimeout({
     callback: isEmailUsed,
     time: 500,
-    callbackVars: { variables: { email: accountInput.email } },
+    callbackVars: {variables: {email: accountInput.email}},
     dependencies: [accountInput.email],
   });
-
-
+  // useTimeout to show the message that the username is already used after 500 ms
   useTimeout({
     callback: isUsernameUsed,
     time: 500,
-    callbackVars: { variables: { username: accountInput.username } },
+    callbackVars: {variables: {username: accountInput.username}},
     dependencies: [accountInput.username],
   });
 
@@ -118,6 +124,7 @@ const SignUp = ({ navigation }: any) => {
     setErrorOpen(false);
   };
 
+  // Check if the credentials input are valid
   const areAllCredentialsFieldsValid = (): boolean => {
     const currErrorMessages = signUpErrorMessage;
     return (
@@ -131,6 +138,7 @@ const SignUp = ({ navigation }: any) => {
       currErrorMessages.shopCategoryError.size === 0
     );
   };
+  // Check if the credentials input are filled
   const areAllCredentialsFieldsAreFilled = (): boolean => {
     return (
       accountInput.shopName !== '' &&
@@ -140,10 +148,10 @@ const SignUp = ({ navigation }: any) => {
       verifyPassword !== '' &&
       accountInput.address !== '' &&
       accountInput.phone !== '' &&
-      accountInput.shopCategory !== '' 
+      accountInput.shopCategory !== ''
     );
   };
-
+  // Should the sign up button be disabled
   const submitButtonShouldBeDisabled = () => {
     return (
       emailUsedLoading ||
@@ -152,14 +160,14 @@ const SignUp = ({ navigation }: any) => {
       !areAllCredentialsFieldsAreFilled()
     );
   };
-
+  // Handle the creation of a new account
   const handleCreateAccount = () => {
-    dispatchCredentialsState({ type: 'CHECK_SIGN_UP_CREDENTIALS' });
+    dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});
     const areCredentialsValid = areAllCredentialsFieldsValid();
     if (areCredentialsValid) {
-      signUp({ variables: { accountInput: accountInput } });
+      signUp({variables: {accountInput: accountInput}});
     } else {
-      dispatchCredentialsState({ type: 'CHECK_SIGN_UP_CREDENTIALS' });
+      dispatchCredentialsState({type: 'CHECK_SIGN_UP_CREDENTIALS'});
     }
   };
 
@@ -202,14 +210,12 @@ const SignUp = ({ navigation }: any) => {
                           (field.attribute +
                             'Error') as keyof SignUpErrorMessage
                         ].size > 0
-                          ?
-                          signUpErrorMessage[
-                            (field.attribute +
-                              'Error') as keyof SignUpErrorMessage
-                          ]
-                            .values()
-                            .next().value
-
+                          ? signUpErrorMessage[
+                              (field.attribute +
+                                'Error') as keyof SignUpErrorMessage
+                            ]
+                              .values()
+                              .next().value
                           : (EMPTY_KEY as string)
                       }
                       dispatch={dispatchCredentialsState}
@@ -228,7 +234,7 @@ const SignUp = ({ navigation }: any) => {
               </View>
               <Snackbar
                 visible={errorOpen}
-                onDismiss={() => { }}
+                onDismiss={() => {}}
                 action={{
                   label: 'Dismiss',
                   onPress: () => {

@@ -1,15 +1,21 @@
-import { Dimensions, StyleSheet } from "react-native"
+import {Dimensions, StyleSheet} from 'react-native';
 
-const width = Dimensions.get('window').width
+/*
+ * Name: Product Styles
+ * Description: This file contains the styles for the product component.
+ * Author: Adam Naoui-Busson, Zouhair Derouich
+ */
+
+const width = Dimensions.get('window').width;
 
 export const productStyles = StyleSheet.create({
   root: {
     width: width / 2,
-    flex: 1
+    flex: 1,
   },
   productName: {
     textAlign: 'center',
-    marginVertical: '4%'
+    marginVertical: '4%',
   },
   cardStyle: {
     flex: 1,
@@ -17,26 +23,26 @@ export const productStyles = StyleSheet.create({
     borderRadius: 30,
     margin: '5%',
     padding: '5%',
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
   buttonStyle: {
     borderRadius: 30,
-    color: "white",
-    backgroundColor: "#FFA500",
-    width: "auto"
+    color: 'white',
+    backgroundColor: '#FFA500',
+    width: 'auto',
   },
   image: {
-    resizeMode:'contain',
+    resizeMode: 'contain',
     height: 100,
     width: '100%',
   },
   buttonText: {
-    color: 'white'
+    color: 'white',
   },
   icon: {
-    alignSelf: "center"
-  }
-})
+    alignSelf: 'center',
+  },
+});

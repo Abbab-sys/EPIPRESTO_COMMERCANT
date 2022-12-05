@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {TextField} from '../../interfaces/textFieldInterface';
 import {SegmentedButtons} from 'react-native-paper';
 import {
   ENGLISH_LANGUAGE_KEY,
@@ -8,10 +7,17 @@ import {
 } from '../../translations/keys/LanguageTranslationKeys';
 import {LanguageSelectorStyles} from './LanguageSelectorStyles';
 
+/*
+ * Name: Language Selector
+ * Description: This component is used to select the language of the app.
+ * Author: Adam Naoui-Busson
+ */
+
 const LanguageSelector = () => {
   const {t: translation, i18n} = useTranslation('translation');
   const [value, setValue] = React.useState<string>('fr');
 
+  // Use effect to change the language in the application when the value changes
   useEffect(() => {
     i18n.changeLanguage(value);
   }, [i18n, value]);
