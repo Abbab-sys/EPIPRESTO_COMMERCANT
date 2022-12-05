@@ -20,6 +20,7 @@ export const SIGN_UP_USERNAME_ERROR_USED_KEY = 'sign_up.username.errors.used';
 export const SIGN_UP_ADRESS_PLACEHOLDER_KEY = 'sign_up.address.placeholder';
 export const SIGN_UP_ADRESS_TITLE_KEY = 'sign_up.address.title';
 export const SIGN_UP_ADRESS_ERROR_MESSAGE_KEY = 'sign_up.address.errorMessage';
+export const SIGN_UP_ADRESS_ERROR_FORMAT_KEY = 'sign_up.address.errorFormat';
 
 export const SIGN_UP_EMAIL_PLACEHOLDER_KEY = 'sign_up.email.placeholder';
 export const SIGN_UP_EMAIL_TITLE_KEY = 'sign_up.email.title';

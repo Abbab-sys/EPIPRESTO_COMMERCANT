@@ -42,9 +42,10 @@
       }
     },
     "address": {
-      "placeholder": "Ex: 123 avenue Lacombe, Montréal, QC H2T2M4",
+      "placeholder": "Ex: 123 avenue Lacombe, Montréal, QC,H2T2M4",
       "title": "Adresse de la boutique",
-      "errorMessage": "Le champ d'adresse ne peut pas être vide"
+      "errorMessage": "Le champ d'adresse ne peut pas être vide",
+      "errorFormat": "Le format de l'adresse est invalide (Ex: 123 avenue Lacombe, Montréal, QC, H2T2M4)"
     },
     "email": {
       "placeholder": "Entrez votre courriel",
