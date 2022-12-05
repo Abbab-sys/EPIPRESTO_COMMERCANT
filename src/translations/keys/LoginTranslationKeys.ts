@@ -1,3 +1,9 @@
+/*
+ * Name: Login Translation Keys
+ * Description: This file contains the keys for the login page.
+ * Author: Adam Naoui-Busson
+ */
+
 export const LOGIN_EMAIL_TITLE_KEY = 'login.email.title';
 export const LOGIN_EMAIL_LABEL_KEY = 'login.email.placeholder';
 export const LOGIN_PASSWORD_TITLE_KEY = 'login.password.title';

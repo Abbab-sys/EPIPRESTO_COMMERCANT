@@ -6,8 +6,14 @@ import {Message} from '../../hooks/ChatManagerHook';
 import {MessageStatus, Role} from '../../interfaces/ChatInterfaces';
 import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {Button} from 'react-native-paper';
-import { CHAT_VIEW_ORDER_KEY } from '../../translations/keys/ChatTranslationKeys';
-import { useTranslation } from 'react-i18next';
+import {CHAT_VIEW_ORDER_KEY} from '../../translations/keys/ChatTranslationKeys';
+import {useTranslation} from 'react-i18next';
+
+/*
+ * Name: Chat
+ * Description: This component is used to display the chat linked to a vendor from a specific command.
+ * Author: Zouhair Derouich, Adam Naoui-Busson, Khalil Zriba
+ */
 
 interface message {
   _id: string;
@@ -24,42 +30,25 @@ interface message {
 
 const Chat = ({navigation, route}: any) => {
   const {chatId} = route.params;
-  const {t} = useTranslation('translation')
+  const {t} = useTranslation('translation');
   const {
     chatManager: [chats, {sendMessage, getChatById}],
   } = useContext(ChatContext);
 
-  console.log('CHAT MANAGER: ', chats);
   const {storeId} = useContext(VendorContext);
 
-  // const [messages, setMessages] = useState<message[]>(
-  //   chat.messages.map((message: Message) => {
-  //   return {
-  //     _id: message.id,
-  //     text: message.message,
-  //     createdAt: new Date(message.date),
-  //     role: message.role,
-  //     status: message.status,
-  //     user: {
-  //       _id: message.role === Role.CLIENT ? chat.relatedClientId : storeId,
-  //       name: message.role === Role.CLIENT ? chat.relatedClientUsername : "Me",
-  //       avatar: message.role === Role.CLIENT ? 'https://placeimg.com/140/140/any' : "https://cdn.shopify.com/s/files/1/0560/5500/5243/products/Huile-pour-cheveux-stimulante.jpg?v=1641949859"
-  //     }
-  //   }
-  // }))
-
+  // Call sendMessage function from ChatManagerHook when the sent button is pressed
   const onSend = useCallback(
     (newMessage: message[]) => {
       sendMessage(chatId, newMessage[0].text);
-      // chatManager[1](chat.id, newMessage[newMessage.length - 1].text);
-      // setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
     },
     [chatId, sendMessage],
   );
 
   const chat = getChatById(chatId);
+
+  // Navigate to the order page when the back button is pressed
   const navigateToOrder = () => {
-    console.log('Navigate to order'); //TODO: Navigate to order
     navigation.navigate('OrderPage', {idOrder: chat?.relatedOrderId});
   };
   const messages = chat?.messages.map((message: Message) => {
@@ -72,7 +61,7 @@ const Chat = ({navigation, route}: any) => {
       user: {
         _id: message.role === Role.CLIENT ? chat.relatedClientId : storeId,
         name: message.role === Role.CLIENT ? chat.relatedClientUsername : 'Me',
-        avatar:"",
+        avatar: '',
       },
     };
   });
@@ -105,7 +94,7 @@ const Chat = ({navigation, route}: any) => {
               source={require('../../assets/icons/back.png')}
             />
           </TouchableOpacity>
-         
+
           <Button
             style={{
               margin: 10,

@@ -1,3 +1,9 @@
+/*
+ * Name: Login Interfaces
+ * Description: This file contains the interfaces for the login page.
+ * Author: Adam Naoui-Busson
+ */
+
 export interface Credentials {
   auth: string;
   password: string;

@@ -6,6 +6,12 @@ import {
   LOGIN_PASSWORD_TITLE_KEY,
 } from '../../translations/keys/LoginTranslationKeys';
 
+/*
+ * Name: Login Text Fields
+ * Description: This file contains all text fields for the login screen.
+ * Author: Zouhair Derouich, Adam Naoui-Busson
+ */
+
 export const LoginTextField: TextField[] = [
   {
     attribute: 'auth',

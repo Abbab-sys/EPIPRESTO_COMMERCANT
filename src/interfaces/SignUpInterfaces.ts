@@ -1,3 +1,9 @@
+/*
+ * Name: Sign Up Interfaces
+ * Description: This file contains all the interfaces used in the SignUp page.
+ * Author: Adam Naoui-Busson, Zouhair Derouich
+ */
+
 export interface AccountInput {
   shopName: string;
   email: string;

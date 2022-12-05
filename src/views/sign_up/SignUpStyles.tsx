@@ -1,5 +1,11 @@
 import {StyleSheet} from 'react-native';
 
+/*
+ * Name: Store Styles
+ * Description: Styles for the store view.
+ * Author: Zouhair Derouich, Adam Naoui-Busson, Khalil Zriba
+ */
+
 export const signUpStyles = StyleSheet.create({
   bottomSafeAreaView: {
     flex: 1,
@@ -8,7 +14,6 @@ export const signUpStyles = StyleSheet.create({
   topSafeAreaView: {
     flex: 0,
     backgroundColor: '#FFA500',
-    
   },
   root: {
     backgroundColor: '#FFA500',
@@ -22,8 +27,6 @@ export const signUpStyles = StyleSheet.create({
   },
   signUp: {
     flex: 5,
-    // alignItems: 'center',
-    // justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -51,7 +54,7 @@ export const signUpStyles = StyleSheet.create({
   buttonView: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: '5%'
+    marginBottom: '5%',
   },
   button: {
     backgroundColor: '#FFA500',
@@ -67,12 +70,10 @@ export const signUpStyles = StyleSheet.create({
     width: 50,
     height: 50,
     marginLeft: 10,
-
-},
-back_button_icon: {
+  },
+  back_button_icon: {
     width: 35,
     height: 35,
     tintColor: 'black',
-},
- 
+  },
 });
