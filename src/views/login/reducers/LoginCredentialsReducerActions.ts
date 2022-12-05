@@ -1,3 +1,8 @@
+/*
+ * Name: Login Credentials Reducer Actions
+ * Description: This file contains the actions for the login credentials reducer.
+ * Author: Zouhair Derouich, Adam Naoui-Busson
+ */
 export type LoginCredentialsStateReducerAction =
   | {type: 'CHANGE_AUTH'; newAuth: string}
   | {type: 'CHECK_LOGIN_CREDENTIALS'}

@@ -18,6 +18,12 @@ import {
   SIGN_UP_USERNAME_TITLE_KEY,
 } from '../../translations/keys/SignUpTranslationKeys';
 
+/*
+ * Name : Sign Up Text Fields
+ * Description: This file is used to manage and initialiaze the state of the sign up page.
+ * Author : Zouhair Derouich, Adam Naoui-Busson, Alessandro van Reusel
+ */
+
 export const SignUpTextFields: TextField[] = [
   {
     label: SIGN_UP_SHOP_NAME_PLACEHOLDER_KEY,

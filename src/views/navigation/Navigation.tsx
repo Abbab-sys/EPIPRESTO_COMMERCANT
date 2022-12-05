@@ -6,6 +6,11 @@ import {Text} from 'react-native';
 import {NavigationTabScreens} from './NavigationTabScreens';
 import {useTranslation} from 'react-i18next';
 
+/*
+ * Name: Navigation
+ * Description: This file contains the navigation tab screens.
+ * Author: Khalil Zriba, Adam Naoui-Busson, Alessandro van Reusel, Zouhair Derouich, Ryma Messedaa
+ */
 const Navigation = () => {
   const Tab = createBottomTabNavigator();
 
@@ -27,7 +32,8 @@ const Navigation = () => {
               />
             ),
             tabBarLabel: ({focused}) => (
-              <Text style={{color: focused ? '#FFA500' : '#707070', fontSize: 10}}>
+              <Text
+                style={{color: focused ? '#FFA500' : '#707070', fontSize: 10}}>
                 {translation(screen.title)}
               </Text>
             ),

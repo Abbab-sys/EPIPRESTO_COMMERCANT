@@ -1,3 +1,9 @@
+/*
+ * Name: Chat Interfaces
+ * Description: This file contains the interfaces for the chat component.
+ * Author: Adam Naoui-Busson
+ */
+
 export interface Message {
   relatedChatId: string;
   message: string;
@@ -7,13 +13,13 @@ export interface Message {
 }
 
 export enum Role {
-  ADMIN = "ADMIN",
-  CLIENT = "CLIENT",
-  VENDOR = "VENDOR"
+  ADMIN = 'ADMIN',
+  CLIENT = 'CLIENT',
+  VENDOR = 'VENDOR',
 }
 
 export enum MessageStatus {
-  SENT = "SENT",
-  RECEIVED = "RECEIVED",
-  READ = "READ"
+  SENT = 'SENT',
+  RECEIVED = 'RECEIVED',
+  READ = 'READ',
 }

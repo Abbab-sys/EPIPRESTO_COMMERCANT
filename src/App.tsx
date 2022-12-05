@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {
   ApolloClient,
   ApolloProvider,
@@ -13,7 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Navigation from './views/navigation/Navigation';
 import Inventory from './views/inventory/Inventory';
-import { VendorContext } from './context/Vendor';
+import {VendorContext} from './context/Vendor';
 import OrderPage from './views/orders/OrderPage';
 import Settings from './views/settings/Settings';
 import Chat from './views/chat/Chat';
@@ -30,15 +30,19 @@ import Analytics from './views/analytics/Analytics';
 import AddProduct from './views/Product/AddProduct';
 import UpdateProduct from './views/Product/UpdateProduct';
 import Stock from './views/stock/Stock';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
+/*
+ * Name: App
+ * Description: The main component of the application.
+ * Author: Alessandro van Reusel, Adam Naoui-Busson, Khalil Zriba, Zouhair Derouich, Ryma Messedaa
+ */
 
 export default function App() {
   const [storeId, setStoreId] = React.useState<string>('');
   const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
-  const storeIdContext = {storeId, setStoreId,isAdmin, setIsAdmin};
 
   const wsLink = new GraphQLWsLink(
     createClient({
@@ -69,37 +73,32 @@ export default function App() {
           products: {
             keyArgs: false,
             merge(existing = [], incoming) {
-              console.log("Existing: ", existing)
-              console.log("Incoming: ", incoming)
               return [...existing, ...incoming];
             },
-          }
-        }
-      }
-    }
-  })
+          },
+        },
+      },
+    },
+  });
 
   const client = new ApolloClient({
     link: splitLink,
     cache: cache,
   });
 
-  AsyncStorage.getItem('@storeId').then((value) => {
-      if (value) setStoreId(value);
-    }
-  );
+  AsyncStorage.getItem('@storeId').then(value => {
+    if (value) setStoreId(value);
+  });
 
-  AsyncStorage.getItem('@isAdmin').then((value:any) => {
-      if (value){
-        if(value === 'true') setIsAdmin(true)
-        else setIsAdmin(false)
-      };
+  AsyncStorage.getItem('@isAdmin').then((value: any) => {
+    if (value) {
+      if (value === 'true') setIsAdmin(true);
+      else setIsAdmin(false);
     }
-  );
-
+  });
 
   return (
-    <VendorContext.Provider value={{storeId, setStoreId,isAdmin,setIsAdmin}}>
+    <VendorContext.Provider value={{storeId, setStoreId, isAdmin, setIsAdmin}}>
       <ApolloProvider client={client}>
         <NavigationStack />
       </ApolloProvider>
@@ -108,20 +107,21 @@ export default function App() {
 }
 
 function NavigationStack() {
-  const {storeId,isAdmin} = useContext(VendorContext);
+  const {storeId, isAdmin} = useContext(VendorContext);
   const chatManager = useChatManager(storeId);
   const chatContext = {chatManager};
   return (
-
     <ChatContext.Provider value={chatContext}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={"Login"} screenOptions={{headerShown: false}}>
+        <Stack.Navigator
+          initialRouteName={'Login'}
+          screenOptions={{headerShown: false}}>
           {!storeId ? (
             <>
-              <Stack.Screen name="Login" component={Login}/>
+              <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="SignUp" component={SignUp} />
             </>
-            ) : (
+          ) : (
             <>
               <Stack.Screen name="Navigation" component={Navigation} />
               <Stack.Screen name="AddProduct" component={AddProduct} />
@@ -136,12 +136,9 @@ function NavigationStack() {
               <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
               <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
               <Stack.Screen name="Analytics" component={Analytics} />
-
-
             </>
           )}
-      </Stack.Navigator>
-    
+        </Stack.Navigator>
       </NavigationContainer>
     </ChatContext.Provider>
   );

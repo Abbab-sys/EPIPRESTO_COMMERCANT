@@ -5,6 +5,12 @@ import {GET_INITIAL_CHATS} from '../graphql/queries';
 import {SEND_MESSAGE} from '../graphql/mutations';
 import {MESSAGE_SENT} from '../graphql/subscriptions';
 
+/*
+ * Name: Chat Manager Hook
+ * Description: This file contains the hook used in the chat component.
+ * Author: Adam Naoui-Busson
+ */
+
 export type Chat = {
   id: string;
   relatedClientId: string;
@@ -48,11 +54,10 @@ export const useChatManager = (storeId: string): ChatManager => {
   const chatsById = useStateMap<string, Chat>(new Map<string, Chat>());
   const [chats, setChats] = useState<Chat[]>([]);
 
+  // Fetch initial chats by clearing the map and adding the new ones
   const onInitialFetchComplete = (data: any) => {
     chatsById.clear();
-    ///TODO check query result
     if (!data || data.getStoreById.code !== 200) {
-      console.log('ERROR');
       return;
     }
 
@@ -98,19 +103,16 @@ export const useChatManager = (storeId: string): ChatManager => {
     setChats(chatsSortedByDate);
   };
 
+  // Query to fetch initial chats
   useQuery(GET_INITIAL_CHATS, {
     variables: {idStore: storeId},
     onCompleted: onInitialFetchComplete,
   });
 
-  const onMessageCorrectlySent = (data: any) => {
-    ///TODO DO ACCUSED CHECK
-    console.log('onMessageCorrectlySent', data);
-  };
-  const [publishMessage] = useMutation(SEND_MESSAGE, {
-    onCompleted: onMessageCorrectlySent,
-  });
+  // Mutation to send a message
+  const [publishMessage] = useMutation(SEND_MESSAGE, {});
 
+  // Send a message
   const sendMessage = (channelId: string, content: string) => {
     const noContent: boolean = !content || content.trim().length === 0;
     const nonexistentChannel: boolean = !chatsById.has(channelId);
@@ -146,8 +148,8 @@ export const useChatManager = (storeId: string): ChatManager => {
     setChats(newChats);
   };
 
+  // Handle when a new message is received
   const onNewMessageReceived = (data: any) => {
-    console.log('DATA: ', data);
     const newMessage = data.subscriptionData.data.messageSent;
     const relatedChatId = newMessage.relatedChat._id;
     const message: Message = {
@@ -175,11 +177,14 @@ export const useChatManager = (storeId: string): ChatManager => {
     ];
     setChats(newChats);
   };
+
+  // Subscription to receive new messages
   useSubscription(MESSAGE_SENT, {
     variables: {storeId},
     onSubscriptionData: onNewMessageReceived,
   });
 
+  // Get a chat by its id
   const getChatById = (id: string) => {
     return chatsById.get(id);
   };
@@ -190,7 +195,6 @@ export const useChatManager = (storeId: string): ChatManager => {
 export const useStateMap = <KEY, VALUE>(initialMap: Map<KEY, VALUE>) => {
   const [map, setMap] = useState<Map<KEY, VALUE>>(initialMap);
   const set = (key: KEY, value: VALUE) => {
-    // const newMap = new Map(map);
     map.set(key, value);
     setMap(map);
   };

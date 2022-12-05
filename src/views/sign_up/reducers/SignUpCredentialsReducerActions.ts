@@ -1,3 +1,8 @@
+/*
+ * Name : Store Credentials Reducer Actions
+ * Description: This file is used to manage the actions of the store credentials page.
+ */
+
 export type SignUpCredentialsReducerActions =
   | {type: 'CHANGE_SHOP_NAME'; newShopName: string}
   | {type: 'CHANGE_EMAIL'; newEmail: string}

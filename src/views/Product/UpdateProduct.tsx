@@ -25,10 +25,15 @@ import {
   ADD_NEW_VARIANTS_TO_PRODUCT,
   REMOVE_VARIANTS_BY_ID,
   UPDATE_PRODUCT,
-  UPDATE_VARIANT,
   UPDATE_VARIANTS,
 } from '../../graphql/mutations';
-import { UPDATE_PRODUCT_PAGE_TITLE } from '../../translations/keys/GeneralTranslationKeys';
+import {UPDATE_PRODUCT_PAGE_TITLE} from '../../translations/keys/GeneralTranslationKeys';
+
+/*
+ * Name: Update Product
+ * Description: This file contains the page to modify the product and its variants.
+ * Author: Zouhair Derouich, Khalil Zriba, Adam Naoui-Busson, Ryma Messedaa
+ */
 
 interface ProductFields {
   title: string;
@@ -54,8 +59,6 @@ interface VariantFields {
 }
 
 const UpdateProduct = ({route, navigation}: any) => {
-  // states to count variants and products updates
-  // count
   const [updateProductCount, setUpdateProductCount] = useState(0);
   const [updateVariantCount, setUpdateVariantCount] = useState(0);
 
@@ -70,7 +73,6 @@ const UpdateProduct = ({route, navigation}: any) => {
   const deleteError = t('addProduct.deleteError');
   const [productNameError, setError] = useState('');
 
-
   const defaultVariant: VariantFields = {
     variantId: new Date().getTime().toString() + 1,
     variantTitle: '',
@@ -84,11 +86,11 @@ const UpdateProduct = ({route, navigation}: any) => {
     isValid: false,
     isHidden: false,
   };
-
-  const {data, loading, error} = useQuery(GET_PRODUCT_BY_ID, {
+  // Query to get the product by id
+  const {loading, error} = useQuery(GET_PRODUCT_BY_ID, {
     variables: {
       idProduct: route.params.idProduct,
-      offset: 0
+      offset: 0,
     },
     fetchPolicy: 'network-only',
     onCompleted(data) {
@@ -101,7 +103,6 @@ const UpdateProduct = ({route, navigation}: any) => {
         tags: myProduct.tags,
         imgSrc: myProduct.imgSrc,
       };
-      // add fields isValid and isHidden to variants
       const myVariants = myProduct.variants.map((variant: any) => {
         return {
           ...variant,
@@ -110,7 +111,6 @@ const UpdateProduct = ({route, navigation}: any) => {
           isHidden: false,
         };
       });
-      // dont return _id and __typename
       const myVariants2 = myVariants.map((variant: any) => {
         const {_id, __typename, ...rest} = variant;
         return rest;
@@ -119,7 +119,7 @@ const UpdateProduct = ({route, navigation}: any) => {
       setVariants(myVariants2);
     },
   });
-
+  // Alert if it the modification of the product are saved or not
   const alertOnSave = (succes: boolean) =>
     Alert.alert(
       succes ? 'Succes' : 'Erreur',
@@ -146,86 +146,124 @@ const UpdateProduct = ({route, navigation}: any) => {
     addNewVariantsToProduct,
     removeVariantsByIds,
     updateVariants,
-  } = useUpdateProductManager(()=> alertOnSave(true),()=>alertOnSave(false));
+  } = useUpdateProductManager(
+    () => alertOnSave(true),
+    () => alertOnSave(false),
+  );
 
+  // Handle the update of the product
   const handleUpdate = () => {
-    const idProduct = route.params.idProduct
-    Keyboard.dismiss()
+    const idProduct = route.params.idProduct;
+    Keyboard.dismiss();
     // remvoe newVariants from updatedVariants
-    const filteredUpdatedVariants = updatedVariants.filter((updatedvariantId) => {
-      const variant = newVariants.find((variantId) => updatedvariantId === variantId);
+    const filteredUpdatedVariants = updatedVariants.filter(updatedvariantId => {
+      const variant = newVariants.find(
+        variantId => updatedvariantId === variantId,
+      );
       return !variant;
-    })
+    });
     // consider only delted variants that are not in newVariants
-    const filteredDeletedVariants = deletedVariants.filter((deletedVariantId) => {
-      const variant = newVariants.find((variantId) => deletedVariantId === variantId);
+    const filteredDeletedVariants = deletedVariants.filter(deletedVariantId => {
+      const variant = newVariants.find(
+        variantId => deletedVariantId === variantId,
+      );
       return !variant;
-    })
+    });
 
     // consider only new variants that are not in deletedVariants
-    const filteredNewVariants = newVariants.filter((newVariantId) => {
-      const variant = deletedVariants.find((variantId) => newVariantId === variantId);
+    const filteredNewVariants = newVariants.filter(newVariantId => {
+      const variant = deletedVariants.find(
+        variantId => newVariantId === variantId,
+      );
       return !variant;
-    })
+    });
 
     // set fields to update
-    let productFieldsToUpdate = {} // remplir si updated
-    let variantsToAdd: { price: number; stock: number; variantTitle: string; sku: string; taxable: boolean; imgSrc: string; byWeight: boolean; availableForSale: boolean; }[] = [] 
-    let variantsToDelete: string[] = []
-    let varvariantsToUpdate: { variantId: string; price: number; stock: number; variantTitle: string; sku: string; taxable: boolean; imgSrc: string; byWeight: boolean; availableForSale: boolean; }[] = []
-  
+    let productFieldsToUpdate = {}; // remplir si updated
+    let variantsToAdd: {
+      price: number;
+      stock: number;
+      variantTitle: string;
+      sku: string;
+      taxable: boolean;
+      imgSrc: string;
+      byWeight: boolean;
+      availableForSale: boolean;
+    }[] = [];
+    let variantsToDelete: string[] = [];
+    let varvariantsToUpdate: {
+      variantId: string;
+      price: number;
+      stock: number;
+      variantTitle: string;
+      sku: string;
+      taxable: boolean;
+      imgSrc: string;
+      byWeight: boolean;
+      availableForSale: boolean;
+    }[] = [];
+
     // if product fields changed, update product
     // the first update happens when the product is loaded
     if (updateProductCount > 1) {
-        console.log("UpdateProduct(productId,fieldsToUpdate)")
-        // consider only tags that are not empty
-        const filteredTags = product?.tags.filter((tag) => tag !== "")
-        // replace tags with filteredTags
-        const productFields = {...product, tags: filteredTags}
-        productFieldsToUpdate = productFields
+      // consider only tags that are not empty
+      const filteredTags = product?.tags.filter(tag => tag !== '');
+      // replace tags with filteredTags
+      const productFields = {...product, tags: filteredTags};
+      productFieldsToUpdate = productFields;
     }
-    if( filteredNewVariants.length > 0) {
-        console.log("addNewVariantToProduct(productId, newVariant)")
-        // get variants that id is in newVariants
-        const newVariantsToAdd = variants.filter((variant) => {
-          const variantId = filteredNewVariants.find((variantId) => variantId === variant.variantId);
-          return variantId;
-        })
-        const variantsWithoutId = newVariantsToAdd.map((variant) => {
-          const {variantId, isHidden, isValid,price, stock, ...rest} = variant;
-          return {...rest, price: parseFloat(parseFloat(price).toFixed(2)), stock: parseInt(stock)};
-        })
-        variantsToAdd = variantsWithoutId
-
-    }            
-    if(filteredDeletedVariants.length > 0) {
-        console.log("removeVariantById(productVariantId)")
-        variantsToDelete = filteredDeletedVariants  
-    }
-    if(filteredUpdatedVariants.length > 0){
-      console.log("updateVariant(productVariantId, fieldsToUpdate)")
-      // get variants that id is in updatedVariants
-      const updatedVariantsToUpdate = variants.filter((variant) => {
-        const variantId = filteredUpdatedVariants.find((variantId) => variantId === variant.variantId);
+    if (filteredNewVariants.length > 0) {
+      // get variants that id is in newVariants
+      const newVariantsToAdd = variants.filter(variant => {
+        const variantId = filteredNewVariants.find(
+          variantId => variantId === variant.variantId,
+        );
         return variantId;
-      })
-      updatedVariantsToUpdate.forEach((variant) => {
+      });
+      const variantsWithoutId = newVariantsToAdd.map(variant => {
+        const {variantId, isHidden, isValid, price, stock, ...rest} = variant;
+        return {
+          ...rest,
+          price: parseFloat(parseFloat(price).toFixed(2)),
+          stock: parseInt(stock),
+        };
+      });
+      variantsToAdd = variantsWithoutId;
+    }
+    if (filteredDeletedVariants.length > 0) {
+      variantsToDelete = filteredDeletedVariants;
+    }
+    if (filteredUpdatedVariants.length > 0) {
+      // get variants that id is in updatedVariants
+      const updatedVariantsToUpdate = variants.filter(variant => {
+        const variantId = filteredUpdatedVariants.find(
+          variantId => variantId === variant.variantId,
+        );
+        return variantId;
+      });
+      updatedVariantsToUpdate.forEach(variant => {
         // dont consider variantId, isHidden and isValid
-        const {isHidden, isValid,price, stock, ...rest} = variant;
+        const {isHidden, isValid, price, stock, ...rest} = variant;
         // change price and stock to number
-        const fieldsToUpdate = {...rest, price: parseFloat(parseFloat(price).toFixed(2)), stock: parseInt(stock)};
-        varvariantsToUpdate.push(fieldsToUpdate)
-      }
-      )
-    } 
+        const fieldsToUpdate = {
+          ...rest,
+          price: parseFloat(parseFloat(price).toFixed(2)),
+          stock: parseInt(stock),
+        };
+        varvariantsToUpdate.push(fieldsToUpdate);
+      });
+    }
 
-    updateProduct({variables: {productId: idProduct, fieldsToUpdate: productFieldsToUpdate}})
-    updateVariants({variables: {variantsToUpdate: varvariantsToUpdate}})
-    addNewVariantsToProduct({variables: {productId: idProduct, newVariants: variantsToAdd}})
-    removeVariantsByIds({variables : {productVariantsIds: variantsToDelete}})
-              
-}
-
+    updateProduct({
+      variables: {productId: idProduct, fieldsToUpdate: productFieldsToUpdate},
+    });
+    updateVariants({variables: {variantsToUpdate: varvariantsToUpdate}});
+    addNewVariantsToProduct({
+      variables: {productId: idProduct, newVariants: variantsToAdd},
+    });
+    removeVariantsByIds({variables: {productVariantsIds: variantsToDelete}});
+  };
+  // Check if the submit button should be disabled
   const submitButtonShouldBeDisabled = () => {
     // if updateProductCount && updateVariantCount is 1, it means that the user has not changed anything
     // First update happens when we load the page, because we set the product and variants
@@ -251,13 +289,14 @@ const UpdateProduct = ({route, navigation}: any) => {
     return false;
   };
 
-  // TDOO: add message translation
   const succesAddMessage = 'Produit modifié avec succès!';
   const failAddMessage =
     'Une erreur est survenue lors de la modification du produit. Veuillez réessayer.';
 
   const messageBack =
     'Voulez-vous vraiment quitter la page? Toutes les modifications non sauvegardées seront perdues.';
+
+  // Go back to the previous screen
   const backToInventory = () => {
     setUpdateProductCount(0);
     setUpdateVariantCount(0);
@@ -275,8 +314,8 @@ const UpdateProduct = ({route, navigation}: any) => {
     }
   };
 
+  // Alert when user tries to delete the default variant
   const alertOnDelete = (message: string) =>
-    // Show this alert when user tries to delete the default variant
     Alert.alert('Alert', message, [
       {
         text: 'OK',
@@ -284,6 +323,7 @@ const UpdateProduct = ({route, navigation}: any) => {
       },
     ]);
 
+  // Add a default variant
   const addDefaultVariant = () => {
     // check if the product title is empty
     if (product && !product.title.trim()) {
@@ -294,132 +334,132 @@ const UpdateProduct = ({route, navigation}: any) => {
   };
 
   return (
-  <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
-    <View style={addProductsStyles.headerFix}>
-            <TouchableOpacity
-              style={addProductsStyles.back_button}
-              onPress={() => backToInventory()}>
-              <Image
-                style={addProductsStyles.back_button_icon}
-                source={require('../../assets/icons/back.png')}
-              />
-            </TouchableOpacity>
-            <Text style={addProductsStyles.header_text}>{t(UPDATE_PRODUCT_PAGE_TITLE)}</Text>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#EAEAEA'}}>
+      <View style={addProductsStyles.headerFix}>
+        <TouchableOpacity
+          style={addProductsStyles.back_button}
+          onPress={() => backToInventory()}>
+          <Image
+            style={addProductsStyles.back_button_icon}
+            source={require('../../assets/icons/back.png')}
+          />
+        </TouchableOpacity>
+        <Text style={addProductsStyles.header_text}>
+          {t(UPDATE_PRODUCT_PAGE_TITLE)}
+        </Text>
 
-            <IconButton
-              style={addProductsStyles.save_button}
-              onPress={() => handleUpdate()}
-              disabled={submitButtonShouldBeDisabled()}
-              mode="contained"
-              icon="content-save-edit"
-              size={30}
-              containerColor="#FFA50047"
-              iconColor="#FFA500"
-            />
+        <IconButton
+          style={addProductsStyles.save_button}
+          onPress={() => handleUpdate()}
+          disabled={submitButtonShouldBeDisabled()}
+          mode="contained"
+          icon="content-save-edit"
+          size={30}
+          containerColor="#FFA50047"
+          iconColor="#FFA500"
+        />
+      </View>
+      <ScrollView style={{flex: 1}}>
+        {loading ? (
+          <View>
+            <ActivityIndicator size="large" color="#FFA500" />
           </View>
-    <ScrollView style={{flex: 1}}>
-      {loading ? (
-        <View>
-          <ActivityIndicator size="large" color="#FFA500" />
-        </View>
-      ) : error ? (
-        <View>
-          <Text style={{textAlign: 'center'}}>
-            OOPS UNE ERREUR EST SURVENUE
-          </Text>
-        </View>
-      ) : (
-        <View>
-          
-
-          {product && (
-            <Product
-              title={product.title}
-              description={product.description}
-              brand={product.brand}
-              published={true}
-              tags={product.tags}
-              imgSrc={product.imgSrc}
-              refreshed={refreshed}
-              updateSelf={(updatedProduct: ProductFields) => {
-                setProduct(updatedProduct);
-                setUpdateProductCount(updateProductCount + 1);
-              }}
-            />
-          )}
-          {product && productNameError && (
-            <HelperText
-              type="error"
-              style={{
-                height: product.title.length < 1 ? 'auto' : 0,
-              }}>
-              {productNameError}
-            </HelperText>
-          )}
-
-          <Text style={addProductsStyles.titleText}>VARIANTS</Text>
-
-          <ScrollView>
-            {variants.map((field, index) => (
-              <Variant
-                key={field.variantId}
-                variantIndex={index}
-                variantId={field.variantId}
-                variantTitle={field.variantTitle}
-                price={field.price.toString()}
-                sku={field.sku}
-                taxable={field.taxable}
-                imgSrc={field.imgSrc}
-                byWeight={field.byWeight}
-                availableForSale={field.availableForSale}
-                stock={field.stock.toString()}
-                isValid={field.isValid}
-                isHidden={field.isHidden}
-                isRefreshed={0}
-                updateSelf={(variant: VariantFields) => {
-                  const newVariants = [...variants];
-                  newVariants[index] = variant;
-                  setVariants(newVariants);
-                  setUpdateVariantCount(updateVariantCount + 1);
-                  // if variants is updated and variantId is not already in updatedVariants, add it
-                  if (
-                    !updatedVariants.includes(variant.variantId) &&
-                    updateVariantCount > 0
-                  ) {
-                    setUpdatedVariants([...updatedVariants, field.variantId]);
-                  }
-                }}
-                deleteSelf={() => {
-                  const newVariants = [...variants];
-                  // add variantId to deletedVariants
-                  setDeletedVariants([
-                    ...deletedVariants,
-                    newVariants[index].variantId,
-                  ]);
-                  if (newVariants.length > 1) {
-                    newVariants.splice(index, 1);
-                    setVariants(newVariants);
-                    // remove variant id from updatedVariants if it has been updated and then deleted
-                    const newUpdatedVariants = updatedVariants.filter(
-                      id => id !== field.variantId,
-                    );
-                    setUpdatedVariants(newUpdatedVariants);
-                  } else {
-                    alertOnDelete(deleteError);
-                  }
+        ) : error ? (
+          <View>
+            <Text style={{textAlign: 'center'}}>
+              OOPS UNE ERREUR EST SURVENUE
+            </Text>
+          </View>
+        ) : (
+          <View>
+            {product && (
+              <Product
+                title={product.title}
+                description={product.description}
+                brand={product.brand}
+                published={true}
+                tags={product.tags}
+                imgSrc={product.imgSrc}
+                refreshed={refreshed}
+                updateSelf={(updatedProduct: ProductFields) => {
+                  setProduct(updatedProduct);
+                  setUpdateProductCount(updateProductCount + 1);
                 }}
               />
-            ))}
-          </ScrollView>
-          <Button
-            style={addProductsStyles.button}
-            mode="contained"
-            onPress={() => addDefaultVariant()}>
-            {t('addProduct.addVariant')}
-          </Button>
-        </View>
-      )}
-    </ScrollView>
+            )}
+            {product && productNameError && (
+              <HelperText
+                type="error"
+                style={{
+                  height: product.title.length < 1 ? 'auto' : 0,
+                }}>
+                {productNameError}
+              </HelperText>
+            )}
+
+            <Text style={addProductsStyles.titleText}>VARIANTS</Text>
+
+            <ScrollView>
+              {variants.map((field, index) => (
+                <Variant
+                  key={field.variantId}
+                  variantIndex={index}
+                  variantId={field.variantId}
+                  variantTitle={field.variantTitle}
+                  price={field.price.toString()}
+                  sku={field.sku}
+                  taxable={field.taxable}
+                  imgSrc={field.imgSrc}
+                  byWeight={field.byWeight}
+                  availableForSale={field.availableForSale}
+                  stock={field.stock.toString()}
+                  isValid={field.isValid}
+                  isHidden={field.isHidden}
+                  isRefreshed={0}
+                  updateSelf={(variant: VariantFields) => {
+                    const newVariants = [...variants];
+                    newVariants[index] = variant;
+                    setVariants(newVariants);
+                    setUpdateVariantCount(updateVariantCount + 1);
+                    // if variants is updated and variantId is not already in updatedVariants, add it
+                    if (
+                      !updatedVariants.includes(variant.variantId) &&
+                      updateVariantCount > 0
+                    ) {
+                      setUpdatedVariants([...updatedVariants, field.variantId]);
+                    }
+                  }}
+                  deleteSelf={() => {
+                    const newVariants = [...variants];
+                    // add variantId to deletedVariants
+                    setDeletedVariants([
+                      ...deletedVariants,
+                      newVariants[index].variantId,
+                    ]);
+                    if (newVariants.length > 1) {
+                      newVariants.splice(index, 1);
+                      setVariants(newVariants);
+                      // remove variant id from updatedVariants if it has been updated and then deleted
+                      const newUpdatedVariants = updatedVariants.filter(
+                        id => id !== field.variantId,
+                      );
+                      setUpdatedVariants(newUpdatedVariants);
+                    } else {
+                      alertOnDelete(deleteError);
+                    }
+                  }}
+                />
+              ))}
+            </ScrollView>
+            <Button
+              style={addProductsStyles.button}
+              mode="contained"
+              onPress={() => addDefaultVariant()}>
+              {t('addProduct.addVariant')}
+            </Button>
+          </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };

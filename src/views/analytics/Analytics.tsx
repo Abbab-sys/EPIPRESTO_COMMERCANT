@@ -10,11 +10,16 @@ import { AnalyticsInterface } from '../../interfaces/AnalyticsInterfaces';
 import { useTranslation } from 'react-i18next';
 import { ANALYTICS_ORDERS_KEY, ANALYTICS_SELECT_PERIOD_FROM_KEY, ANALYTICS_SELECT_PERIOD_KEY, ANALYTICS_SELECT_PERIOD_SUBMIT_KEY, ANALYTICS_SELECT_PERIOD_TO_KEY, ANALYTICS_TITLE_KEY, ANALYTICS_TOP_PRODUCTS_KEY, ANALYTICS_TOP_PRODUCTS_SUBTITLE_KEY, ANALYTICS_TOTAL_ORDERS_KEY, ANALYTICS_TOTAL_ORDERS_SUBTITLE_KEY, ANALYTICS_TOTAL_SALES_KEY, ANALYTICS_TOTAL_SALES_SUBTITLE_KEY } from '../../translations/keys/AnalyticsTranslationKeys';
 
+/*
+* Name: Analytics
+* Description: This component is used to display the analytics of the store.
+* Author: Zouhair Derouich, Khalil Zriba
+*/
+
 const text_font_family = 'Lato';
 const text_font_style = 'normal';
 
 const Analytics = () => {
-    //Default dateFrom is a week ago
     const [dateFrom, setDateFrom] = useState(new Date(new Date().setDate(new Date().getDate() - 7)))
     const [dateTo, setDateTo] = useState(new Date())
     const [openDateFrom, setOpenDateFrom] = useState(false)
@@ -32,6 +37,7 @@ const Analytics = () => {
     const { storeId } = useContext(VendorContext);
     const { t: translation } = useTranslation('translation');
 
+    // Query to get the analytics of the store
     const [getAnalytics, { data, loading, error }] = useLazyQuery(GET_ANALYTICS, {
         variables: {
             idStore: storeId,
@@ -41,7 +47,6 @@ const Analytics = () => {
         },
         fetchPolicy: 'network-only',
         onCompleted(data) {
-            console.log("on completed called")
             const result = data.getAnalytics
             const object: AnalyticsInterface = {
                 totalOrders: result.totalOrders,
@@ -110,6 +115,7 @@ const Analytics = () => {
         }
     };
 
+    // Function to set the date range
     const setNewDateRange = () => {
         setDateFrom(selectedDateFrom)
         setDateTo(selectedDateTo)
@@ -403,7 +409,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         lineHeight: 29,
         color: '#FFA500',
-        //center 
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
