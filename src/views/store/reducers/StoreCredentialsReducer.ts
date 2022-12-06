@@ -51,7 +51,7 @@ export function storeCredentialsReducer(
       const errorMessage = {...initialStoreErrorMessage};
 
       const adressFormatIsInvalid =
-        !/[0-9]+\s*[A-Z][a-z]+\s*[A-Z][a-z]+,\s*[A-Z][a-z]+,\s*[A-Z]{2},\s*[A-Z][1-9][A-Z]\s[1-9][A-Z][1-9]/i.test(action.newAddress);
+        !/\d+\s+[a-z\sA-Z-]+,[a-z\sA-Z-]+,\s*[A-Z]{2},\s*[A-Z]\d[A-Z]\d[A-Z]\d/i.test(action.newAddress);
 
         manageError(
           errorMessage.addressError,
