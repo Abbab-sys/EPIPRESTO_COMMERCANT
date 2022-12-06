@@ -157,7 +157,7 @@ export const GET_STORE_VARIANTS_BY_ID = gql`
   query Query(
     $idStore: ID!
     $offset: Int!
-    $first: Int
+    $first: Int!
     $variantsOffset2: Int!
     $variantsSearchText2: String
     $variantsFirst2: Int
@@ -242,7 +242,7 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
 `;
 
 export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($idProduct: ID!, $offset: Int!) {
+  query GetProductById($idProduct: ID!, $offset: Int!,$first: Int ) {
     getProductById(idProduct: $idProduct) {
       code
       message
@@ -254,7 +254,7 @@ export const GET_PRODUCT_BY_ID = gql`
         tags
         imgSrc
         description
-        variants(offset: $offset) {
+        variants(offset: $offset, first: $first) {
           _id
           variantTitle
           availableForSale
