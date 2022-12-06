@@ -91,6 +91,7 @@ const UpdateProduct = ({route, navigation}: any) => {
     variables: {
       idProduct: route.params.idProduct,
       offset: 0,
+      first:20
     },
     fetchPolicy: 'network-only',
     onCompleted(data) {
