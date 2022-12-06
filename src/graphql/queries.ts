@@ -242,7 +242,7 @@ export const GET_ALL_ORDERS_BY_STORE_ID = gql`
 `;
 
 export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($idProduct: ID!, $offset: Int!,$first: Int ) {
+  query GetProductById($idProduct: ID!, $offset: Int!, $first: Int) {
     getProductById(idProduct: $idProduct) {
       code
       message
