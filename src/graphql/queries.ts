@@ -157,7 +157,7 @@ export const GET_STORE_VARIANTS_BY_ID = gql`
   query Query(
     $idStore: ID!
     $offset: Int!
-    $first: Int
+    $first: Int!
     $variantsOffset2: Int!
     $variantsSearchText2: String
     $variantsFirst2: Int
