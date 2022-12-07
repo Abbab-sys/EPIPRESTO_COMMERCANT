@@ -19,10 +19,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Settings = ({navigation}: any) => {
   const {t: translation} = useTranslation('translation');
 
-  const {storeId} = useContext(VendorContext);
+  const {storeId,setStoreId,setIsAdmin} = useContext(VendorContext);
   // Use Effect to check if the user is logged in
   useEffect(() => {
-    if (!storeId) {
+    if (!storeId || storeId === '') {
       navigation.replace('Login');
     }
   }, [storeId]);
@@ -35,6 +35,9 @@ const Settings = ({navigation}: any) => {
     AsyncStorage.setItem('@isAdmin', '').then(r =>
       {}
     );
+    setStoreId('');
+    setIsAdmin(false);
+    
   };
 
   return (
