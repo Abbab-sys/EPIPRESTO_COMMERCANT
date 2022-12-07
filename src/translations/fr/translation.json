@@ -7,7 +7,7 @@
   },
   "login":{
     "email": {
-      "title" : "Nom d'utilisateur",
+      "title" : "Courriel ou nom utilisateur",
       "placeholder":"Entrez votre identifiant"
     },
     "password": {
