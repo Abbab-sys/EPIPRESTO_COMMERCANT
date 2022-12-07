@@ -38,7 +38,7 @@ const Inventory = ({navigation}: any) => {
   const [products, setProducts] = useState<ProductProps[]>([]);
 
   // Query to get the products from the store
-  const [getItems, {loading, error, data, fetchMore}] = useLazyQuery(
+  const [getItems, {loading, error, data, fetchMore,refetch}] = useLazyQuery(
     GET_STORE_PRODUCTS_BY_ID,
     {
       variables: {
@@ -127,7 +127,7 @@ const Inventory = ({navigation}: any) => {
               <RefreshControl
                 refreshing={loading}
                 onRefresh={() => {
-                  getItems();
+                  refetch()
                 }}
               />
             }
