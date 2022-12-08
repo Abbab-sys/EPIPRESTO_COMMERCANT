@@ -4,6 +4,8 @@
 
 # Xcode
 #
+.prettierrc.js
+ios/.xcode.env
 build/
 *.pbxuser
 !default.pbxuser

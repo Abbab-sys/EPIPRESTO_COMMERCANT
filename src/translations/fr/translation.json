@@ -1,0 +1,288 @@
+{
+  "empty": "",
+  "language": {
+    "en": "Anglais",
+    "fr": "Français",
+    "language": "Langue"
+  },
+  "login":{
+    "email": {
+      "title" : "Courriel ou nom utilisateur",
+      "placeholder":"Entrez votre identifiant"
+    },
+    "password": {
+      "title" : "Mot de passe",
+      "placeholder":"Entrez votre mot de passe"
+    },
+    "login": "SE CONNECTER",
+    "newTo": "Nouveau chez Épipresto?",
+    "createAccount": "Créer un compte",
+    "errorMessages": {
+      "emailError": "L'email ou le pseudonyme ne peut pas être vide",
+      "passwordError": "Le mot de passe ne peut pas être vide",
+      "credentialsError": "L'email ou le mot de passe renseigné est incorrect"
+    }
+  },
+  "sign_up": {
+    "title": "Inscription",
+    "createAccount": "Créer un compte",
+    "successAccountCreation": "Votre compte a été créé aves succès!",
+    "errorAccountCreation": "Oops une erreur est survenues",
+    "shopName": {
+      "placeholder": "Entrez le nom de votre boutique",
+      "title": "Nom de la boutique",
+      "errorMessage": "Le champ du nom de la boutique ne peut pas être vide"
+    },
+    "username": {
+      "placeholder": "Entrez votre nom d'utilisateur",
+      "title": "Nom d'utilisateur",
+      "errors": {
+        "empty": "Le champ du nom d'utilisateur ne peut pas être vide",
+        "used": "Ce nom d'utilisateur est déjà utilisé"
+      }
+    },
+    "address": {
+      "placeholder": "Ex: 123 avenue Lacombe, Montréal, QC,H2T2M4",
+      "title": "Adresse de la boutique",
+      "errorMessage": "Le champ d'adresse ne peut pas être vide",
+      "errorFormat": "Le format de l'adresse est invalide (Ex: 123 avenue Lacombe, Montréal, QC, H2T2M4)"
+    },
+    "email": {
+      "placeholder": "Entrez votre courriel",
+      "title": "Courriel",
+      "errors": {
+        "empty": "Le champ du courriel ne peut pas être vide",
+        "formatError": "Le format du courriel est incorrect",
+        "used": "Ce courriel est déjà utilisé"
+      }
+    },
+    "category": {
+      "placeholder": "Entrez la catégorie de votre boutique",
+      "title": "Catégorie",
+      "errorMessage": "Le champ de la catégorie ne peut pas être vide",
+      "categories": {
+        "FRUITS_AND_VEGETABLES": "Fruits et légumes",
+        "FISH_AND_SEAFOOD": "Poissons et fruits de mer",
+        "HEALTHY": "Produits santé",
+        "KETO": "Keto",
+        "BAKERY": "Boulangerie",
+        "WORLD_PRODUCTS": "Produits du monde",
+        "BUTCHER": "Boucherie",
+        "OTHER": "Autre"
+      },
+      "notFound": "Pas de catégorie trouvée"
+    },
+    "phone": {
+      "placeholder": "Entrez le téléphone de votre boutique",
+      "title": "Téléphone de la boutique",
+      "errorMessage": "Le champ du numéro de téléphone ne peut pas être vide"
+    },
+    "password": {
+      "placeholder": "Entrez votre mot de passe",
+      "title": "Mot de passe",
+      "errorMessage": "Le champ du mot de passe ne peut pas être vide"
+    },
+    "confirmPassword": {
+      "placeholder": "Confirmez votre mot de passe",
+      "title": "Confirmation mot de passe",
+      "errorMessage": "Les deux mots de passe ne sont pas identiques"
+    }
+  },
+  "synchronization": {
+    "synchronize": "SYNCHRONISER",
+    "success": "Votre marché a été synchronisé avec succès!",
+    "error": "Un des champs renseignés est incorrect",
+    "domainName": {
+      "placeholder": "Nom de domaine",
+      "errorMessage" :"Le nom du domaine ne peut pas être vide"
+    },
+    "shopify": {
+      "apiToken": {
+        "placeholder": "API Token",
+        "errorMessage": "Le token API ne peut pas être vide"
+      }
+    },
+    "woocommerce": {
+      "consumerKey": {
+        "placeholder": "Clé de consommateur du marché",
+        "errorMessage": "La clé de consommateur ne peut pas être vide"
+      },
+      "consumerSecret": {
+        "placeholder": "Clé secrète du consommateur",
+        "errorMessage": "La clé secrète du consommateur ne peut pas être vide"
+      }
+    }
+  },
+  "home":{
+    "title": "Accueil",
+    "shop": "{{shopName}}",
+    "welcomeMessage": "Bonjour, voici les données de la journée !",
+    "recentOrders": "Commandes récentes",
+    "orders": "COMMANDES",
+    "income": "REVENU",
+    "ordersSection": {
+      "order": "Commande #{{orderNum}}",
+      "consult": "CONSULTER LA COMMANDE",
+      "noOrders": "Pas de commandes disponibles"
+    }
+  },
+  "inventory": {
+    "title":"Inventaire",
+    "error": "Oops une erreur est survenue",
+    "noProducts": "Pas de produits disponibles",
+    "noResult": "Votre recherche ne correspond à aucun article",
+    "modify":"Modifier"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "store":{
+      "title":"Ma boutique",
+      "save":"Enregistrer",
+      "saveError": "Erreur : Certains champs renseignés sont incorrects",
+      "saveSuccess": "Votre boutique a été modifiée avec succès!",
+      "status": {
+        "title": "État de ma boutique",
+        "open":"Ouvert",
+        "paused":"Fermé"
+      }
+    },
+    "logOut": {
+      "title": "Déconnexion"
+    },
+    "language":{
+      "title":"Changement de langue"
+    }
+  },
+  "disponibility": {
+    "title": "Disponibilités",
+    "day" : "Jour",
+    "openHour": "Ouverture",
+    "closeHour": "Fermeture",
+    "errorFormat": "Format incorrect (hh:mm)",
+    "errorOrder": "Mauvaise ordre des heures",
+    "days":{
+      "MONDAY": "Lundi",
+      "TUESDAY": "Mardi",
+      "WEDNESDAY": "Mercredi",
+      "THURSDAY": "Jeudi",
+      "FRIDAY": "Vendredi",
+      "SATURDAY": "Samedi",
+      "SUNDAY": "Dimanche"
+    },
+    "closed": "FÉRMÉ"
+  },
+  "addProduct": {
+    "title": "Ajout de produit à la boutique",
+    "deletePhoto": "Supprimer la photo",
+    "takePicture": "Prendre une photo",
+    "importPicture": "Importer une photo",
+    "labels": {
+      "name": "Titre du produit*",
+      "description": "Description",
+      "brand": "Marque",
+      "tags": "Tags (séparez vos tags avec une virgule)"
+    },
+    "addVariant": "Ajouter un variant",
+    "publishProduct": "Publier le produit",
+    "deleteError": "Vous devez au minimum avoir un variant"
+  },
+  "addVariant": {
+    "errorMessage": "Veuillez remplir tous les champs obligatoires*",
+    "labels": {
+      "name": "Nom du variant*",
+      "description": "Description",
+      "price": "Prix*",
+      "sku": "Sku",
+      "stock": "Stock*",
+      "forSale": "Produit disponible a la vente",
+      "shownPrice": "Prix affiché au client"
+    },
+    "boughtByWeight": "Produit vendu au poids",
+    "unit": "Unité de mesure",
+    "taxable": "Taxable product"
+  },
+  "orders":{
+    "title":"Commandes",
+    "filtering":"Trier",
+    "customer":"Client",
+    "status":"Statut",
+    "view":"Détails",
+    "noOrders": "Pas de commandes disponibles"
+  },
+  "order":{
+    "status":{
+      "WAITING_CONFIRMATION":"En attente",
+      "CONFIRMED":"Confirmée",
+      "IN_DELIVERY":"En livraison",
+      "DELIVERED":"Livrée",
+      "CLOSED":"Fermée"
+    },
+    "details":{
+      "title":"Commande",
+      "payment":{
+        "title":"Paiement",
+        "subTotal":"Sous-Total",
+        "taxes":"Taxes",
+        "deliveryFees":"Frais de livraison",
+        "total":"Total",
+        "method":"Méthode de paiement"
+      },
+      "product":{
+        "title":"Produits"
+      },
+      "save":{
+        "button":"Enregistrer"
+      },
+      "update":{
+        "success":"Statut mis à jour avec succès",
+        "failed":"Une erreur est survenue lors de la mise à jour du statut"
+      }
+    },
+    "subOrders":{
+      "title":"Statut de chaque magasin"
+    }
+  },
+  "analytics":{
+    "title":"Statistiques",
+    "totalSales":{
+      "title":"Ventes totales",
+      "subtitle":"Ventes totales de la boutique durant cette période"
+    },
+    "totalOrders":{
+      "title":"Nombre de commandes",
+      "subtitle":"Commandes totales de la boutique durant cette période",
+      "value":"Commandes"
+    },
+    "topProducts":{
+      "title":"Top 5 produits",
+      "subtitle":"Les 5 produits les plus vendus de la boutique durant cette période"
+    },
+    "selectPeriod":{
+      "title":"Choisir une intervalle de temps pour afficher les données",
+      "from":"Du",
+      "to":"Jusqu'au",
+      "submit":"Valider"
+    }
+  },
+  "chat": {
+    "title": "Messagerie",
+    "noChats": "Pas de chats disponibles",
+    "viewOrder": "Voir la commande"
+  },
+  "searchBarPlaceholder": "Rechercher",
+  "updateProductPageTitle": "Modifier produit",
+  "somethingWrong": "Une erreur est survenue",
+  "verifyYourAccount": "Vérifiez votre courriel pour activer votre compte",
+  "invalidCredentials": "Votre identifiant ou mot de passe est incorrect, veuillez réessayer",
+  "productMessageBack": "Êtes-vous sûr de vouloir revenir à la page précédente ? Vous perdrez les modifications non enregistrées",
+  "quitButton": "Quitter",
+  "cancelButton": "Annuler",
+  "yesButton": "Oui",
+  "noButton": "Non",
+  "success": "Succés",
+  "error": "Erreur",
+  "successAddMessage": "Le produit a été ajouté avec succès, voulez-vous ajouter un autre produit ?",
+  "failedAddMessage": "Une erreur est survenue, veuillez réessayer",
+  "emptyFields": "Veuillez remplir tous les champs obligatoires"
+  
+}

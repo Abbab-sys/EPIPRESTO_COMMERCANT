@@ -1,0 +1,291 @@
+{
+  "empty": "",
+  "language": {
+    "en": "English",
+    "fr": "French",
+    "language": "Language"
+  },
+  "login": {
+    "email": {
+      "title" : "Email or Username",
+      "placeholder":"Enter your login"
+    },
+    "password": {
+      "title" : "Password",
+      "placeholder":"Enter your password"
+    },
+    "login": "LOG IN",
+    "newTo": "New to Épipresto?",
+    "createAccount": "Create an account",
+    "errorMessages": {
+      "emailError": "The email or username field can not be empty",
+      "passwordError": "The password can not be empty",
+      "credentialsError": "The email or the password is incorrect"
+    }
+  },
+  "sign_up": {
+    "title": "Sign up",
+    "createAccount": "Create an account",
+    "successAccountCreation": "Your account has been successfully created!",
+    "errorAccountCreation": "Oops something went wrong",
+    "shopName": {
+      "placeholder": "Enter your shop's name",
+      "title": "Shop's name",
+      "errorMessage": "The shop's name field can not be empty"
+    },
+    "username": {
+      "placeholder": "Enter your username",
+      "title": "Username",
+      "errors": {
+        "empty": "The username field can not be empty",
+        "used": "This username is already used"
+      }
+    },
+    "address": {
+      "placeholder": "E: 123 avenue Lacombe, Montreal, QC, H2T2M4",
+      "title": "Shop's address",
+      "errorMessage": "The address field can not be empty",
+      "errorFormat": "The address format is incorrect (E: 123 avenue Lacombe, Montreal, QC, H2T2M4)"
+    },
+    "email": {
+      "placeholder": "Enter your email",
+      "title": "Email",
+      "errors": {
+        "empty": "The email field can not be empty",
+        "formatError": "The email format is not correct",
+        "used": "This email is already used"
+      }
+    },
+    "category": {
+      "placeholder": "Enter your shop's category",
+      "title": "Category",
+      "errorMessage": "The category field can not be empty",
+      "categories": {
+        "FRUITS_AND_VEGETABLES": "Fruits and vegetables",
+        "FISH_AND_SEAFOOD": "Fish and seafood",
+        "HEALTHY": "Healthy food",
+        "KETO": "Keto",
+        "BAKERY": "Bakery",
+        "WORLD_PRODUCTS": "Products of the world",
+        "BUTCHER": "Butcher shop",
+        "OTHER": "Autre"
+      },
+      "notFound": "No category found"
+    },
+    "phone": {
+      "placeholder": "Enter your shop's phone number",
+      "title": "Shop's phone number",
+      "errorMessage": "The phone number field can not be empty"
+    },
+    "password": {
+      "placeholder": "Enter your password",
+      "title": "Password",
+      "errorMessage": "The password field can not be empty"
+    },
+    "confirmPassword": {
+      "placeholder": "Confirm your password",
+      "title": "Password confirmation",
+      "errorMessage": "The two passwords do not match"
+    }
+  },
+  "synchronization": {
+    "synchronize": "SYNCHRONIZE",
+    "success": "Your shop has been succesfully synchronized!",
+    "error": "One of the fields is incorrect",
+    "domainName": {
+      "placeholder": "Domain name",
+      "errorMessage": "The shop domain name can not be empty"
+    },
+    "shopify": {
+      "apiToken": {
+        "placeholder" : "API Token",
+        "errorMessage": "The API Token can not be empty"
+      }
+    },
+    "woocommerce": {
+      "consumerKey": {
+        "placeholder":"Shop consumer key",
+        "errorMessage": "The consumer key can not be empty"
+      },
+      "consumerSecret": {
+        "placeholder": "Shop consumer secret key",
+        "errorMessage": "The consumer secret key can not be empty"
+      }
+    }
+  },
+  "home": {
+    "title": "Home",
+    "shop": "{{shopName}}",
+    "welcomeMessage": "Hello, here are the data of the day !",
+    "recentOrders": "Recent orders",
+    "orders": "ORDERS",
+    "income": "INCOME",
+    "ordersSection": {
+      "order": "Order #{{orderNum}}",
+      "consult": "SEE THE ORDER",
+      "noOrders": "No orders available"
+    }
+  },
+  "inventory":{
+    "title": "Inventory",
+    "error": "Oops an error has occured",
+    "noProducts": "No products available",
+    "noResult": "Your research does not match any item",
+    "modify":"Edit"
+  },
+  "settings": {
+    "title": "Settings",
+    "store":{
+      "title":"My store",
+      "save":"Save",
+      "saveError":"Error : Some fields are incorrect",
+      "saveSuccess":"Your store has been successfully modified",
+      "status": {
+        "title":"Status of my store",
+        "open":"Open",
+        "paused":"Paused"
+        }
+    },
+    "language":{
+      "title":"Change Language"
+    },
+    "logOut": {
+      "title": "Log out"
+    }
+  
+  },
+  "disponibility": {
+    "title": "Disponibilities",
+    "day" : "Day",
+    "openHour": "Open",
+    "closeHour": "Closing",
+    "errorFormat": "Incorrect format (hh:mm)",
+    "errorOrder": "Wrong order of hours",
+    "days":{
+      "MONDAY": "Monday",
+      "TUESDAY": "Tuesday",
+      "WEDNESDAY": "Wednesday",
+      "THURSDAY": "Thursday",
+      "FRIDAY": "Friday",
+      "SATURDAY": "Saturday",
+      "SUNDAY": "Sunday"
+    },
+    "closed": "CLOSED"
+  },
+  "addProduct": {
+    "title": "Add product to the shop",
+    "deletePhoto": "Delete photo",
+    "takePicture": "Take a photo",
+    "importPicture": "Import a photo",
+    "labels": {
+      "name": "Product name*",
+      "description": "Description",
+      "brand": "Brand",
+      "tags": "Tags (separate your tags with a comma)"
+    },
+    "addVariant": "Add a variant",
+    "publishProduct": "Publish product",
+    "deleteError": "You must have at least one variant"
+  },
+  "addVariant": {
+    "errorMessage": "Please fill in all required fields*",
+    "labels": {
+      "name": "Variant name*",
+      "description": "Description",
+      "price": "Price*",
+      "sku": "Sku",
+      "stock": "Stock*",
+      "forSale": "Product available for sale",
+      "shownPrice": "Price shown to the customer"
+    },
+    "boughtByWeight": "Product sold by weight",
+    "unit": "Unit of measure",
+    "taxable": "Taxable product"
+  },
+  "orders":{
+    "title":"Orders",
+    "filtering":"Sort",
+    "customer":"Customer",
+    "status":"Status",
+    "view":"Details",
+    "noOrders": "No orders available"
+  },
+  "order":{
+    "status":{
+      "WAITING_CONFIRMATION":"Pending",
+      "CONFIRMED":"Confirmed",
+      "IN_DELIVERY":"In delivery",
+      "DELIVERED":"Delivered",
+      "CLOSED":"Closed"
+    },
+    "details":{
+      "title":"Order",
+      "payment":{
+        "title":"Payment",
+        "subTotal":"Subtotal",
+        "taxes":"Taxes",
+        "deliveryFees":"Delivery Fees",
+        "total":"Total",
+        "method":"Payment method"
+      },
+      "product":{
+        "title":"Products"
+      },
+      "save":{
+        "button":"Save"
+      },
+      "update":{
+        "success":"Status updated successfully",
+        "failed":"Oops something went wrong"
+      }
+
+    },
+    "subOrders":{
+      "title":"Status of each shop"
+    }
+    
+  },
+  "analytics":{
+    "title":"Analytics",
+    "totalSales":{
+      "title":"Total Sales",
+      "subtitle":"Revenue during this period"
+    },
+    "totalOrders":{
+      "title":"Number of orders",
+      "subtitle":"Number of orders during this period",
+      "value":"Orders"
+    },
+    "topProducts":{
+      "title":"Top 5 products",
+      "subtitle":"Most sold products during this period"
+    },
+    "selectPeriod":{
+      "title":"Select a range of dates to display the data",
+      "from":"From",
+      "to":"Until",
+      "submit":"Submit"
+
+    }
+  },
+  "chat": {
+    "title": "Chats",
+    "noChats": "No chats available",
+    "viewOrder": "View order"
+  },
+  "searchBarPlaceholder": "Search",
+  "updateProductPageTitle": "Update product",
+  "somethingWrong": "Oops something went wrong",
+  "verifyYourAccount": "Please check your email to verify your account before logging in !",
+  "invalidCredentials": "Your username or password is incorrect. Please try again.",
+  "productMessageBack": "Are you sure you want to go back ? Your changes will not be saved.",
+  "quitButton": "Quit",
+  "cancelButton": "Cancel",
+  "yesButton": "Yes",
+  "noButton": "No",
+  "success": "Success",
+  "error": "Error",
+  "successAddMessage": "Your product has been successfully added ! Do you want to add another one? ",
+  "failedAddMessage": "Oops something went wrong, please try again",
+  "emptyFields": "Please fill in all required fields"
+}
